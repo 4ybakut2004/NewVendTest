@@ -1,12 +1,27 @@
-<header class="navbar">
-  <div class="logo">
-      <%= link_to "Новый Вендинг", root_path, id: "logo" %>
+<header>
+  <div class="navbar">
+    <div class="logo">
+        <%= link_to "Новый Вендинг", root_path, id: "logo" %>
+    </div>
+    <nav>
+      <ul class="nav">
+        <li><%= link_to "Главная", root_path %></li>
+        <li><%= link_to "Помощь",  help_path %></li>
+
+        <% if signed_in? %>
+            <li><%= link_to "Выйти", signout_path, method: "delete" %></li>
+        <% else %>
+            <li><%= link_to "Войти", signin_path %></li>
+        <% end %>
+      </ul>
+    </nav>
   </div>
-  <nav>
-    <ul class="nav">
-      <li><%= link_to "Главная", root_path %></li>
-      <li><%= link_to "Помощь",  help_path %></li>
-      <li><%= link_to "Войти",   '#' %></li>
-    </ul>
-  </nav>
+  <% if signed_in? %>
+      <div class="main-menu">
+        <div>Меню пользователя <%= current_user.name %></div> 
+        <ul>
+          <li><%= link_to "Оформить заявку", "#" %></li>
+        </ul>
+      </div>
+  <% end %>
 </header>

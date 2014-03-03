@@ -1,0 +1,20 @@
+<% provide(:title, "Sign in") %>
+
+<div class="form">
+
+	<h1>Вход</h1>
+
+	<%= form_for(:session, url: sessions_path) do |f| %>
+
+	<div>
+		<%= f.label :name, 'Имя' %>
+	  	<%= f.text_field :name %>
+	</div>
+	<div>
+		<%= f.label :password, 'Пароль' %>
+		<%= f.password_field :password %>	
+	</div>
+	  
+	  <%= f.submit "Войти", class: "btn btn-large" %>
+	<% end %>
+</div>

@@ -18,4 +18,12 @@ describe "Static pages" do
     it { should have_title('| Help') }
   end
 
+  it "should have the right links on the layout" do
+    visit root_path
+    click_link "Главная"
+    expect(page).to have_title('New Vending')
+    click_link "Помощь"
+    expect(page).to have_title('Help')
+  end
+
 end
