@@ -1,2 +1,9 @@
-New Vending
-<p>Find me in app/views/static_pages/home.html.erb</p>
+<div class="center-element">
+	<% if signed_in? %>
+	<h1>Меню</h1>
+	<%= link_to "Заявки", requests_path, class: "btn btn-large" %>
+	<%= link_to "Автоматы", "#", class: "btn btn-large" %>
+	<% else %>
+		<%= link_to "Войти в систему", signin_path %>
+	<% end %>
+</div>

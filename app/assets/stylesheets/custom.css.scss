@@ -27,6 +27,10 @@ header {
 .navbar a {
 	font-weight: bold;
 	text-decoration: none;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
 }
 
 .logo {
@@ -46,7 +50,7 @@ header {
 	color: #bbbbbb;
 }
 
-.main-menu {
+.user-menu {
 	font-size: 14px;
 	padding: 10px 0px 0px 0px;
 	background-color: #eeeeee;
@@ -64,26 +68,26 @@ header {
 	box-shadow: 0 0 7px rgba(0,0,0,0.5);
 }
 
-.main-menu:hover ul li a{
+.user-menu:hover ul li a{
 	display: block;
 }
 
-.main-menu div {
+.user-menu div {
 	margin-bottom: 5px;
 	padding-left: 3px;
 	padding-right: 3px;
 }
 
-.main-menu ul {
+.user-menu ul {
 	margin: 0;
 	padding: 0;
 }
 
-.main-menu li {
+.user-menu li {
 	list-style-type: none;
 }
 
-.main-menu li a {
+.user-menu li a {
 	color: #ffffff;
 	padding: 5px 15px;
 	margin-top: 2px;
@@ -91,9 +95,14 @@ header {
 	background-color: #dddddd;
 	text-decoration: none;
 	display: none;
+
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
 }
 
-.main-menu li:last-child a {
+.user-menu li:last-child a {
 	-webkit-border-bottom-left-radius: 4px;
 	-moz-border-bottom-left-radius: 4px;
 	-o-border-bottom-left-radius: 4px;
@@ -126,7 +135,7 @@ header {
 	border-radius: 5px;
 }
 
-.main-menu a:hover,
+.user-menu a:hover,
 .nav a:hover {
 	background: #d0d0d0;
 	color: #a0a0a0;
@@ -153,7 +162,7 @@ header {
 	border: 1px solid #dddddd;
 }
 
-.form div {
+.form .field {
 	font-size: 1.3em;
 	width: 50%;
 	margin: 15px auto;
@@ -184,6 +193,7 @@ header {
 	-o-border-radius: 5px;
 	border-radius: 5px;
 	font-weight: bold;
+	text-decoration: none;
 }
 
 .btn-large {
@@ -193,4 +203,64 @@ header {
 .btn:hover {
 	background-color: #7771F0;
 	color: #ffffff;
+}
+
+.center-element {
+	width: 80%;
+	margin: 10px auto;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	-o-border-radius: 15px;
+	border-radius: 15px;
+	background-color: #efefef;
+	border: 1px solid #dddddd;
+	padding: 15px;
+	width: 1000px;
+}
+
+.msg-error {
+	color: #CC5050;
+	font-size: 16px;
+	padding: 5px;
+	border: 1px solid #FF6868;
+	display: block;
+	background-color: #FFD4D4;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.field_with_errors input {
+	border: 1px solid #FF8888 !important;
+}
+
+.mandatory {
+	position: relative;
+}
+
+.mandatory:after {
+	content: " ";
+    display: block;
+    height: 0px;
+    width: 100%;
+    border-bottom: 1px dashed #FF6868;
+
+    position: absolute;
+}
+
+.standart-table {
+	margin: 0 auto;
+}
+.standart-table thead tr th,
+.standart-table thead tr td {
+	background-color: #ABA8FF;
+	padding: 5px;
+}
+
+.standart-table tbody tr th,
+.standart-table tbody tr td {
+	background-color: #DDDDFF;
+	padding: 5px;
+	color: #313131;
 }

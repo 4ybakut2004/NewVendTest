@@ -1,0 +1,24 @@
+<% provide(:title, "Request") %>
+
+<%= form_for(@request) do |f| %>
+  <% if @request.errors.any? %>
+      <h2 class="msg-error">Количество ошибок: <%= @request.errors.count %></h2>
+      <h3 class="msg-error">Проверьте обязательные для ввода поля</h3>
+
+      <!--<ul>
+      <% @request.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>-->
+  <% end %>
+
+  <div class="field mandatory">
+    <%= f.label :machine, "Автомат" %><br>
+    <%= f.text_field :machine %>
+  </div>
+  <div class="field mandatory">
+    <%= f.label :description, "Описание" %><br>
+    <%= f.text_field :description %>
+  </div>
+  <%= f.submit "Подтвердить", class: "btn btn-large" %>
+<% end %>
