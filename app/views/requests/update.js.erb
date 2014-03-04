@@ -1,0 +1,20 @@
+if("<%= @request.errors.count %>" != 0)
+{
+	alert("Количество ошибок: <%= @request.errors.count %>. Проверьте обязательные для ввода поля.");
+}
+else
+{
+	$("<tr style='opacity: 1;' id='<%= @request.id %>'>" +
+		"<td><%= @request.id %></td>" +
+		"<td><%= @request.employee %></td>" +
+		"<td><%= escape_javascript(link_to @request.machine, edit_request_path(@request), remote: true, class: 'edit btn') %></td>" +
+		"<td><%= escape_javascript(link_to @request.description, edit_request_path(@request), remote: true, class: 'edit btn') %></td>" +
+		"<td class='actions'><%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'btn delete', remote: true) %></td>" +
+	"</tr>").insertAfter("#<%= @request.id %>");
+	$("#<%= @request.id %>").remove();
+	$("#request_edit").animate({opacity: 0}, 500, function() {
+		$(this).css("display", "none").empty();
+		setDeleteAction($("a[data-remote].delete"));
+    	setEditAction($("a[data-remote].edit"));
+	});
+}

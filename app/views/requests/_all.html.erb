@@ -1,0 +1,52 @@
+<script type="text/javascript">
+  function setDeleteAction(element)
+  {
+    element.on("ajax:success", function(e, data, status, xhr){
+    }).bind("ajax:error", function(e, xhr, status, error){
+      console.log(xhr.responseText);
+    });
+  }
+
+  function setEditAction(element)
+  {
+    element.on("ajax:success", function(e, data, status, xhr){
+      $("#request_edit").empty();
+      $($("<h1>Редактирование заявки</h1>")).appendTo('#request_edit');
+      $($(xhr.responseText).find("#request")).appendTo('#request_edit');
+      $("#request_edit").css("display", "block");
+      $("#request_edit").animate({opacity: 1}, 500, function() {     
+      });
+    }).bind("ajax:error", function(e, xhr, status, error){
+      console.log(xhr.responseText);
+    });
+  }
+
+  $(document).ready(function() {
+    setDeleteAction($("a[data-remote].delete"));
+    setEditAction($("a[data-remote].edit"));
+  });
+
+</script>
+<table class="standart-table">
+  <thead>
+    <tr>
+      <th>Номер</th>
+      <th>Сотрудник</th>
+      <th>Автомат</th>
+      <th>Описание</th>
+      <th>Действия</th>
+    </tr>
+  </thead>
+
+  <tbody id ="requests">
+    <% @requests.each do |request| %>
+      <tr id="<%= request.id %>">
+        <td><%= request.id %></td>
+        <td><%= request.employee %></td>
+        <td><%= link_to request.machine, edit_request_path(request), remote: true, class: "edit btn" %></td>
+        <td><%= link_to request.description, edit_request_path(request), remote: true, class: "edit btn" %></td>
+        <td class="actions"><%= link_to 'Удалить', request, method: :delete, data: { confirm: 'Вы уверены?' }, class: "btn delete", remote: true %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

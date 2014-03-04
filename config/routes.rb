@@ -1,7 +1,7 @@
 NewVend::Application.routes.draw do
   resources :users, only: [:show]
   resources :sessions, only: [:new, :create, :destroy]
-  resources :requests
+  resources :requests, only: [:index, :destroy, :create, :update, :edit]
 
   root  'static_pages#home'
   match '/help', to: 'static_pages#help',       via: 'get'

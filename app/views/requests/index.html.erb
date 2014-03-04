@@ -1,37 +1,17 @@
-<script type="text/javascript" charset="utf-8">
-  
-</script>
-
 <div class="center-element">
   <h1>Заявки</h1>
   <hr>
-
-  <table class="standart-table">
-    <thead>
-      <tr>
-        <th>Сотрудник</th>
-        <th>Автомат</th>
-        <th>Описание</th>
-        <th>Действия</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @requests.each do |request| %>
-        <tr>
-          <td><%= request.employee %></td>
-          <td><%= request.machine %></td>
-          <td><%= request.description %></td>
-          <td><%= link_to 'Показать', request, class: "btn" %>
-              <%= link_to 'Редактировать', edit_request_path(request), class: "btn" %>
-              <%= link_to 'Удалить', request, method: :delete, data: { confirm: 'Вы уверены?' }, class: "btn" %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
+  <%= render 'all' %>
   <br>
-
-  <%= link_to 'Новая заявка', new_request_path, class: "btn btn-large" %>
 </div>
 
+<div id="request_edit" class="form">
+  <h1>Редактирование заявки</h1>
+</div>
+
+<br>
+
+<div class="form">
+  <h1>Новая заявка</h1>
+  <%= render 'form' %>
+</div>

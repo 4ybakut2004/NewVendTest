@@ -5,6 +5,7 @@ class RequestsController < ApplicationController
   # GET /requests.json
   def index
     @requests = Request.all
+    @request  = Request.new
   end
 
   # GET /requests/1
@@ -19,19 +20,23 @@ class RequestsController < ApplicationController
 
   # GET /requests/1/edit
   def edit
+
   end
 
   # POST /requests
   # POST /requests.json
   def create
-    @request = Request.new(request_params)
+    @requests = Request.all
+    @request  = Request.new(request_params)
 
     respond_to do |format|
       if @request.save
         format.html { redirect_to @request, notice: 'Request was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @request }
+        format.js   {}
+        format.json { render json: @request, status: :created, location: @request }
       else
         format.html { render action: 'new' }
+        format.js   {}
         format.json { render json: @request.errors, status: :unprocessable_entity }
       end
     end
@@ -43,9 +48,11 @@ class RequestsController < ApplicationController
     respond_to do |format|
       if @request.update(request_params)
         format.html { redirect_to @request, notice: 'Request was successfully updated.' }
-        format.json { head :no_content }
+        format.js   {}
+        format.json { render json: @request, status: :created, location: @request }
       else
         format.html { render action: 'edit' }
+        format.js   {}
         format.json { render json: @request.errors, status: :unprocessable_entity }
       end
     end
@@ -54,9 +61,12 @@ class RequestsController < ApplicationController
   # DELETE /requests/1
   # DELETE /requests/1.json
   def destroy
+    @requests = Request.all
+    
     @request.destroy
     respond_to do |format|
       format.html { redirect_to requests_url }
+      format.js   {}
       format.json { head :no_content }
     end
   end

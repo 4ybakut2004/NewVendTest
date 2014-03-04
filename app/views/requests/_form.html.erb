@@ -1,24 +1,23 @@
-<% provide(:title, "Request") %>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#new_request").on("ajax:success", function(e, data, status, xhr){
+    }).bind("ajax:error", function(e, xhr, status, error){
+      console.log(xhr.responseText);
+    });
+  });
+</script>
 
-<%= form_for(@request) do |f| %>
-  <% if @request.errors.any? %>
-      <h2 class="msg-error">Количество ошибок: <%= @request.errors.count %></h2>
-      <h3 class="msg-error">Проверьте обязательные для ввода поля</h3>
+<div id="request">
+  <%= form_for(@request, remote: true) do |f| %>
+    <div class="field mandatory">
+      <%= f.label :machine, "Автомат" %><br>
+      <%= f.text_field :machine %>
+    </div>
+    <div class="field mandatory">
+      <%= f.label :description, "Описание" %><br>
+      <%= f.text_field :description %>
+    </div>
+    <%= f.submit "Подтвердить", class: "btn btn-large" %>
+  <% end %>  
+</div>
 
-      <!--<ul>
-      <% @request.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>-->
-  <% end %>
-
-  <div class="field mandatory">
-    <%= f.label :machine, "Автомат" %><br>
-    <%= f.text_field :machine %>
-  </div>
-  <div class="field mandatory">
-    <%= f.label :description, "Описание" %><br>
-    <%= f.text_field :description %>
-  </div>
-  <%= f.submit "Подтвердить", class: "btn btn-large" %>
-<% end %>
