@@ -1,6 +1,8 @@
 if("<%= @request.errors.count %>" != 0)
 {
-	alert("Количество ошибок: <%= @request.errors.count %>. Проверьте обязательные для ввода поля.");
+	$("#request_new").find("#error").empty();
+	$("#request_new").find("#error").append("<span class='msg-error'>Количество ошибок: <%= @request.errors.count %></span><br>" +
+	                                        "<span class='msg-error'>Проверьте обязательные для ввода поля</span>");
 }
 else
 {
@@ -15,4 +17,7 @@ else
 		setDeleteAction($("a[data-remote].delete"));
     	setEditAction($("a[data-remote].edit"));
 	});
+
+	$("#request_new").find("#error").empty();
+	$("#request_new").find("#error").append("<span class='msg-success'>Заявка успешно создана</span>");
 }

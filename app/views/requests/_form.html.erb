@@ -1,13 +1,11 @@
 <script type="text/javascript">
-  $(document).ready(function() {
-    $("#new_request").on("ajax:success", function(e, data, status, xhr){
-    }).bind("ajax:error", function(e, xhr, status, error){
-      console.log(xhr.responseText);
-    });
-  });
+ 
 </script>
 
 <div id="request">
+  <div id="error">
+    
+  </div>
   <%= form_for(@request, remote: true) do |f| %>
     <div class="field mandatory">
       <%= f.label :machine, "Автомат" %><br>
