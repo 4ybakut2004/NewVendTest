@@ -11,21 +11,36 @@
   {
     element.on("ajax:success", function(e, data, status, xhr){
       $("#request_edit").empty();
+      $("#request_edit").css("opacity", "0");
+
+      var btn = $("<input type='button' value='X' class='btn' style='float: right;'>");
+      btn.bind("click", function(event) {
+          $("#request_edit").animate({opacity: 0}, 500, function() {
+              $(this).css("display", "none").empty();
+          });
+      });
+
+      $(btn).appendTo('#request_edit');
+
       $($("<h1>Редактирование заявки</h1>")).appendTo('#request_edit');
       $($(xhr.responseText).find("#request")).appendTo('#request_edit');
       $("#request_edit").css("display", "block");
-      $("#request_edit").animate({opacity: 1}, 500, function() {     
-      });
+      if($("#request_edit").css("opacity") != 1)
+      {
+        $("#request_edit").animate({opacity: 1}, 500, function() {});
+      }
     }).bind("ajax:error", function(e, xhr, status, error){
       console.log(xhr.responseText);
     });
   }
 
   $(document).ready(function() {
+    $(".container").css("opacity", "0");
+    $(".container").css("margin-top", "-15px");
+    $(".container").animate({opacity: 1, 'margin-top': 0}, 300, function() {});
     setDeleteAction($("a[data-remote].delete"));
     setEditAction($("a[data-remote].edit"));
   });
-
 </script>
 <table class="standart-table">
   <thead>
@@ -43,9 +58,9 @@
       <tr id="<%= request.id %>">
         <td><%= request.id %></td>
         <td><%= request.employee %></td>
-        <td><%= link_to request.machine, edit_request_path(request), remote: true, class: "edit btn" %></td>
-        <td><%= link_to request.description, edit_request_path(request), remote: true, class: "edit btn" %></td>
-        <td class="actions"><%= link_to 'Удалить', request, method: :delete, data: { confirm: 'Вы уверены?' }, class: "btn delete", remote: true %></td>
+        <td><%= link_to request.machine, edit_request_path(request), remote: true, class: "edit" %></td>
+        <td><%= link_to request.description, edit_request_path(request), remote: true, class: "edit" %></td>
+        <td class="actions"><%= link_to 'Удалить', request, method: :delete, data: { confirm: 'Вы уверены?' }, class: "btn delete", remote: true %> <%= link_to 'Править', edit_request_path(request), remote: true, class: "edit btn" %></td>
       </tr>
     <% end %>
   </tbody>

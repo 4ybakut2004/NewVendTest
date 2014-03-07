@@ -28,4 +28,7 @@ describe User do
 
     it { should_not be_valid }
   end
+
+  it { should respond_to(:remember_token) }
+  it { should respond_to(:authenticate) }
 end

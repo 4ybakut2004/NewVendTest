@@ -7,7 +7,7 @@ working_directory "/var/www/apps/NewVend/current" # available in 0.94.0+
 # Слушаем Unix domain socket и TCP порт,
 # we use a shorter backlog for quicker failover when busy - с этим не разобрался (backlog и tcp_nopush)
 listen "/var/www/apps/NewVend/socket/.unicorn.sock", :backlog => 64
-listen 3000, :tcp_nopush => true
+listen 8080, :tcp_nopush => true
 
 # уничтожаем workers после 30 секунд вместо 60 дефолтных
 timeout 30

@@ -9,9 +9,9 @@ else
 	$("<tr style='opacity: 0;' id='<%= @request.id %>'>" +
 		"<td><%= @request.id %></td>" +
 		"<td><%= @request.employee %></td>" +
-		"<td><%= if @request.id then escape_javascript(link_to @request.machine, edit_request_path(@request), remote: true, class: 'edit btn') end %></td>" +
-		"<td><%= if @request.id then escape_javascript(link_to @request.description, edit_request_path(@request), remote: true, class: 'edit btn') end %></td>" +
-		"<td class='actions'><%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'btn delete', remote: true) %></td>" +
+		"<td><%= if @request.id then escape_javascript(link_to @request.machine, edit_request_path(@request), remote: true, class: 'edit') end %></td>" +
+		"<td><%= if @request.id then escape_javascript(link_to @request.description, edit_request_path(@request), remote: true, class: 'edit') end %></td>" +
+		"<td class='actions'><%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'btn delete', remote: true) %>  <%= if @request.id then escape_javascript(link_to 'Править', edit_request_path(@request), remote: true, class: 'edit btn') end %></td>" +
 	"</tr>").appendTo("#requests")
 	.animate({opacity: 1}, 500, function() {
 		setDeleteAction($("a[data-remote].delete"));
