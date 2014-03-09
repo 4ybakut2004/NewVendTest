@@ -1,0 +1,20 @@
+  <%= form_for(@machine) do |f| %>
+    <div>
+      <%= f.label :uid, "uid" %><br>
+      <%= f.text_field :uid %>
+    </div>
+    <div>
+      <%= f.label :name, "name" %><br>
+      <%= f.text_field :name %>
+    </div>
+    <div>
+      <%= f.label :location, "location" %><br>
+      <%= f.text_field :location %>
+    </div>
+    <div>
+      <%= f.label :machine_type, "machine_type" %><br>
+      <%= f.text_field :machine_type %>
+    </div>
+    <%= f.submit "Подтвердить", class: "btn btn-large" %>
+  <% end %>  
+
