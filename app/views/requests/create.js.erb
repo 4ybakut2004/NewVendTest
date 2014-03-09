@@ -1,7 +1,11 @@
+var msg = $("#request_new").find("#msg");
+msg.empty();
+msg.css("opacity", "0");
+msg.css("display", "none");
+
 if("<%= @request.errors.count %>" != 0)
 {
-	$("#request_new").find("#error").empty();
-	$("#request_new").find("#error").append("<span class='msg-error'>Количество ошибок: <%= @request.errors.count %></span><br>" +
+	msg.append("<span class='msg-error'>Количество ошибок: <%= @request.errors.count %></span><br>" +
 	                                        "<span class='msg-error'>Проверьте обязательные для ввода поля</span>");
 }
 else
@@ -20,8 +24,12 @@ else
 	    	setEditAction($("a[data-remote].edit"));
 		});
 
-		$("#request_new").find("#error").empty();
-		$("#request_new").find("#error").append("<span class='msg-success'>Заявка успешно создана</span>");
+		msg.append("<span class='msg-success'>Заявка успешно создана</span>");
 
 	<% end %>
 }
+
+msg.css("display", "block");
+msg.animate({opacity: 1}, 300).
+	animate({opacity: 1}, 5000).
+	animate({opacity: 0}, 300, function() { msg.css("display", "none") });
