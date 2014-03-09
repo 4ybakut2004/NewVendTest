@@ -35,9 +35,6 @@
   }
 
   $(document).ready(function() {
-    $(".container").css("opacity", "0");
-    $(".container").css("margin-top", "-15px");
-    $(".container").animate({opacity: 1, 'margin-top': 0}, 300, function() {});
     setDeleteAction($("a[data-remote].delete"));
     setEditAction($("a[data-remote].edit"));
   });
@@ -58,8 +55,8 @@
       <tr id="<%= request.id %>">
         <td><%= request.id %></td>
         <td><%= request.employee %></td>
-        <td><%= link_to request.machine, edit_request_path(request), remote: true, class: "edit" %></td>
-        <td><%= link_to request.description, edit_request_path(request), remote: true, class: "edit" %></td>
+        <td><%= link_to request.machine.name, machine_path(request.machine) %></td>
+        <td><%= request.description %></td>
         <td class="actions"><%= link_to 'Удалить', request, method: :delete, data: { confirm: 'Вы уверены?' }, class: "btn delete", remote: true %> <%= link_to 'Править', edit_request_path(request), remote: true, class: "edit btn" %></td>
       </tr>
     <% end %>

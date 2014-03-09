@@ -8,13 +8,12 @@ describe "Static pages" do
 
     it { should have_content('Новый Вендинг') }
     it { should have_title('New Vending') }
-    it { should_not have_title('| Home') }
   end
 
   describe "Help page" do
     before { visit help_path }
 
-    it { should have_content('Help') }
+    it { should have_content('Помощь') }
     it { should have_title('| Help') }
   end
 

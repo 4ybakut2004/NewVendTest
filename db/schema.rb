@@ -11,17 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140303095606) do
+ActiveRecord::Schema.define(version: 20140307051528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "machines", force: true do |t|
+    t.string   "uid"
+    t.string   "name"
+    t.string   "location"
+    t.string   "machine_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "machines", ["name"], name: "index_machines_on_name", using: :btree
+  add_index "machines", ["uid"], name: "index_machines_on_uid", using: :btree
+
   create_table "requests", force: true do |t|
     t.string   "employee"
-    t.string   "machine"
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "machine_id"
   end
 
   create_table "users", force: true do |t|

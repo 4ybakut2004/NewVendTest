@@ -1,15 +1,11 @@
-<script type="text/javascript">
-
-</script>
-
 <div id="request">
   <div id="error">
     
   </div>
   <%= form_for(@request, remote: true) do |f| %>
     <div class="field mandatory">
-      <%= f.label :machine, "Автомат" %><br>
-      <%= f.text_field :machine %>
+      <%= f.label :machine_id, "Автомат" %><br>
+      <%= f.select :machine_id, options_for_select(Machine.all.collect {|m| [ m.name, m.id ] }, :selected => @request.machine_id ) %>
     </div>
     <div class="field mandatory">
       <%= f.label :description, "Описание" %><br>

@@ -8,6 +8,7 @@ body {
 header {
 	min-width: 860px;
 	width: 100%;
+	position: fixed;
 }
 
 .navbar {
@@ -34,7 +35,7 @@ header {
 }
 
 .logo {
-	font-size: 30px;
+	font-size: 23px;
 	padding: 5px 40px 5px 40px;
 	float: left;
 	border-right: 1px solid #dddddd;
@@ -50,13 +51,20 @@ header {
 	color: #bbbbbb;
 }
 
+.menu-label {
+	text-align: left;
+	width: 50px;
+	float: right;
+	font-weight: bold;
+}
+
 .user-menu {
 	font-size: 16px;
 	padding: 10px 0px 0px 0px;
 	background-color: #eeeeee;
 	color: #777777;
-	right: 15px;
-	top: 38px;
+	left: -100px;
+	top: 30px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	-o-border-radius: 5px;
@@ -66,14 +74,18 @@ header {
 	-webkit-box-shadow: 0 0 7px rgba(0,0,0,0.5);
 	-moz-box-shadow: 0 0 7px rgba(0,0,0,0.5);
 	box-shadow: 0 0 7px rgba(0,0,0,0.5);
-}
 
-.user-menu:hover ul li a{
-	display: block;
+	min-width: 160px;
+
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
 }
 
 .user-menu div {
 	margin-bottom: 5px;
+	margin-top: 5px;
 	padding-left: 3px;
 	padding-right: 3px;
 }
@@ -81,6 +93,7 @@ header {
 .user-menu ul {
 	margin: 0;
 	padding: 0;
+	display: none;
 }
 
 .user-menu li {
@@ -94,7 +107,7 @@ header {
 	height: 14px;
 	background-color: #dddddd;
 	text-decoration: none;
-	display: none;
+	display: block;
 
 	-webkit-transition: all 0.3s ease;
 	-moz-transition: all 0.3s ease;
@@ -102,21 +115,11 @@ header {
 	transition: all 0.3s ease;
 }
 
-.user-menu li:last-child a {
-	-webkit-border-bottom-left-radius: 4px;
-	-moz-border-bottom-left-radius: 4px;
-	-o-border-bottom-left-radius: 4px;
-	border-bottom-left-radius: 4px;
-
-	-webkit-border-bottom-right-radius: 4px;
-	-moz-border-bottom-right-radius: 4px;
-	-o-border-bottom-right-radius: 4px;
-	border-bottom-right-radius: 4px;
-}
-
 .nav {
 	float: right;
 	margin-right: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .nav li {
@@ -127,7 +130,7 @@ header {
 
 .nav li a {
 	color: #ffffff;
-	padding: 10px 15px;
+	padding: 5px 10px;
 	background-color: #dddddd;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -142,15 +145,12 @@ header {
 }
 
 .container {
-	padding-right: 15px;
-	padding-left: 15px;
-	margin-right: auto;
-	margin-left: auto;
+	margin-right: 100px;
+	margin-left: 100px;
 }
 
 .form {
 	font-size: 14px;
-	width: 80%;
 	min-width: 600px;
 	padding: 15px;
 	background-color: #efefef;
@@ -173,7 +173,8 @@ header {
 }
 
 .form input[type='text'],
-.form input[type='password'] {
+.form input[type='password'],
+.form select {
 	width: 100%;
 	font-size: 1.3em;
 	-webkit-border-radius: 5px;
@@ -187,10 +188,12 @@ header {
 	-moz-transition: all 0.3s ease;
 	-o-transition: all 0.3s ease;
 	transition: all 0.3s ease;
+	background-color: #FFFFFF;
 }
 
 .form input[type='text']:focus,
-.form input[type='password']:focus {
+.form input[type='password']:focus,
+.form select:focus {
 	-webkit-box-shadow: 0px 0px 10px #4237FF;
 	-moz-box-shadow: 0px 0px 10px #4237FF;
 	box-shadow: 0px 0px 10px #4237FF;
@@ -228,8 +231,11 @@ header {
 }
 
 .center-element {
-	width: 80%;
-	margin: 10px auto;
+	width: 100%;
+	padding-top: 80px;
+}
+
+.content {
 	-webkit-border-radius: 15px;
 	-moz-border-radius: 15px;
 	-o-border-radius: 15px;
@@ -237,13 +243,13 @@ header {
 	background-color: #efefef;
 	border: 1px solid #dddddd;
 	padding: 15px;
-	min-width: 600px;
 	-webkit-box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
 	-moz-box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
 	box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
+	min-width: 600px;
 }
 
-.center-element a {
+.content a {
 	color: #333333;
 	text-decoration: none;
 }

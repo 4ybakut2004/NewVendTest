@@ -1,4 +1,6 @@
 NewVend::Application.routes.draw do
+  get "machines/new"
+  resources :machines, only: [:index, :show]
   resources :users, only: [:show]
   resources :sessions, only: [:new, :create, :destroy]
   resources :requests, only: [:index, :destroy, :create, :update, :edit]

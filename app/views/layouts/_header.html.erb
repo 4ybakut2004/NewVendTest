@@ -1,3 +1,22 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+      $(".user-menu").click(function(event) {
+          $(this).find("ul").css("display", "block");
+          $(this).animate({left: 0},
+            200, function() {});
+      });
+
+      $(".user-menu").hover(function() {
+          $(this).css("cursor", "pointer");
+      }, function() {
+          $(this).find("ul").css("display", "none");
+          $(this).animate({left: "-100px"},
+            100, function() {});
+      });
+    });
+  
+</script>
+
 <header>
   <div class="navbar">
     <div class="logo">
@@ -18,12 +37,12 @@
   </div>
   <% if signed_in? %>
       <div class="user-menu">
-        <div>Меню пользователя <%= current_user.name %></div> 
         <ul>
           <li><%= link_to "Заявки",      requests_path %></li>
-          <li><%= link_to "Автоматы",    "#" %></li>
+          <li><%= link_to "Автоматы",    machines_path %></li>
           <li><%= link_to "Мой профиль", user_path(current_user.id) %></li>
         </ul>
+        <div class="menu-label">Меню</div>
       </div>
   <% end %>
 </header>

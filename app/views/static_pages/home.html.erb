@@ -1,9 +1,10 @@
-<div class="center-element">
+<div class="content">
 	<% if signed_in? %>
 	<h1>Меню</h1>
+	<hr><br>
 	<%= link_to "Заявки", requests_path, class: "btn btn-large" %>
-	<%= link_to "Автоматы", "#", class: "btn btn-large" %>
+	<%= link_to "Автоматы", machines_path, class: "btn btn-large" %>
 	<% else %>
 		<%= link_to "Войти в систему", signin_path %>
-	<% end %>
+	<% end %>	
 </div>
