@@ -9,14 +9,14 @@ lock '3.1.0'
 #set :deploy_to, '/var/www/apps/NewVend'
 #set :port, 2222
 
-#set :repo_url, 'file:///home/chybakut2004/Workspace/RubyOnRails/NewVend/.git'
-set :rsync_stage, 'file:///home/chybakut2004/Workspace/RubyOnRails/NewVend/.git'
-set :rsync_options, %w[--recursive --delete --delete-excluded --exclude .git*]
 set :application, 'NewVend'
+set :deploy_to, '/var/www/apps/NewVend'
+set :deploy_via, :copy
+set :scm, :git
+set :repo_url, 'file://.git/'
 application = 'NewVend'
 set :rvm_type, :user
 set :rvm_ruby_version, '2.0.0-p247'
-set :deploy_to, '/var/www/apps/NewVend'
 set :port, 2222
 
 namespace :foreman do
