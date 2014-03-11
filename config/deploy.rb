@@ -9,8 +9,8 @@ lock '3.1.0'
 #set :deploy_to, '/var/www/apps/NewVend'
 #set :port, 2222
 
-set :repo_url, '.'
-set :rsync_stage, 'file:///home/chybakut2004/Workspace/RubyOnRails/NewVend'
+#set :repo_url, '.'
+#set :rsync_stage, 'file:///home/chybakut2004/Workspace/RubyOnRails/NewVend'
 set :application, 'NewVend'
 application = 'NewVend'
 set :rvm_type, :user
