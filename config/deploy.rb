@@ -4,10 +4,11 @@ lock '3.1.0'
 #set :application, 'my_app_name'
 #set :repo_url, 'git@example.com:me/my_repo.git'
 #set :repo_url, 'git@github.com:4ybakut2004/NewVendTest.git'
-set :repository,  "/home/chybakut2004/Workspace/RubyOnRails/NewVend/.git"
-set :local_repository, "/home/chybakut2004/Workspace/RubyOnRails/NewVend/.git"
-set :scm, :git
-set :deploy_via, :copy
+set :repo_url, '/home/chybakut2004/Workspace/RubyOnRails/NewVend/.git'
+#set :repository,  "/home/chybakut2004/Workspace/RubyOnRails/NewVend/.git"
+#set :local_repository, "/home/chybakut2004/Workspace/RubyOnRails/NewVend/.git"
+#set :scm, :git
+#set :deploy_via, :copy
 
 set :application, 'NewVend'
 application = 'NewVend'
