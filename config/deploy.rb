@@ -11,6 +11,7 @@ lock '3.1.0'
 
 #set :repo_url, '.'
 #set :rsync_stage, 'file:///home/chybakut2004/Workspace/RubyOnRails/NewVend'
+set :rsync_options, %w[--recursive --delete --delete-excluded --exclude .git*]
 set :application, 'NewVend'
 application = 'NewVend'
 set :rvm_type, :user
