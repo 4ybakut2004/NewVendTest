@@ -11,7 +11,7 @@ lock '3.1.0'
 
 set :application, 'NewVend'
 set :deploy_to, '/var/www/apps/NewVend'
-#set :deploy_via, :copy
+set :deploy_via, :copy
 #set :scm, :git
 set :repo_url, 'file:///vagrant/NewVend/.git'
 application = 'NewVend'
