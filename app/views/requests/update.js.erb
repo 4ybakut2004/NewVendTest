@@ -1,26 +1,40 @@
-if("<%= @request.errors.count %>" != 0)
+function updateRequest()
 {
-	$("#request_edit").find("#msg").empty();
-	$("#request_edit").find("#msg").append("<span class='msg-error'>Количество ошибок: <%= @request.errors.count %></span><br>" +
-	                                        "<span class='msg-error'>Проверьте обязательные для ввода поля</span>");
-}
-else
-{
-	<% if @request.machine %>
+	var msg = $("#request_edit").find("#msg");
+	msg.empty();
+	msg.css("opacity", "0");
+	msg.css("display", "none");
 
-		$("<tr style='opacity: 1;' id='<%= @request.id %>'>" +
-			"<td><%= @request.id %></td>" +
-			"<td><%= @request.employee %></td>" +
-			"<td><%= escape_javascript(link_to @request.machine.name, machine_path(@request.machine)) %></td>" +
-			"<td><%= @request.description %></td>" +
-			"<td class='actions'><%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'btn delete', remote: true) %>  <%= escape_javascript(link_to 'Править', edit_request_path(@request), remote: true, class: 'edit btn') %></td>" +
-		"</tr>").insertAfter("#<%= @request.id %>");
-		$("#<%= @request.id %>").remove();
-		$("#request_edit").animate({opacity: 0}, 500, function() {
-			$(this).css("display", "none").empty();
-			setDeleteAction($("a[data-remote].delete"));
-	    	setEditAction($("a[data-remote].edit"));
-		});
+	if("<%= @request.errors.count %>" != 0)
+	{
+		msg.append("<span class='msg-error'>Количество ошибок: <%= @request.errors.count %><br>" +
+		                                        "Проверьте обязательные для ввода поля</span>");
+	}
+	else
+	{
+		<% if @request.machine %>
 
-	<% end %>
+			$("<tr style='opacity: 1;' id='<%= @request.id %>'>" +
+				"<td><%= @request.id %></td>" +
+				"<td><%= @request.employee %></td>" +
+				"<td><%= escape_javascript(link_to @request.machine.name, machine_path(@request.machine)) %></td>" +
+				"<td><%= @request.description %></td>" +
+				"<td class='actions'><%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'btn delete', remote: true) %>  <%= escape_javascript(link_to 'Править', edit_request_path(@request), remote: true, class: 'edit btn') %></td>" +
+			"</tr>").insertAfter("#<%= @request.id %>");
+			$("#<%= @request.id %>").remove();
+			$("#request_edit").animate({opacity: 0}, 500, function() {
+				$(this).css("display", "none").empty();
+				setDeleteAction($("a[data-remote].delete"));
+		    	setEditAction($("a[data-remote].edit"));
+			});
+
+		<% end %>
+	}
+
+	msg.css("display", "block");
+	msg.animate({opacity: 1}, 500).
+		animate({opacity: 1}, 5000).
+		animate({opacity: 0}, 1000, function() { msg.css("display", "none") });
 }
+
+updateRequest();

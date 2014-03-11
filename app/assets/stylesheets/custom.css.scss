@@ -3,6 +3,7 @@ body {
 	width: 100%;
 	font-family: 'MS Sans Serif', Geneva, sans-serif;
 	font-size: 14px;
+	background-color: #FFFFFF;
 }
 
 header {
@@ -149,18 +150,25 @@ header {
 	margin-left: 100px;
 }
 
+.bubble {
+	position: absolute !important;
+	z-index: 500;
+}
+
 .form {
 	font-size: 14px;
 	min-width: 600px;
 	padding: 15px;
-	background-color: #efefef;
+	/*background-color: #efefef;*/
+	background-color: #FFFFFF;
 	text-align: center;
 	margin: 0 auto;
 	-webkit-border-radius: 15px;
 	-moz-border-radius: 15px;
 	-o-border-radius: 15px;
 	border-radius: 15px;
-	border: 1px solid #dddddd;
+	/*border: 1px solid #dddddd;*/
+	border: 1px solid #BDBDBD;
 	-webkit-box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
 	-moz-box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
 	box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
@@ -240,8 +248,8 @@ header {
 	-moz-border-radius: 15px;
 	-o-border-radius: 15px;
 	border-radius: 15px;
-	background-color: #efefef;
-	border: 1px solid #dddddd;
+	background-color: #FFFFFF;
+	border: 1px solid #BDBDBD;
 	padding: 15px;
 	-webkit-box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
 	-moz-box-shadow: 3px 3px 5px rgba(0,0,0,0.3);

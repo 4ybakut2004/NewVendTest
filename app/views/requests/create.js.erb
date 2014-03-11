@@ -1,35 +1,40 @@
-var msg = $("#request_new").find("#msg");
-msg.empty();
-msg.css("opacity", "0");
-msg.css("display", "none");
-
-if("<%= @request.errors.count %>" != 0)
+function addNewRequest()
 {
-	msg.append("<span class='msg-error'>Количество ошибок: <%= @request.errors.count %></span><br>" +
-	                                        "<span class='msg-error'>Проверьте обязательные для ввода поля</span>");
+	var msg = $("#request_new").find("#msg");
+	msg.empty();
+	msg.css("opacity", "0");
+	msg.css("display", "none");
+
+	if("<%= @request.errors.count %>" != 0)
+	{
+		msg.append("<span class='msg-error'>Количество ошибок: <%= @request.errors.count %><br>" +
+		                                        "Проверьте обязательные для ввода поля</span>");
+	}
+	else
+	{
+		<% if @request.machine %>
+		
+			$("<tr style='opacity: 0;' id='<%= @request.id %>'>" +
+				"<td><%= @request.id %></td>" +
+				"<td><%= @request.employee %></td>" +
+				"<td><%= escape_javascript(link_to @request.machine.name, machine_path(@request.machine)) %></td>" +
+				"<td><%= @request.description %></td>" +
+				"<td class='actions'><%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'btn delete', remote: true) %>  <%= if @request.id then escape_javascript(link_to 'Править', edit_request_path(@request), remote: true, class: 'edit btn') end %></td>" +
+			"</tr>").appendTo("#requests")
+			.animate({opacity: 1}, 500, function() {
+				setDeleteAction($("a[data-remote].delete"));
+		    	setEditAction($("a[data-remote].edit"));
+			});
+
+			msg.append("<span class='msg-success'>Заявка успешно создана</span>");
+
+		<% end %>
+	}
+
+	msg.css("display", "block");
+	msg.animate({opacity: 1}, 500).
+		animate({opacity: 1}, 5000).
+		animate({opacity: 0}, 1000, function() { msg.css("display", "none") });
 }
-else
-{
-	<% if @request.machine %>
-	
-		$("<tr style='opacity: 0;' id='<%= @request.id %>'>" +
-			"<td><%= @request.id %></td>" +
-			"<td><%= @request.employee %></td>" +
-			"<td><%= escape_javascript(link_to @request.machine.name, machine_path(@request.machine)) %></td>" +
-			"<td><%= @request.description %></td>" +
-			"<td class='actions'><%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'btn delete', remote: true) %>  <%= if @request.id then escape_javascript(link_to 'Править', edit_request_path(@request), remote: true, class: 'edit btn') end %></td>" +
-		"</tr>").appendTo("#requests")
-		.animate({opacity: 1}, 500, function() {
-			setDeleteAction($("a[data-remote].delete"));
-	    	setEditAction($("a[data-remote].edit"));
-		});
 
-		msg.append("<span class='msg-success'>Заявка успешно создана</span>");
-
-	<% end %>
-}
-
-msg.css("display", "block");
-msg.animate({opacity: 1}, 300).
-	animate({opacity: 1}, 5000).
-	animate({opacity: 0}, 300, function() { msg.css("display", "none") });
+addNewRequest();

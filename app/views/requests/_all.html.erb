@@ -1,4 +1,6 @@
 <script type="text/javascript">
+  var clickX, clickY;
+
   function setDeleteAction(element)
   {
     element.on("ajax:success", function(e, data, status, xhr){
@@ -9,28 +11,35 @@
 
   function setEditAction(element)
   {
+    element.click(function(e) {
+        var editForm = $("#request_edit");
+        editForm.css("top", e.pageY + "px")
+        .css("left", (e.pageX - editForm.width()) + "px");
+    });
+
     element.on("ajax:success", function(e, data, status, xhr){
-      $("#request_edit").empty();
-      $("#request_edit").css("opacity", "0");
+        var editForm = $("#request_edit");
+        editForm.empty();
 
-      var btn = $("<input type='button' value='X' class='btn' style='float: right;'>");
-      btn.bind("click", function(event) {
-          $("#request_edit").animate({opacity: 0}, 500, function() {
-              $(this).css("display", "none").empty();
-          });
-      });
+        var btn = $("<input type='button' value='X' class='btn' style='float: right;'>");
+        btn.bind("click", function(event) {
+            editForm.animate({opacity: 0}, 500, function() {
+                editForm.css("display", "none").empty();
+            });
+        });
+        editForm.append($(btn));
 
-      $(btn).appendTo('#request_edit');
+        editForm.append($("<h1>Редактирование заявки</h1>"));
+        editForm.append($(xhr.responseText).find("#request"));
 
-      $($("<h1>Редактирование заявки</h1>")).appendTo('#request_edit');
-      $($(xhr.responseText).find("#request")).appendTo('#request_edit');
-      $("#request_edit").css("display", "block");
-      if($("#request_edit").css("opacity") != 1)
-      {
-        $("#request_edit").animate({opacity: 1}, 500, function() {});
-      }
+        editForm.css("display", "block");
+        if(editForm.css("opacity") != 1)
+        {
+            editForm.css("opacity", "0");
+            editForm.animate({opacity: 1}, 500, function() {});
+        }
     }).bind("ajax:error", function(e, xhr, status, error){
-      console.log(xhr.responseText);
+        console.log(xhr.responseText);
     });
   }
 

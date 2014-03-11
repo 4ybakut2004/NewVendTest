@@ -3,7 +3,12 @@ lock '3.1.0'
 
 #set :application, 'my_app_name'
 #set :repo_url, 'git@example.com:me/my_repo.git'
-set :repo_url, 'git@github.com:4ybakut2004/NewVendTest.git'
+#set :repo_url, 'git@github.com:4ybakut2004/NewVendTest.git'
+set :repository,  "/home/chybakut2004/Workspace/RubyOnRails/NewVend/.git"
+set :local_repository, "/home/chybakut2004/Workspace/RubyOnRails/NewVend/.git"
+set :scm, :git
+set :deploy_via, :copy
+
 set :application, 'NewVend'
 application = 'NewVend'
 set :rvm_type, :user
@@ -48,7 +53,7 @@ namespace :git do
     run_locally do
       execute "git add -A"
       execute "git commit -m '#{fetch(:message)}'"
-      execute "git push"
+      #execute "git push"
     end
   end
 end
