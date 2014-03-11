@@ -9,7 +9,7 @@ lock '3.1.0'
 #set :deploy_to, '/var/www/apps/NewVend'
 #set :port, 2222
 
-set :repo_url, 'file:///home/chybakut2004/Workspace/RubyOnRails/NewVend'
+set :repo_url, 'file:///home/chybakut2004/Workspace/RubyOnRails/NewVend/.git'
 #set :rsync_stage, 'file:///home/chybakut2004/Workspace/RubyOnRails/NewVend'
 set :rsync_options, %w[--recursive --delete --delete-excluded --exclude .git*]
 set :application, 'NewVend'
