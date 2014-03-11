@@ -13,7 +13,7 @@ set :application, 'NewVend'
 set :deploy_to, '/var/www/apps/NewVend'
 set :deploy_via, :copy
 set :scm, :git
-set :repo_url, 'file://.git'
+set :repo_url, 'file:///vagrant/NewVend.git'
 application = 'NewVend'
 set :rvm_type, :user
 set :rvm_ruby_version, '2.0.0-p247'
