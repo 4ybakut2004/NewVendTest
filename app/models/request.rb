@@ -5,6 +5,8 @@ class Request < ActiveRecord::Base
 
 	validate :validate_machine_id
 
+	enum type: [:phone, :other]
+
 	private
 
 	  def validate_machine_id
