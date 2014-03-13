@@ -1,7 +1,7 @@
 function Switchable(containerSelector, clickMethod)
 {
 	var container    = $(containerSelector);
-	var buttons      = container.find("button[type='button']");
+	var buttons      = container.find("button");
 	container.attr('value', 'undefined');
 
 	function onClickMethod() {
@@ -34,4 +34,34 @@ function FormSwitchable(containerSelector, submitMethod, inputSelector)
 	}
 
 	forms.submit(onSubmitMethod);
+
+	this.switchOff = function()
+	{
+		container.attr('value', 'undefined');
+		submitButtons.removeAttr('disabled');
+		submitButtons.removeClass('btn-activated');
+	};
+}
+
+function Checkable(button, clickMethod) {
+	$(button).click(function(event) {
+		if($(this).attr('activated') == 'true')
+		{
+			$(this).removeClass('btn-activated-toogle');
+			$(this).attr('activated', 'false');
+		}
+		else
+		{
+			$(this).addClass('btn-activated-toogle');
+			$(this).attr('activated', 'true');
+		}
+		clickMethod();
+	});
+
+	this.checkOff = function()
+	{
+		$(button).removeClass('btn-activated-toogle');
+		$(button).attr('activated', 'false');
+		clickMethod();
+	};
 }

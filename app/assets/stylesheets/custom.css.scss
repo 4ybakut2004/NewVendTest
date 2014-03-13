@@ -234,8 +234,23 @@ header {
 }
 
 .btn-activated {
-	background: #918DE6;
-	border: 2px solid #807BE2;
+	background: #B7B7B7;
+	border: 2px solid #A5A5A5;
+}
+
+.btn-activated:hover {
+	background: #B7B7B7 !important;
+	border: 2px solid #A5A5A5 !important;
+}
+
+.btn-activated-toogle {
+	background: #B7B7B7;
+	border: 2px solid #A5A5A5;
+}
+
+.btn-activated-toogle:hover {
+	background: #D2D2D2 !important;
+	color: #565656 !important;
 }
 
 .btn:hover {
@@ -352,5 +367,15 @@ header {
 }
 
 .display-none {
-	display: none;
+	display: none !important;
+}
+
+.display-inline-block {
+	display: inline-block;
+}
+
+.message-checker {
+	display: inline-block;
+	margin-left: 5px;
+	margin-right: 5px;
 }

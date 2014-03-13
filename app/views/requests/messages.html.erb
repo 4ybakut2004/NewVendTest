@@ -1,0 +1,32 @@
+<div id="filtered-messages">
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".message-checker").each(function(index, el) {
+			var checkbox = $(el).find("input[type='checkbox']");
+			var button   = $(el).find('button');
+
+			function check(btn, chk){
+				if(btn.hasClass('btn-activated-toogle'))
+				{
+					btn.removeClass('btn-activated-toogle');
+					chk.prop('checked', false);
+				}
+				else
+				{
+					btn.addClass('btn-activated-toogle');
+					chk.prop('checked', true);
+				}
+			}
+			button.click(function(event) {
+				check(button, checkbox);
+			});
+		});
+	});
+</script>
+	<% @messages.each do |message| %>
+		<div class="message-checker">
+			<button class="btn" type="button"><%= message.name %></button>
+	    	<%= check_box_tag 'messages[]', message.id, false, :class => "display-none" %>
+		</div>
+	<% end %>
+</div>

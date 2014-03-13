@@ -11,7 +11,7 @@ NewVend::Application.routes.draw do
   match '/signin',  to: 'sessions#new',         via: 'get'
   match '/signout', to: 'sessions#destroy',     via: 'delete'
 
-  post 'signal_models' => 'requests#signal_models', :as => :signal_models
+  post 'messages' => 'requests#messages', :as => :messages
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

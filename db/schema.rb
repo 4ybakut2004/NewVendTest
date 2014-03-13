@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140312094626) do
+ActiveRecord::Schema.define(version: 20140313062059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,11 +28,18 @@ ActiveRecord::Schema.define(version: 20140312094626) do
   add_index "machines", ["name"], name: "index_machines_on_name", using: :btree
   add_index "machines", ["uid"], name: "index_machines_on_uid", using: :btree
 
-  create_table "request_signals", force: true do |t|
-    t.integer  "request_id"
-    t.integer  "signal_model_id"
+  create_table "messages", force: true do |t|
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "request_type"
+  end
+
+  create_table "request_messages", force: true do |t|
+    t.integer  "request_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "message_id"
   end
 
   create_table "requests", force: true do |t|
@@ -42,13 +49,6 @@ ActiveRecord::Schema.define(version: 20140312094626) do
     t.datetime "updated_at"
     t.integer  "machine_id"
     t.string   "request_type", default: "phone"
-  end
-
-  create_table "signal_models", force: true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "request_type"
   end
 
   create_table "users", force: true do |t|

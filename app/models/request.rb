@@ -1,7 +1,7 @@
 class Request < ActiveRecord::Base
 	belongs_to :machine
-	has_many :request_signals, dependent: :destroy
-  	has_many :signal_models, through: :request_signals
+	has_many :request_messages, dependent: :destroy
+  	has_many :messages, through: :request_messages
 
 	validates :machine_id, presence: true
 	validate :validate_machine_id

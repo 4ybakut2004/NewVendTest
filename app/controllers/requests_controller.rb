@@ -6,7 +6,7 @@ class RequestsController < ApplicationController
   def index
     @requests = Request.all
     @request  = Request.new
-    @signal_models = SignalModel.all
+    @messages = Message.all
   end
 
   # GET /requests/1
@@ -29,13 +29,15 @@ class RequestsController < ApplicationController
   def create
     @requests = Request.all
     @request  = Request.new(request_params)
-    signal_models = params[:signal_models]
+    messages = params[:messages]
 
     respond_to do |format|
       if @request.save
-        signal_models.each { |signal|
-          RequestSignal.create(:request_id => @request.id, :signal_model_id => signal);
-        }
+        if messages
+          messages.each { |message|
+            RequestMessage.create(:request_id => @request.id, :message_id => message);
+          }
+        end
         format.html { redirect_to @request, notice: 'Request was successfully created.' }
         format.js   {}
         format.json { render json: @request, status: :created, location: @request }
@@ -76,12 +78,12 @@ class RequestsController < ApplicationController
     end
   end
 
-  def signal_models
+  def messages
     request_type = params[:request_type]
 
-    @signal_models = SignalModel.where(:request_type => request_type)
+    @messages = Message.where(:request_type => request_type)
 
-    render template: "/requests/signal_models.html.erb"
+    render template: "/requests/messages.html.erb"
   end
 
   private

@@ -1,26 +1,41 @@
 <div id="request">
   <script type="text/javascript">
     $(document).ready(function() {
-      FormSwitchable("#btn-group", function(){
-        var form = $("#new_request");
+      var form = $("#new_request");
+      var machine_id = "#machine_id";
+      var description = "#description";
+      var submit = "input[type='submit']";
+      var otherButton = "#other-button";
+      var otherButtonContainer = "#other-button-container";
 
-        switch($("#btn-group").attr('value'))
-        {
-          case "phone":
-            form.find("#request_type").addClass('display-none');
-            form.find("#machine_id").removeClass('display-none');
-            form.find("#description").addClass('display-none');
-            form.find("input[type='submit']").removeClass('display-none');
-            break;
-          case "other":
-            form.find("#request_type").addClass('display-none');
-            form.find("#machine_id").removeClass('display-none');
-            form.find("#description").removeClass('display-none');
-            form.find("input[type='submit']").removeClass('display-none');
-            break;
-          default:
-            break;
-        }
+      $(submit).css("margin-top", "10px");
+
+      function showElement(elem) {
+        form.find(elem).removeClass('display-none');
+      }
+
+      function hideElement(elem) {
+        form.find(elem).addClass('display-none');
+      }
+
+      var checkable = new Checkable(otherButton, function() {
+          switch($(otherButton).attr('activated'))
+          {
+            case 'true':
+              showElement(description);
+              break;
+            case 'false':
+              hideElement(description);
+              form.find("#request_description").val('');
+              break;
+          }
+      });
+
+      var switchable = new FormSwitchable("#btn-group", function(){
+        checkable.checkOff();
+        showElement(machine_id);
+        showElement(submit);
+        showElement(otherButtonContainer);
 
         form.find("#request_request_type")
         .find("option[value='" + $("#btn-group").attr('value') + "']")
@@ -28,12 +43,23 @@
 
         form.find("#request_description").val('');
 
-        $("#signals").empty();
+        $("#messages").empty();
       },
       "#request_type");
 
       $("#btn-group form").on("ajax:success", function(e, data, status, xhr){
-        $("#signals").append($(xhr.responseText).find("#filtered-signals"));
+        $("#messages").append($(xhr.responseText).find("#filtered-messages"));
+      }).bind("ajax:error", function(e, xhr, status, error){
+        console.log(xhr.responseText);
+      });
+
+      $("#new_request").on("ajax:success", function(e, data, status, xhr){
+        hideElement(machine_id);
+        hideElement(description);
+        hideElement(submit);
+        hideElement(otherButtonContainer);
+        $("#messages").empty();
+        switchable.switchOff();
       }).bind("ajax:error", function(e, xhr, status, error){
         console.log(xhr.responseText);
       });
@@ -42,7 +68,7 @@
   
   <div id="btn-group">
     <% Request.request_types.each do |key, value| %>
-      <%= form_tag('signal_models', :remote => true, :style => "display: inline-block;") do %>
+      <%= form_tag('messages', :remote => true, :style => "display: inline-block;") do %>
         <%= hidden_field_tag 'request_type', key %>
         <%= submit_tag value, :class => "btn" %>
       <% end %>
@@ -58,14 +84,18 @@
       <%= f.label :machine_id, "Автомат" %><br>
       <%= f.select :machine_id, options_for_select(Machine.all.collect {|m| [ m.name, m.id ] }, :selected => @request.machine_id ) %>
     </div>
+    <div id="messages" class="display-inline-block">
+    </div>
+    <div id="other-button-container" class="display-inline-block display-none">
+      <button id="other-button" type="button" class="btn">Другое</button>
+    </div>
     <div id="description" class="field display-none">
       <%= f.label :description, "Описание" %><br>
       <%= f.text_field :description %>
     </div>
-    <div id="signals">
-      
+    <div style="display: block;">
+      <%= f.submit "Подтвердить", class: "btn btn-large display-none" %>
     </div>
-    <%= f.submit "Подтвердить", class: "btn btn-large display-none" %>
   <% end %>  
 
   <div id="msg"></div>
