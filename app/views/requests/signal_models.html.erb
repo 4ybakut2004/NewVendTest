@@ -1,0 +1,7 @@
+<div id="filtered-signals">
+	<% @signal_models.each do |signal| %>
+	    <%= signal.name %>
+	    <%= check_box_tag 'signal_models[]', signal.id, false %>
+	    <br>
+	<% end %>
+</div>

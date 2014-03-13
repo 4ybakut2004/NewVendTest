@@ -10,6 +10,7 @@ header {
 	min-width: 860px;
 	width: 100%;
 	position: fixed;
+	z-index: 1000;
 }
 
 .navbar {
@@ -19,7 +20,7 @@ header {
 	border-bottom: 1px solid #dddddd;
 	margin-bottom: 15px;
 	display: inline-block;
-	z-index: 1000;
+	z-index: 999;
 	position: relative;
 	-webkit-box-shadow: 0 0 9px rgba(0,0,0,0.5);
 	-moz-box-shadow: 0 0 9px rgba(0,0,0,0.5);
@@ -232,6 +233,11 @@ header {
 	font-size: 18px;
 }
 
+.btn-activated {
+	background: #918DE6;
+	border: 2px solid #807BE2;
+}
+
 .btn:hover {
 	background-color: #7771F0;
 	color: #ffffff;
@@ -272,6 +278,7 @@ header {
 	-moz-border-radius: 5px;
 	-o-border-radius: 5px;
 	border-radius: 5px;
+	margin-top: 5px;
 }
 
 .msg-success {
@@ -285,6 +292,7 @@ header {
 	-moz-border-radius: 5px;
 	-o-border-radius: 5px;
 	border-radius: 5px;
+	margin-top: 5px;
 }
 
 .field_with_errors input {
@@ -309,7 +317,6 @@ header {
 	text-align: center;
 	margin: 0 auto;
 	border-spacing: 1px;
-	max-width: 800px;
 }
 
 .standart-table thead tr th,
@@ -342,4 +349,8 @@ header {
 #request_edit {
 	display: none;
 	opacity: 0;
+}
+
+.display-none {
+	display: none;
 }

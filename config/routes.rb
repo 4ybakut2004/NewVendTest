@@ -1,6 +1,6 @@
 NewVend::Application.routes.draw do
   get "machines/new"
-  resources :machines, only: [:index, :show, :new, :create]
+  resources :machines, only: [:index, :show, :create, :new]
   resources :users, only: [:show]
   resources :sessions, only: [:new, :create, :destroy]
   resources :requests, only: [:index, :destroy, :create, :update, :edit]
@@ -10,6 +10,8 @@ NewVend::Application.routes.draw do
 
   match '/signin',  to: 'sessions#new',         via: 'get'
   match '/signout', to: 'sessions#destroy',     via: 'delete'
+
+  post 'signal_models' => 'requests#signal_models', :as => :signal_models
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

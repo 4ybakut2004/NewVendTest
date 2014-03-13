@@ -22,6 +22,8 @@ gem 'whenever', :require => false
 
 gem 'json'
 
+gem 'enum_simulator'
+
 group :doc do
   gem 'sdoc', require: false
 end

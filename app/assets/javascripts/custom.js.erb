@@ -1,0 +1,37 @@
+function Switchable(containerSelector, clickMethod)
+{
+	var container    = $(containerSelector);
+	var buttons      = container.find("button[type='button']");
+	container.attr('value', 'undefined');
+
+	function onClickMethod() {
+		buttons.removeAttr('disabled');
+		buttons.removeClass('btn-activated');
+		$(this).attr('disabled', 'disabled');
+		$(this).addClass('btn-activated');
+		container.attr('value', $(this).attr('value'));
+		clickMethod();
+	}
+
+	buttons.click(onClickMethod);
+}
+
+function FormSwitchable(containerSelector, submitMethod, inputSelector)
+{
+	var container     = $(containerSelector);
+	var forms         = container.find('form');
+	var submitButtons = container.find("input[type='submit']");
+	container.attr('value', 'undefined');
+
+	function onSubmitMethod() {
+		submitButtons.removeAttr('disabled');
+		submitButtons.removeClass('btn-activated');
+		var submitButton = $(this).find("input[type='submit']");
+		submitButton.attr('disabled', 'disabled');
+		submitButton.addClass('btn-activated');
+		container.attr('value', $(this).find(inputSelector).val());	
+		submitMethod();
+	}
+
+	forms.submit(onSubmitMethod);
+}

@@ -1,0 +1,73 @@
+<div id="request">
+  <script type="text/javascript">
+    $(document).ready(function() {
+      FormSwitchable("#btn-group", function(){
+        var form = $("#new_request");
+
+        switch($("#btn-group").attr('value'))
+        {
+          case "phone":
+            form.find("#request_type").addClass('display-none');
+            form.find("#machine_id").removeClass('display-none');
+            form.find("#description").addClass('display-none');
+            form.find("input[type='submit']").removeClass('display-none');
+            break;
+          case "other":
+            form.find("#request_type").addClass('display-none');
+            form.find("#machine_id").removeClass('display-none');
+            form.find("#description").removeClass('display-none');
+            form.find("input[type='submit']").removeClass('display-none');
+            break;
+          default:
+            break;
+        }
+
+        form.find("#request_request_type")
+        .find("option[value='" + $("#btn-group").attr('value') + "']")
+        .attr('selected', 'selected');
+
+        form.find("#request_description").val('');
+
+        $("#signals").empty();
+      },
+      "#request_type");
+
+      $("#btn-group form").on("ajax:success", function(e, data, status, xhr){
+        $("#signals").append($(xhr.responseText).find("#filtered-signals"));
+      }).bind("ajax:error", function(e, xhr, status, error){
+        console.log(xhr.responseText);
+      });
+    });
+  </script>
+  
+  <div id="btn-group">
+    <% Request.request_types.each do |key, value| %>
+      <%= form_tag('signal_models', :remote => true, :style => "display: inline-block;") do %>
+        <%= hidden_field_tag 'request_type', key %>
+        <%= submit_tag value, :class => "btn" %>
+      <% end %>
+    <% end %>
+  </div>
+  
+  <%= form_for(@request, remote: true) do |f| %>
+    <div id="request_type" class="field mandatory display-none">
+      <%= f.label :request_type, "Тип заявки" %><br>
+      <%= f.select :request_type, options_for_select(Request.request_types.map { |k, v| [ v, k ] }) %>
+    </div>
+    <div id="machine_id" class="field mandatory display-none">
+      <%= f.label :machine_id, "Автомат" %><br>
+      <%= f.select :machine_id, options_for_select(Machine.all.collect {|m| [ m.name, m.id ] }, :selected => @request.machine_id ) %>
+    </div>
+    <div id="description" class="field display-none">
+      <%= f.label :description, "Описание" %><br>
+      <%= f.text_field :description %>
+    </div>
+    <div id="signals">
+      
+    </div>
+    <%= f.submit "Подтвердить", class: "btn btn-large display-none" %>
+  <% end %>  
+
+  <div id="msg"></div>
+</div>
+

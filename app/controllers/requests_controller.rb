@@ -6,6 +6,7 @@ class RequestsController < ApplicationController
   def index
     @requests = Request.all
     @request  = Request.new
+    @signal_models = SignalModel.all
   end
 
   # GET /requests/1
@@ -28,9 +29,13 @@ class RequestsController < ApplicationController
   def create
     @requests = Request.all
     @request  = Request.new(request_params)
+    signal_models = params[:signal_models]
 
     respond_to do |format|
       if @request.save
+        signal_models.each { |signal|
+          RequestSignal.create(:request_id => @request.id, :signal_model_id => signal);
+        }
         format.html { redirect_to @request, notice: 'Request was successfully created.' }
         format.js   {}
         format.json { render json: @request, status: :created, location: @request }
@@ -71,6 +76,14 @@ class RequestsController < ApplicationController
     end
   end
 
+  def signal_models
+    request_type = params[:request_type]
+
+    @signal_models = SignalModel.where(:request_type => request_type)
+
+    render template: "/requests/signal_models.html.erb"
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_request
@@ -79,6 +92,6 @@ class RequestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def request_params
-      params.require(:request).permit(:machine_id, :description)
+      params.require(:request).permit(:machine_id, :description, :request_type)
     end
 end

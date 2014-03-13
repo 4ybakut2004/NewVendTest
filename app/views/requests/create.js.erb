@@ -2,7 +2,7 @@ function addNewRequest()
 {
 	var msg = $("#request_new").find("#msg");
 	msg.empty();
-	msg.css("opacity", "0");
+	msg.animate({opacity: 0}, 0);
 	msg.css("display", "none");
 
 	if("<%= @request.errors.count %>" != 0)
@@ -19,6 +19,7 @@ function addNewRequest()
 				"<td><%= @request.employee %></td>" +
 				"<td><%= escape_javascript(link_to @request.machine.name, machine_path(@request.machine)) %></td>" +
 				"<td><%= @request.description %></td>" +
+				"<td><%= Request.request_types[@request.request_type.to_sym] %></td>" +
 				"<td class='actions'><%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'btn delete', remote: true) %>  <%= if @request.id then escape_javascript(link_to 'Править', edit_request_path(@request), remote: true, class: 'edit btn') end %></td>" +
 			"</tr>").appendTo("#requests")
 			.animate({opacity: 1}, 500, function() {
@@ -28,13 +29,16 @@ function addNewRequest()
 
 			msg.append("<span class='msg-success'>Заявка успешно создана</span>");
 
+			var form = $("#new_request");
+        	form.find("#request_description").val('');
+
 		<% end %>
 	}
 
 	msg.css("display", "block");
 	msg.animate({opacity: 1}, 500).
 		animate({opacity: 1}, 5000).
-		animate({opacity: 0}, 1000, function() { msg.css("display", "none") });
+		animate({opacity: 0}, 1000, function() { msg.css("display", "none"); });
 }
 
 addNewRequest();
