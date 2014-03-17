@@ -1,0 +1,36 @@
+<div class="standart-table-container">
+
+<table id="messages-table" class="standart-table table-autosort">
+  <thead>
+    <tr>
+      <th class="table-sortable:numeric table-sortable">Номер</th>
+      <th class="table-sortable:default table-sortable">Наименование</th>
+      <th class="table-sortable:default table-sortable">Тип заявки</th>
+      <th>Действия</th>
+    </tr>
+    <tr>
+      <th>Фильтр:</th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th>
+        <select onchange="Table.filter(this,this)">
+        <option value>Все</option>
+        <%= options_for_select(Request.request_types.map { |k, v| [ v, v ] }) %>
+        </select>
+      </th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody id ="messages">
+    <% @messages.each do |message| %>
+      <tr id="<%= message.id %>">
+        <td><%= message.id %></td>
+        <td><%= message.name %></td>
+        <td><%= Request.request_types[message.request_type.to_sym] %></td>
+        <td><%= link_to 'Удалить', message, method: :delete, data: { confirm: 'Вы уверены?' }, class: "delete", remote: true %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+  
+</div>

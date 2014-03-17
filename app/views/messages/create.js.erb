@@ -1,0 +1,36 @@
+function addNewMessage()
+{
+	var msg = $("#message_new").find("#msg");
+	msg.empty();
+	msg.animate({opacity: 0}, 0);
+	msg.css("display", "none");
+
+	if("<%= @message.errors.count %>" != 0)
+	{
+		msg.append("<span class='msg-error'>Количество ошибок: <%= @message.errors.count %><br>" +
+		                                        "Проверьте обязательные для ввода поля</span>");
+	}
+	else
+	{
+		$("<tr style='opacity: 0;' id='<%= @message.id %>'>" +
+			"<td><%= @message.id %></td>" +
+			"<td><%= @message.name %></td>" +
+			"<td><%= Request.request_types[@message.request_type.to_sym] %></td>" +
+			"<td><%= if @message.id then escape_javascript(link_to 'Удалить', @message, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'delete', remote: true) end %></td>" +
+		"</tr>").appendTo("#messages")
+		.animate({opacity: 1}, 500, function() {
+		});
+
+		msg.append("<span class='msg-success'>Сигнял успешно создан</span>");
+
+		var form = $("#new_message");
+    	form.find("#message_name").val('');
+	}
+
+	msg.css("display", "block");
+	msg.animate({opacity: 1}, 500).
+		animate({opacity: 1}, 5000).
+		animate({opacity: 0}, 1000, function() { msg.css("display", "none"); });
+}
+
+addNewMessage();

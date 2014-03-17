@@ -9,54 +9,38 @@
     });
   }
 
-  function setEditAction(element)
-  {
-    element.click(function(e) {
-        var editForm = $("#request_edit");
-        editForm.css("top", e.pageY + "px")
-        .css("left", (e.pageX - editForm.width()) + "px");
-    });
-
-    element.on("ajax:success", function(e, data, status, xhr){
-        var editForm = $("#request_edit");
-        editForm.empty();
-
-        var btn = $("<input type='button' value='X' class='btn' style='float: right;'>");
-        btn.bind("click", function(event) {
-            editForm.animate({opacity: 0}, 500, function() {
-                editForm.css("display", "none").empty();
-            });
-        });
-        editForm.append($(btn));
-
-        editForm.append($("<h1>Редактирование заявки</h1>"));
-        editForm.append($(xhr.responseText).find("#request"));
-
-        editForm.css("display", "block");
-        if(editForm.css("opacity") != 1)
-        {
-            editForm.css("opacity", "0");
-            editForm.animate({opacity: 1}, 500, function() {});
-        }
-    }).bind("ajax:error", function(e, xhr, status, error){
-        console.log(xhr.responseText);
-    });
-  }
-
   $(document).ready(function() {
     setDeleteAction($("a[data-remote].delete"));
-    setEditAction($("a[data-remote].edit"));
+    Bubble($("a[data-remote].edit"), $("#request_edit"), "#request", "Редактирование заявки");
+    Bubble($("a[data-remote].request_messages"), $("#request_messages"), "#filtered-request-messages", undefined);
   });
 </script>
-<table class="standart-table">
+<div class="standart-table-container">
+
+<table id="requests-table" class="standart-table table-autosort">
   <thead>
     <tr>
-      <th>Номер</th>
-      <th>Сотрудник</th>
-      <th>Автомат</th>
-      <th>Описание</th>
-      <th>Тип</th>
+      <th class="table-sortable:numeric table-sortable">Номер</th>
+      <th class="table-sortable:default table-sortable">Сотрудник</th>
+      <th class="table-sortable:default table-sortable">Автомат</th>
+      <th class="table-sortable:default table-sortable">Описание</th>
+      <th class="table-sortable:default table-sortable">Тип</th>
+      <th>Сигналов</th>
       <th>Действия</th>
+    </tr>
+    <tr>
+      <th>Фильтр:</th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th>
+        <select onchange="Table.filter(this,this)">
+        <option value>Все</option>
+        <%= options_for_select(Request.request_types.map { |k, v| [ v, v ] }) %>
+        </select>
+      </th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
 
@@ -68,8 +52,16 @@
         <td><%= link_to request.machine.name, machine_path(request.machine) %></td>
         <td><%= request.description %></td>
         <td><%= Request.request_types[request.request_type.to_sym] %></td>
-        <td class="actions"><%= link_to 'Удалить', request, method: :delete, data: { confirm: 'Вы уверены?' }, class: "btn delete", remote: true %> <%= link_to 'Править', edit_request_path(request), remote: true, class: "edit btn" %></td>
+        <td>
+          <%= link_to (request.request_messages.length.to_s), request_messages_path(:id => request.id), remote: true, class: "request_messages", :method => :post %>
+        </td>
+        <td class="actions">
+          <%= link_to 'Удалить', request, method: :delete, data: { confirm: 'Вы уверены?' }, class: "delete", remote: true %>,
+          <%= link_to 'Править', edit_request_path(request), remote: true, class: "edit" %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
+  
+</div>

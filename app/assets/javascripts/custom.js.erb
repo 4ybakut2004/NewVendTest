@@ -65,3 +65,38 @@ function Checkable(button, clickMethod) {
 		clickMethod();
 	};
 }
+
+function Bubble(clickElement, formElement, extractingElement, title)
+{
+    clickElement.click(function(e) {
+        formElement.css("top", e.pageY + "px")
+        .css("left", (e.pageX - formElement.width()) + "px");
+    });
+
+    clickElement.on("ajax:success", function(e, data, status, xhr){
+        formElement.empty();
+
+        var btn = $("<input type='button' value='X' class='btn' style='float: right;'>");
+        btn.bind("click", function(event) {
+            formElement.animate({opacity: 0}, 300, function() {
+                formElement.css("display", "none").empty();
+            });
+        });
+        formElement.append($(btn));
+
+        if(title)
+        {
+          formElement.append($("<h1>" + title + "</h1>"));
+        }
+        formElement.append($(xhr.responseText).find(extractingElement));
+
+        formElement.css("display", "block");
+        if(formElement.css("opacity") != 1)
+        {
+            formElement.css("opacity", "0");
+            formElement.animate({opacity: 1}, 200, function() {});
+        }
+    }).bind("ajax:error", function(e, xhr, status, error){
+        console.log(xhr.responseText);
+    });
+}

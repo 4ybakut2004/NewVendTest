@@ -20,11 +20,18 @@ function addNewRequest()
 				"<td><%= escape_javascript(link_to @request.machine.name, machine_path(@request.machine)) %></td>" +
 				"<td><%= @request.description %></td>" +
 				"<td><%= Request.request_types[@request.request_type.to_sym] %></td>" +
-				"<td class='actions'><%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'btn delete', remote: true) %>  <%= if @request.id then escape_javascript(link_to 'Править', edit_request_path(@request), remote: true, class: 'edit btn') end %></td>" +
+				"<td>" +
+          			"<%= if @request.id then escape_javascript(link_to (@request.request_messages.length.to_s), request_messages_path(:id => @request.id), remote: true, class: 'request_messages', :method => :post) end %>" +
+       		    "</td>" +
+				"<td class='actions'>" + 
+					"<%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'delete', remote: true) %>, " +
+					"<%= if @request.id then escape_javascript(link_to 'Править', edit_request_path(@request), remote: true, class: 'edit') end %> " +
+				"</td>" +
 			"</tr>").appendTo("#requests")
 			.animate({opacity: 1}, 500, function() {
 				setDeleteAction($("a[data-remote].delete"));
-		    	setEditAction($("a[data-remote].edit"));
+		    	Bubble($("a[data-remote].edit"), $("#request_edit"), "#request", "Редактирование заявки");
+    			Bubble($("a[data-remote].request_messages"), $("#request_messages"), "#filtered-request-messages", undefined);
 			});
 
 			msg.append("<span class='msg-success'>Заявка успешно создана</span>");

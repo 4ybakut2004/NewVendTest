@@ -1,5 +1,5 @@
 class RequestsController < ApplicationController
-  before_action :set_request, only: [:show, :edit, :update, :destroy]
+  before_action :set_request, only: [:show, :edit, :update, :destroy, :request_messages]
 
   # GET /requests
   # GET /requests.json 
@@ -78,12 +78,18 @@ class RequestsController < ApplicationController
     end
   end
 
-  def messages
+  def request_messages
+    @request_messages = RequestMessage.where(:request_id => @request.id)
+
+    render template: "/requests/request_messages.html.erb"
+  end
+
+  def messages_for_request
     request_type = params[:request_type]
 
     @messages = Message.where(:request_type => request_type)
 
-    render template: "/requests/messages.html.erb"
+    render template: "/requests/messages_for_request.html.erb"
   end
 
   private
@@ -94,6 +100,6 @@ class RequestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def request_params
-      params.require(:request).permit(:machine_id, :description, :request_type)
+      params.require(:request).permit(:machine_id, :description, :request_type, :phone)
     end
 end

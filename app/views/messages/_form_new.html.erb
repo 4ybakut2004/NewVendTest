@@ -1,0 +1,26 @@
+<div id="request">
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#new_message").on("ajax:success", function(e, data, status, xhr){
+      }).bind("ajax:error", function(e, xhr, status, error){
+        console.log(xhr.responseText);
+      });
+    });
+  </script>
+  
+  <%= form_for(@message, remote: true) do |f| %>
+    <div id="name" class="field mandatory">
+      <%= f.label :name, "Наименование" %><br>
+      <%= f.text_field :name %>
+    </div>
+    <div id="request_type" class="field mandatory">
+      <%= f.label :request_type, "Тип заявки" %><br>
+      <%= f.select :request_type, options_for_select(Request.request_types.map { |k, v| [ v, k ] }) %>
+    </div>
+    <div id="msg"></div>
+    <div class="form-footer">
+      <%= f.submit "Подтвердить", class: "btn btn-large" %>
+    </div>
+  <% end %>  
+</div>
+

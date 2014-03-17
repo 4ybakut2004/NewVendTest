@@ -7,6 +7,7 @@
       var submit = "input[type='submit']";
       var otherButton = "#other-button";
       var otherButtonContainer = "#other-button-container";
+      var phone = "#phone";
 
       $(submit).css("margin-top", "10px");
 
@@ -37,11 +38,22 @@
         showElement(submit);
         showElement(otherButtonContainer);
 
+        switch($("#btn-group").attr("value"))
+        {
+          case 'phone':
+            showElement(phone);
+            break;
+          case 'other':
+            hideElement(phone);
+            break;
+        }
+
         form.find("#request_request_type")
         .find("option[value='" + $("#btn-group").attr('value') + "']")
         .attr('selected', 'selected');
 
         form.find("#request_description").val('');
+        form.find("#request_phone").val('');
 
         $("#messages").empty();
       },
@@ -58,6 +70,7 @@
         hideElement(description);
         hideElement(submit);
         hideElement(otherButtonContainer);
+        hideElement(phone);
         $("#messages").empty();
         switchable.switchOff();
       }).bind("ajax:error", function(e, xhr, status, error){
@@ -68,7 +81,7 @@
   
   <div id="btn-group">
     <% Request.request_types.each do |key, value| %>
-      <%= form_tag('messages', :remote => true, :style => "display: inline-block;") do %>
+      <%= form_tag('messages_for_request', :remote => true, :style => "display: inline-block;") do %>
         <%= hidden_field_tag 'request_type', key %>
         <%= submit_tag value, :class => "btn" %>
       <% end %>
@@ -82,7 +95,11 @@
     </div>
     <div id="machine_id" class="field mandatory display-none">
       <%= f.label :machine_id, "Автомат" %><br>
-      <%= f.select :machine_id, options_for_select(Machine.all.collect {|m| [ m.name, m.id ] }, :selected => @request.machine_id ) %>
+      <%= f.select :machine_id, options_for_select(Machine.order('name ASC').all.collect {|m| [ m.name, m.id ] }, :selected => @request.machine_id ) %>
+    </div>
+    <div id="phone" class="field display-none">
+      <%= f.label :phone, "Номер телефона" %><br>
+      <%= f.text_field :phone %>
     </div>
     <div id="messages" class="display-inline-block">
     </div>
@@ -93,11 +110,10 @@
       <%= f.label :description, "Описание" %><br>
       <%= f.text_field :description %>
     </div>
-    <div style="display: block;">
+    <div id="msg"></div>
+    <div class="form-footer">
       <%= f.submit "Подтвердить", class: "btn btn-large display-none" %>
     </div>
   <% end %>  
-
-  <div id="msg"></div>
 </div>
 
