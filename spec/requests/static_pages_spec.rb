@@ -23,6 +23,22 @@ describe "Static pages" do
     expect(page).to have_title('New Vending')
     click_link "Помощь"
     expect(page).to have_title('Help')
+
+    visit root_path
+    click_link "Заявки"
+    expect(page).to have_title('| Requests')
+
+    visit root_path
+    click_link "Автоматы"
+    expect(page).to have_title('| Machines')
+
+    visit root_path
+    click_link "Сигналы"
+    expect(page).to have_title('| Messages')
+
+    visit root_path
+    click_link "Поручения сигналов"
+    expect(page).to have_title('| Message Tasks')
   end
 
 end

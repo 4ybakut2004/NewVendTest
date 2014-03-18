@@ -1,0 +1,12 @@
+<%= form_tag(message_tasks_path, method: "get") do %>
+	<div class="field">
+		<%= label_tag(:request_id, "Номер заявки") %>
+  		<%= select_tag(:request_id, options_for_select(Request.all.collect {|m| [m.id, m.id]}.unshift(["Все", nil]), :selected => @request_id )) %>	
+	</div>
+	<div class="field">
+		<%= label_tag(:action_type, "Тип поручения") %>
+  		<%= select_tag(:action_type, options_for_select([["Все", "all"],["Созданные мной", "my"],["Порученные мне", "to_me"],["Для контроля", "to_audit"]], :selected => @action_type)) %>	
+	</div>
+  
+  	<%= submit_tag("Искать", class: "btn btn-large") %>
+<% end %>

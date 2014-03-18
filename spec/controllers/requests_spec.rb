@@ -8,7 +8,7 @@ describe "Requests pages" do
 
     it { should have_content('Заявки') }
     it { should have_content('Новая заявка') }
-    it { should have_title('Requests') }
+    it { should have_title('| Requests') }
   end
 
 end

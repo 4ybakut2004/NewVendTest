@@ -1,5 +1,5 @@
 body {
-	margin: 0 auto;
+	margin: 0 auto 300px auto;
 	width: 100%;
 	font-family: 'MS Sans Serif', Geneva, sans-serif;
 	font-size: 14px;
@@ -436,6 +436,7 @@ header {
 
 .display-inline-block {
 	display: inline-block;
+	vertical-align: top;
 }
 
 .message-checker {
@@ -444,3 +445,6 @@ header {
 	margin-right: 5px;
 }
 
+.task {
+	display: block;
+}

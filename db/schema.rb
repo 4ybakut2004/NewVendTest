@@ -11,10 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140316090238) do
+ActiveRecord::Schema.define(version: 20140317071706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "employees", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "machines", force: true do |t|
     t.string   "uid"
@@ -27,6 +33,17 @@ ActiveRecord::Schema.define(version: 20140316090238) do
 
   add_index "machines", ["name"], name: "index_machines_on_name", using: :btree
   add_index "machines", ["uid"], name: "index_machines_on_uid", using: :btree
+
+  create_table "message_tasks", force: true do |t|
+    t.integer  "assigner_id"
+    t.integer  "executor_id"
+    t.integer  "auditor_id"
+    t.string   "description"
+    t.integer  "request_message_id"
+    t.integer  "task_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "messages", force: true do |t|
     t.string   "name"
@@ -43,13 +60,21 @@ ActiveRecord::Schema.define(version: 20140316090238) do
   end
 
   create_table "requests", force: true do |t|
-    t.string   "employee"
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "machine_id"
     t.string   "request_type", default: "phone"
     t.string   "phone"
+    t.integer  "registrar_id"
+    t.integer  "solver_id"
+  end
+
+  create_table "tasks", force: true do |t|
+    t.string   "name"
+    t.integer  "message_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|
@@ -58,6 +83,7 @@ ActiveRecord::Schema.define(version: 20140316090238) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "remember_token"
+    t.integer  "employee_id"
   end
 
   add_index "users", ["name"], name: "index_users_on_name", unique: true, using: :btree

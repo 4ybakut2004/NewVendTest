@@ -1,3 +1,7 @@
+// Превращает кнопки в контейнере в переключатели
+// В один момент может быть включена только одна кнопка
+// Значение кнопки сохраняется в атрибут value контейнера
+// После нажатия кнопки выполняется метод clickMethod
 function Switchable(containerSelector, clickMethod)
 {
 	var container    = $(containerSelector);
@@ -16,6 +20,10 @@ function Switchable(containerSelector, clickMethod)
 	buttons.click(onClickMethod);
 }
 
+// Превращает формы в контейнере в переключатели
+// В один момент может быть включен только один сабмит
+// Значение сабмита сохраняется в поле ввода формы inputSelector
+// После нажатия сабмита выполняется метод submitMethod
 function FormSwitchable(containerSelector, submitMethod, inputSelector)
 {
 	var container     = $(containerSelector);
@@ -43,6 +51,8 @@ function FormSwitchable(containerSelector, submitMethod, inputSelector)
 	};
 }
 
+// Превращает кнопку в переключатель
+// При нажатии вызывается метод clickMethod
 function Checkable(button, clickMethod) {
 	$(button).click(function(event) {
 		if($(this).attr('activated') == 'true')
@@ -66,6 +76,10 @@ function Checkable(button, clickMethod) {
 	};
 }
 
+// Превращает элемент во всплывающее окно
+// По нажатию clickElement (Submit формы запроса) 
+// на странице появляется formElement с заголовком title.
+// Из респонза excractingElement помещается в тело formElement
 function Bubble(clickElement, formElement, extractingElement, title)
 {
     clickElement.click(function(e) {
@@ -99,4 +113,57 @@ function Bubble(clickElement, formElement, extractingElement, title)
     }).bind("ajax:error", function(e, xhr, status, error){
         console.log(xhr.responseText);
     });
+}
+
+function trHover() {
+  var infoContainer = $("#full-request-info");
+  var request = requestsHash[$(this).attr("id")];
+
+  var request_messages_table = infoContainer.find("#request-messages-table");
+  var message_tasks_table = infoContainer.find("#message-tasks-table");
+
+  for(var i = 0; i < request.request_messages.length; i++)
+  {
+    var request_message = request.request_messages[i];
+    request_messages_table.find("tbody").append(
+      $("<tr>"+
+          "<td>" + request_message + "</td>" +
+        "<tr>")
+    );
+  }
+
+  for(var i = 0; i < request.message_tasks.length; i++)
+  {
+    var message_task = request.message_tasks[i];
+    message_tasks_table.find("tbody").append(
+      $("<tr>"+
+          "<td>" + message_task.name + "</td>" +
+        "<tr>")
+    );
+  }
+
+  if(request.request_type == "phone" && request.phone)
+  {
+    infoContainer.find("#full-phone-number").append(
+      $("<table class='standart-table'><thead>" +
+        "<tr><th>Телефон</th></tr>" +
+        "</thead>" +
+        "<tbody>" +
+        "<tr><td>" + request.phone + "</td></tr>" +
+        "</tbody></table>")
+    );
+  }
+
+  infoContainer.css("top", $(this).position().top + $(this).height() + "px")
+  .css("left", $(this).position().left + "px")
+  .css("display", "block")
+  .css("opacity", "0").animate({opacity: 1}, 200, function() {});
+}
+
+function trUnHover() {
+  var infoContainer = $("#full-request-info");
+  infoContainer.css("display", "none").css("opacity", "0");
+  infoContainer.find("#request-messages-table tbody").empty();
+  infoContainer.find("#message-tasks-table tbody").empty();
+  infoContainer.find("#full-phone-number").empty();
 }

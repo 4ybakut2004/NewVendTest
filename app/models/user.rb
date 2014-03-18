@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
 	validates :name,     presence: true, uniqueness: { case_sensitive: false }
 	validates :password, presence: true
 
+	belongs_to :employee
+
 	before_create :create_remember_token
 
 	def authenticate(not_encrypted_password)

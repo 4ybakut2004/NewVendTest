@@ -1,11 +1,11 @@
 <div class="content">
-	<% if signed_in? %>
+	<!--<% if !signed_in? %>
+		<%= link_to "Войти в систему", signin_path %>
+	<% end %>-->
 	<h1>Меню</h1>
 	<hr><br>
 	<%= link_to "Заявки", requests_path, class: "btn btn-large" %>
 	<%= link_to "Автоматы", machines_path, class: "btn btn-large" %>
 	<%= link_to "Сигналы", messages_path, class: "btn btn-large" %>
-	<% else %>
-		<%= link_to "Войти в систему", signin_path %>
-	<% end %>	
+	<%= link_to "Поручения сигналов", message_tasks_path, class: "btn btn-large" %>
 </div>

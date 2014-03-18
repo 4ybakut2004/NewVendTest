@@ -1,0 +1,48 @@
+<div class="standart-table-container">
+
+<table class="standart-table table-autosort" id="message-tasks-table">
+  <thead>
+    <tr>
+      <th class="table-sortable:numeric table-sortable">Номер</th>
+      <th class="table-sortable:numeric table-sortable">Номер заявки</th>
+      <th class="table-sortable:default table-sortable">Действие</th>
+      <th class="table-sortable:default table-sortable">Назначатель</th>
+      <th class="table-sortable:default table-sortable">Исполнитель</th>
+      <th class="table-sortable:default table-sortable">Контроллер</th>
+      <th class="table-sortable:default table-sortable">Описание</th>
+      <th class="table-sortable:date table-sortable">Дата создания</th>
+      <th class="table-sortable:date table-sortable">Дата выполнения</th>
+      <th class="table-sortable:date table-sortable">Дата проверки</th>
+    </tr>
+    <tr>
+      <th>Фильтр:</th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @message_tasks.each do |message_task| %>
+      <tr id="<%= message_task.id %>">
+        <td><%= message_task.id %></td>
+        <td><%= link_to message_task.request_message.request_id, edit_request_path(message_task.request_message.request) %></td>
+        <td><%= message_task.task.name %></td>
+        <td><%= message_task.assigner.name %></td>
+        <td><%= message_task.executor ? message_task.executor.name : "" %></td>
+        <td><%= message_task.auditor.name %></td>
+        <td><%= message_task.description %></td>
+        <td><%= message_task.created_at %></td>
+        <td>ЗАВЕСТИ ПОЛЕ</td>
+        <td>ЗАВЕСТИ ПОЛЕ</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+  
+</div>

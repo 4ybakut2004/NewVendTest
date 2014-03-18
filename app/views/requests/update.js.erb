@@ -13,28 +13,28 @@ function updateRequest()
 	else
 	{
 		<% if @request.machine %>
-
-			$("<tr style='opacity: 1;' id='<%= @request.id %>'>" +
+			var tr = $("<tr style='opacity: 1;' id='<%= @request.id %>'>" +
 								"<td><%= @request.id %></td>" +
-				"<td><%= @request.employee %></td>" +
+				"<td><%= @request.registrar.name %></td>" +
+				"<td><%= @request.solver.name %></td>" +
 				"<td><%= escape_javascript(link_to @request.machine.name, machine_path(@request.machine)) %></td>" +
 				"<td><%= @request.description %></td>" +
 				"<td><%= Request.request_types[@request.request_type.to_sym] %></td>" +
-				"<td>" +
-          			"<%= if @request.id then escape_javascript(link_to (@request.request_messages.length.to_s), request_messages_path(:id => @request.id), remote: true, class: 'request_messages', :method => :post) end %>" +
-       		    "</td>" +
 				"<td class='actions'>" + 
 					"<%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'delete', remote: true) %>, " +
 					"<%= if @request.id then escape_javascript(link_to 'Править', edit_request_path(@request), remote: true, class: 'edit') end %> " +
 				"</td>" +
-			"</tr>").insertAfter("#<%= @request.id %>");
+			"</tr>");
+			tr.insertAfter("#<%= @request.id %>");
 			$("#<%= @request.id %>").remove();
 			$("#request_edit").animate({opacity: 0}, 500, function() {
 				$(this).css("display", "none").empty();
 				setDeleteAction($("a[data-remote].delete"));
 		    	Bubble($("a[data-remote].edit"), $("#request_edit"), "#request", "Редактирование заявки");
-    			Bubble($("a[data-remote].request_messages"), $("#request_messages"), "#filtered-request-messages", undefined);
 			});
+
+			requestsHash[<%= @request.id %>] = <%= raw @request.getFullInfo.to_json %>;
+        	tr.hover(trHover, trUnHover);
 
 		<% end %>
 	}

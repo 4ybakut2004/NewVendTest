@@ -1,6 +1,15 @@
 <script type="text/javascript">
   var clickX, clickY;
 
+  var requestsArray = <%= raw (@requests.map{ |r| r.getFullInfo }).to_json %>;
+
+  var requestsHash = {};
+
+  for(var i = 0; i < requestsArray.length; i++)
+  {
+    requestsHash[requestsArray[i].id] = requestsArray[i];
+  }
+
   function setDeleteAction(element)
   {
     element.on("ajax:success", function(e, data, status, xhr){
@@ -12,7 +21,7 @@
   $(document).ready(function() {
     setDeleteAction($("a[data-remote].delete"));
     Bubble($("a[data-remote].edit"), $("#request_edit"), "#request", "Редактирование заявки");
-    Bubble($("a[data-remote].request_messages"), $("#request_messages"), "#filtered-request-messages", undefined);
+    $(".standart-table tbody tr").hover(trHover, trUnHover);
   });
 </script>
 <div class="standart-table-container">
@@ -21,15 +30,16 @@
   <thead>
     <tr>
       <th class="table-sortable:numeric table-sortable">Номер</th>
-      <th class="table-sortable:default table-sortable">Сотрудник</th>
+      <th class="table-sortable:default table-sortable">Регистратор</th>
+      <th class="table-sortable:default table-sortable">Решатель</th>
       <th class="table-sortable:default table-sortable">Автомат</th>
       <th class="table-sortable:default table-sortable">Описание</th>
       <th class="table-sortable:default table-sortable">Тип</th>
-      <th>Сигналов</th>
       <th>Действия</th>
     </tr>
     <tr>
       <th>Фильтр:</th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
       <th><input type="text" onkeyup="Table.filter(this,this)"></th>
       <th><input type="text" onkeyup="Table.filter(this,this)"></th>
       <th><input type="text" onkeyup="Table.filter(this,this)"></th>
@@ -40,7 +50,6 @@
         </select>
       </th>
       <th></th>
-      <th></th>
     </tr>
   </thead>
 
@@ -48,13 +57,11 @@
     <% @requests.each do |request| %>
       <tr id="<%= request.id %>">
         <td><%= request.id %></td>
-        <td><%= request.employee %></td>
+        <td><%= request.registrar.name %></td>
+        <td><%= request.solver.name %></td>
         <td><%= link_to request.machine.name, machine_path(request.machine) %></td>
         <td><%= request.description %></td>
         <td><%= Request.request_types[request.request_type.to_sym] %></td>
-        <td>
-          <%= link_to (request.request_messages.length.to_s), request_messages_path(:id => request.id), remote: true, class: "request_messages", :method => :post %>
-        </td>
         <td class="actions">
           <%= link_to 'Удалить', request, method: :delete, data: { confirm: 'Вы уверены?' }, class: "delete", remote: true %>,
           <%= link_to 'Править', edit_request_path(request), remote: true, class: "edit" %>
@@ -63,5 +70,31 @@
     <% end %>
   </tbody>
 </table>
+
+<div id="full-request-info" class="content bubble" style="min-width: 0;">
+  <div id="full-request-messages" class="display-inline-block">
+    <table id="request-messages-table" class="standart-table">
+      <thead>
+        <tr>
+          <th>Сигналы заявки</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <div id="full-message-tasks" class="display-inline-block">
+    <table id="message-tasks-table" class="standart-table">
+      <thead>
+        <tr>
+          <th>Поручения заявки</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <div id="full-phone-number" class="display-inline-block"></div>
+</div>
   
 </div>

@@ -1,10 +1,10 @@
 class RequestsController < ApplicationController
-  before_action :set_request, only: [:show, :edit, :update, :destroy, :request_messages]
+  before_action :set_request, only: [:show, :edit, :update, :destroy]
 
   # GET /requests
   # GET /requests.json 
   def index
-    @requests = Request.all
+    @requests = Request.order('created_at DESC').all
     @request  = Request.new
     @messages = Message.all
   end
@@ -29,13 +29,21 @@ class RequestsController < ApplicationController
   def create
     @requests = Request.all
     @request  = Request.new(request_params)
+    @request.registrar_id = current_user.employee.id
     messages = params[:messages]
 
     respond_to do |format|
       if @request.save
         if messages
           messages.each { |message|
-            RequestMessage.create(:request_id => @request.id, :message_id => message);
+            request_message = RequestMessage.create(:request_id => @request.id,
+                                                    :message_id => message)
+            Message.find(message).tasks.each { |task|
+              message_task = MessageTask.create(:assigner_id => @request.solver_id,
+                                                :auditor_id  => @request.solver_id,
+                                                :task_id => task.id,
+                                                :request_message_id => request_message.id)
+            }
           }
         end
         format.html { redirect_to @request, notice: 'Request was successfully created.' }
@@ -78,12 +86,6 @@ class RequestsController < ApplicationController
     end
   end
 
-  def request_messages
-    @request_messages = RequestMessage.where(:request_id => @request.id)
-
-    render template: "/requests/request_messages.html.erb"
-  end
-
   def messages_for_request
     request_type = params[:request_type]
 
@@ -100,6 +102,6 @@ class RequestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def request_params
-      params.require(:request).permit(:machine_id, :description, :request_type, :phone)
+      params.require(:request).permit(:machine_id, :description, :request_type, :phone, :solver_id)
     end
 end

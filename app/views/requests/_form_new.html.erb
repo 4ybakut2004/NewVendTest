@@ -8,6 +8,7 @@
       var otherButton = "#other-button";
       var otherButtonContainer = "#other-button-container";
       var phone = "#phone";
+      var solver = "#solver_id";
 
       $(submit).css("margin-top", "10px");
 
@@ -56,11 +57,13 @@
         form.find("#request_phone").val('');
 
         $("#messages").empty();
+        $("#tasks").empty();
       },
       "#request_type");
 
       $("#btn-group form").on("ajax:success", function(e, data, status, xhr){
         $("#messages").append($(xhr.responseText).find("#filtered-messages"));
+        $("#tasks").append($(xhr.responseText).find("#tasks-of-messages"));
       }).bind("ajax:error", function(e, xhr, status, error){
         console.log(xhr.responseText);
       });
@@ -72,6 +75,7 @@
         hideElement(otherButtonContainer);
         hideElement(phone);
         $("#messages").empty();
+        $("#tasks").empty();
         switchable.switchOff();
       }).bind("ajax:error", function(e, xhr, status, error){
         console.log(xhr.responseText);
@@ -89,6 +93,10 @@
   </div>
   
   <%= form_for(@request, remote: true) do |f| %>
+    <div id="solver_id" class="field mandatory">
+      <%= f.label :solver_id, "Решатель" %><br>
+      <%= f.select :solver_id, options_for_select(Employee.order('name ASC').all.collect {|e| [ e.name, e.id ] }, :selected =>  signed_in? ? current_user.employee.id : nil ) %>
+    </div>
     <div id="request_type" class="field mandatory display-none">
       <%= f.label :request_type, "Тип заявки" %><br>
       <%= f.select :request_type, options_for_select(Request.request_types.map { |k, v| [ v, k ] }) %>
@@ -110,6 +118,7 @@
       <%= f.label :description, "Описание" %><br>
       <%= f.text_field :description %>
     </div>
+    <div id="tasks"></div>
     <div id="msg"></div>
     <div class="form-footer">
       <%= f.submit "Подтвердить", class: "btn btn-large display-none" %>
