@@ -37,9 +37,9 @@
         <td><%= message_task.executor ? message_task.executor.name : "" %></td>
         <td><%= message_task.auditor.name %></td>
         <td><%= message_task.description %></td>
-        <td><%= message_task.created_at %></td>
-        <td>ЗАВЕСТИ ПОЛЕ</td>
-        <td>ЗАВЕСТИ ПОЛЕ</td>
+        <td><%= message_task.creation_date %></td>
+        <td><%= message_task.execution_date %></td>
+        <td><%= message_task.audition_date %></td>
       </tr>
     <% end %>
   </tbody>

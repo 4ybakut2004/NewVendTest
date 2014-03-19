@@ -42,7 +42,8 @@ class RequestsController < ApplicationController
               message_task = MessageTask.create(:assigner_id => @request.solver_id,
                                                 :auditor_id  => @request.solver_id,
                                                 :task_id => task.id,
-                                                :request_message_id => request_message.id)
+                                                :request_message_id => request_message.id,
+                                                :creation_date => Time.now)
             }
           }
         end
