@@ -3,9 +3,14 @@
 		<%= link_to "Войти в систему", signin_path %>
 	<% end %>-->
 	<h1>Меню</h1>
-	<hr><br>
+	<hr>
+	<h2>Управление заявками</h2>
 	<%= link_to "Заявки", requests_path, class: "btn btn-large" %>
+	<%= link_to "Поручения сигналов", message_tasks_path, class: "btn btn-large" %>
+	<br><br><hr>
+	<h2>Справочники</h2>
 	<%= link_to "Автоматы", machines_path, class: "btn btn-large" %>
 	<%= link_to "Сигналы", messages_path, class: "btn btn-large" %>
-	<%= link_to "Поручения сигналов", message_tasks_path, class: "btn btn-large" %>
+	<%= link_to "Поручения", tasks_path, class: "btn btn-large" %>
+	
 </div>

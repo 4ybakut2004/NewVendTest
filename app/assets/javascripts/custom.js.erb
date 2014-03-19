@@ -115,55 +115,37 @@ function Bubble(clickElement, formElement, extractingElement, title)
     });
 }
 
-function trHover() {
-  var infoContainer = $("#full-request-info");
-  var request = requestsHash[$(this).attr("id")];
-
-  var request_messages_table = infoContainer.find("#request-messages-table");
-  var message_tasks_table = infoContainer.find("#message-tasks-table");
-
-  for(var i = 0; i < request.request_messages.length; i++)
-  {
-    var request_message = request.request_messages[i];
-    request_messages_table.find("tbody").append(
-      $("<tr>"+
-          "<td>" + request_message + "</td>" +
-        "<tr>")
-    );
-  }
-
-  for(var i = 0; i < request.message_tasks.length; i++)
-  {
-    var message_task = request.message_tasks[i];
-    message_tasks_table.find("tbody").append(
-      $("<tr>"+
-          "<td>" + message_task.name + "</td>" +
-        "<tr>")
-    );
-  }
-
-  if(request.request_type == "phone" && request.phone)
-  {
-    infoContainer.find("#full-phone-number").append(
-      $("<table class='standart-table'><thead>" +
-        "<tr><th>Телефон</th></tr>" +
-        "</thead>" +
-        "<tbody>" +
-        "<tr><td>" + request.phone + "</td></tr>" +
-        "</tbody></table>")
-    );
-  }
-
-  infoContainer.css("top", $(this).position().top + $(this).height() + "px")
-  .css("left", $(this).position().left + "px")
-  .css("display", "block")
-  .css("opacity", "0").animate({opacity: 1}, 200, function() {});
+function showErrorMessage(message, container)
+{
+  showMessage(message, container, "error");
 }
 
-function trUnHover() {
-  var infoContainer = $("#full-request-info");
-  infoContainer.css("display", "none").css("opacity", "0");
-  infoContainer.find("#request-messages-table tbody").empty();
-  infoContainer.find("#message-tasks-table tbody").empty();
-  infoContainer.find("#full-phone-number").empty();
+function showSuccessMessage(message, container)
+{
+  showMessage(message, container, "success");
+}
+
+function showMessage(message, container, type)
+{
+    container.empty();
+    container.css({ opacity: 0, display: "none" });
+
+    var classes = "";
+    switch(type)
+    {
+        case "error":
+          classes += "msg-error";
+          break;
+
+        case "success":
+          classes += "msg-success";
+          break;
+    }
+
+    container.append($("<span class='" + classes + "'>" + message + "</span>"));
+
+    container.css("display", "block");
+    container.animate({opacity: 1}, 500)
+    .animate({opacity: 1}, 5000)
+    .animate({opacity: 0}, 1000, function() { container.css("display", "none"); });
 }

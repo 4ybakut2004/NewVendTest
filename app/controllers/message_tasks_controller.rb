@@ -20,10 +20,7 @@ class MessageTasksController < ApplicationController
 			end
 		end
 
-		puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-		puts filter
-
-		@message_tasks = MessageTask.joins(:request_message).where(filter)
+		@message_tasks = MessageTask.joins(:request_message).order("created_at DESC").where(filter)
 	end
 
 	private

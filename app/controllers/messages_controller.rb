@@ -6,16 +6,6 @@ class MessagesController < ApplicationController
 		@message = Message.new
 	end
 
-	def show
-	end
-
-	def new
-		@message = Message.new
-	end
-
-	def edit
-	end
-
 	def create
 	    @message  = Message.new(message_params)
 
@@ -26,20 +16,6 @@ class MessagesController < ApplicationController
 	        format.json { render json: @message, status: :created, location: @message }
 	      else
 	        format.html { render action: 'new' }
-	        format.js   {}
-	        format.json { render json: @message.errors, status: :unprocessable_entity }
-	      end
-	    end
-	end
-
-	def update
-	  	respond_to do |format|
-	      if @message.update(message_params)
-	        format.html { redirect_to @message, notice: 'Message was successfully updated.' }
-	        format.js   {}
-	        format.json { render json: @message, status: :created, location: @message }
-	      else
-	        format.html { render action: 'edit' }
 	        format.js   {}
 	        format.json { render json: @message.errors, status: :unprocessable_entity }
 	      end

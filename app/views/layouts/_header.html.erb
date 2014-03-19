@@ -38,10 +38,13 @@
   <% if signed_in? %>
       <div class="user-menu">
         <ul>
+          <li>Управление заявками</li>
           <li><%= link_to "Заявки",      requests_path %></li>
+          <li><%= link_to "Поручения сигналов", message_tasks_path %></li>
+          <li>Справочники</li>
           <li><%= link_to "Автоматы",    machines_path %></li>
           <li><%= link_to "Сигналы",     messages_path %></li>
-          <li><%= link_to "Поручения сигналов", message_tasks_path %></li>
+          <li><%= link_to "Поручения",   tasks_path %></li>
           <li><%= link_to "Мой профиль", user_path(current_user.id) %></li>
         </ul>
         <div class="menu-label">Меню</div>

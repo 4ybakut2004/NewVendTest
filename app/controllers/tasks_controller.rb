@@ -1,0 +1,43 @@
+class TasksController < ApplicationController
+	before_action :set_task, only: [:show, :edit, :update, :destroy]
+
+	def index
+		@tasks = Task.order("created_at DESC").all
+		@task  = Task.new
+	end
+
+	def create
+		@task = Task.new(task_params)
+
+		respond_to do |format|
+			if @task.save
+				format.html { redirect_to @task, notice: 'Task was successfully created.' }
+				format.js   {}
+			else
+				format.html { render action: 'new' }
+				format.js   {}
+			end
+		end
+	end
+
+	def destroy
+		@tasks = Task.all
+    
+	    @task.destroy
+	    respond_to do |format|
+	      format.html { redirect_to tasks_url }
+	      format.js   {}
+	      format.json { head :no_content }
+    	end
+	end
+
+	private
+
+		def set_task
+			@task = Task.find(params[:id])
+		end
+
+		def task_params
+			params.require(:task).permit(:name, :message_id)
+		end
+end

@@ -1,0 +1,26 @@
+<div id="task">
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#new_task").on("ajax:success", function(e, data, status, xhr){
+      }).bind("ajax:error", function(e, xhr, status, error){
+        console.log(xhr.responseText);
+      });
+    });
+  </script>
+  
+  <%= form_for(@task, remote: true) do |f| %>
+    <div id="name" class="field mandatory">
+      <%= f.label :name, "Наименование" %><br>
+      <%= f.text_field :name %>
+    </div>
+    <div id="message_id" class="field mandatory">
+      <%= f.label :message_id, "Сообщение" %><br>
+      <%= f.select :message_id, options_for_select(Message.all.map { |m| [ m.name, m.id ] }) %>
+    </div>
+    <div id="msg"></div>
+    <div class="form-footer">
+      <%= f.submit "Подтвердить", class: "btn btn-large" %>
+    </div>
+  <% end %>  
+</div>
+

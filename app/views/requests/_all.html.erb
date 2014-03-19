@@ -1,27 +1,18 @@
-<script type="text/javascript">
-  var clickX, clickY;
-
-  var requestsArray = <%= raw (@requests.map{ |r| r.getFullInfo }).to_json %>;
-
-  var requestsHash = {};
-
-  for(var i = 0; i < requestsArray.length; i++)
-  {
-    requestsHash[requestsArray[i].id] = requestsArray[i];
-  }
-
-  function setDeleteAction(element)
-  {
-    element.on("ajax:success", function(e, data, status, xhr){
-    }).bind("ajax:error", function(e, xhr, status, error){
-      console.log(xhr.responseText);
-    });
-  }
+<script type="text/javascript"> 
+  var allRequestsTemplate;
 
   $(document).ready(function() {
-    setDeleteAction($("a[data-remote].delete"));
-    Bubble($("a[data-remote].edit"), $("#request_edit"), "#request", "Редактирование заявки");
-    $(".standart-table tbody tr").hover(trHover, trUnHover);
+    allRequestsTemplate = new AllRequestsTemplate();
+
+    allRequestsTemplate.init(<%= raw (@requests.map{ |r| r.getFullInfo }).to_json %>);
+    allRequestsTemplate.parmDeleteActionSelector("a[data-remote].delete");
+    allRequestsTemplate.parmEditActionSelector("a[data-remote].edit");
+    allRequestsTemplate.parmTableSelector("#requests-table");
+    allRequestsTemplate.parmEditFormSelector("#request_edit");
+
+    allRequestsTemplate.setDeleteAction();
+    allRequestsTemplate.setEditAction();
+    allRequestsTemplate.setHoverAction();
   });
 </script>
 <div class="standart-table-container">
@@ -64,7 +55,8 @@
         <td><%= Request.request_types[request.request_type.to_sym] %></td>
         <td class="actions">
           <%= link_to 'Удалить', request, method: :delete, data: { confirm: 'Вы уверены?' }, class: "delete", remote: true %>,
-          <%= link_to 'Править', edit_request_path(request), remote: true, class: "edit" %>
+          <%= link_to 'Править', edit_request_path(request), remote: true, class: "edit" %>, 
+          <%= link_to 'Поручения', message_tasks_path(:request_id => request.id), class: "tasks" %>
         </td>
       </tr>
     <% end %>

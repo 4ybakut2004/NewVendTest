@@ -39,6 +39,10 @@ describe "Static pages" do
     visit root_path
     click_link "Поручения сигналов"
     expect(page).to have_title('| Message Tasks')
+
+    visit root_path
+    click_link "Поручения"
+    expect(page).to have_title('| Tasks')
   end
 
 end

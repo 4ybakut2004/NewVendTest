@@ -1,0 +1,36 @@
+<div class="standart-table-container">
+
+<table id="tasks-table" class="standart-table table-autosort">
+  <thead>
+    <tr>
+      <th class="table-sortable:numeric table-sortable">Номер</th>
+      <th class="table-sortable:default table-sortable">Наименование</th>
+      <th class="table-sortable:default table-sortable">Сообщение</th>
+      <th>Действия</th>
+    </tr>
+    <tr>
+      <th>Фильтр:</th>
+      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th>
+        <select onchange="Table.filter(this,this)">
+        <option value>Все</option>
+        <%= options_for_select(Message.all.map { |k| [ k.name, k.name ] }) %>
+        </select>
+      </th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody id ="tasks">
+    <% @tasks.each do |task| %>
+      <tr id="<%= task.id %>">
+        <td><%= task.id %></td>
+        <td><%= task.name %></td>
+        <td><%= task.message.name %></td>
+        <td><%= link_to 'Удалить', task, method: :delete, data: { confirm: 'Вы уверены?' }, class: "delete", remote: true %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+  
+</div>

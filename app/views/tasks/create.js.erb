@@ -1,0 +1,29 @@
+function addNewTask()
+{
+	var msg = $("#task_new").find("#msg");
+
+	if("<%= @task.errors.count %>" != 0)
+	{
+		showErrorMessage("Количество ошибок: <%= @task.errors.count %><br>" +
+		                                        "Проверьте обязательные для ввода поля",
+		                                        msg);
+	}
+	else
+	{
+		$("<tr style='opacity: 0;' id='<%= @task.id %>'>" +
+			"<td><%= @task.id %></td>" +
+			"<td><%= @task.name %></td>" +
+			"<td><%= if @task.message_id then @task.message.name end %></td>" +
+			"<td><%= if @task.id then escape_javascript(link_to 'Удалить', @task, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'delete', remote: true) end %></td>" +
+		"</tr>").prependTo("#tasks")
+		.animate({opacity: 1}, 500, function() {
+		});
+
+		showSuccessMessage("Поручение успешно создано", msg);
+
+		var form = $("#new_task");
+    	form.find("#task_name").val('');
+	}
+}
+
+addNewTask();

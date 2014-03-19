@@ -1,0 +1,14 @@
+<% provide(:title, 'Tasks') %>
+<div id="task_new" class="form">
+  <h1>Новое поручение</h1>
+  <%= render 'form_new' %>
+</div>
+
+<br>
+
+<div class="content">
+  <h1>Поручения</h1>
+  <hr>
+  <%= render 'all' %>
+  <br>
+</div>
