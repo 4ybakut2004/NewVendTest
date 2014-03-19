@@ -1,142 +1,149 @@
 function AllRequestsTemplate() {
-  var requests = {};
-  var deleteActionSelector;
-  var editActionSelector;
-  var tableSelector;
-  var editFormSelector;
-  var extractingSelector;
-  var self = this;
+  this.requests = {};
+  this.deleteActionSelector;
+  this.editActionSelector;
+  this.tableSelector;
+  this.editFormSelector;
+  this.extractingSelector;
+} 
 
-  this.init = function(requestsArray) {
+AllRequestsTemplate.prototype = {
+  init: function(requestsArray) {
     for(var i = 0; i < requestsArray.length; i++) {
-      requests[requestsArray[i].id] = requestsArray[i];
+      this.requests[requestsArray[i].id] = requestsArray[i];
     }
 
-    extractingSelector = "#request";
-  }
+    this.extractingSelector = "#request";
+  },
 
-  this.parmDeleteActionSelector = function(selector) {
-    deleteActionSelector = selector;
-  };
+  parmDeleteActionSelector: function(selector) {
+    this.deleteActionSelector = selector;
+  },
 
-  this.parmEditActionSelector = function(selector) {
-    editActionSelector = selector;
-  };
+  parmEditActionSelector: function(selector) {
+    this.editActionSelector = selector;
+  },
 
-  this.parmTableSelector = function(selector) {
-    tableSelector = selector;
-  };
+  parmTableSelector: function(selector) {
+    this.tableSelector = selector;
+  },
 
-  this.parmEditFormSelector = function(selector) {
-    editFormSelector = selector;
-  };
+  parmEditFormSelector: function(selector) {
+    this.editFormSelector = selector;
+  },
 
-  this.setDeleteAction = function() {
-    if(deleteActionSelector) {
-      $(deleteActionSelector).on("ajax:success", function(e, data, status, xhr){
+  setDeleteAction: function() {
+    if(this.deleteActionSelector) {
+      $(this.deleteActionSelector).on("ajax:success", function(e, data, status, xhr){
       }).bind("ajax:error", function(e, xhr, status, error){
         console.log(xhr.responseText);
       });
     }
-  };
+  },
 
-  this.setEditAction = function() {
-    Bubble($(editActionSelector), $(editFormSelector), extractingSelector, "Редактирование заявки");
-  };
+  setEditAction: function() {
+    Bubble($(this.editActionSelector), $(this.editFormSelector), this.extractingSelector, "Редактирование заявки");
+  },
 
-  this.setHoverAction = function() {
-    $(tableSelector + " tbody tr").hover(tableRowHover, tableRowUnHover);
-  };
+  setHoverAction: function() {
+    this.hoverAction($(this.tableSelector + " tbody tr"));
+  },
 
-  this.insertRow = function(row, request)
-  {
-    requests[request.id] = request;
-    row.hover(tableRowHover, tableRowUnHover);
+  hoverAction: function(element) {
+    var self = this;
 
-    row.prependTo(tableSelector + " tbody")
+    function tableRowHover() {
+      var infoContainer = $("#full-request-info");
+      infoContainer.find("#request-messages-table tbody").empty();
+      infoContainer.find("#message-tasks-table tbody").empty();
+      infoContainer.find("#full-phone-number").empty();
+
+      var request = self.requests[$(this).attr("id")];
+
+      var request_messages_table = infoContainer.find("#request-messages-table");
+      var message_tasks_table = infoContainer.find("#message-tasks-table");
+
+      for(var i = 0; i < request.request_messages.length; i++)
+      {
+        var request_message = request.request_messages[i];
+        request_messages_table.find("tbody").append(
+          $("<tr>"+
+              "<td>" + request_message + "</td>" +
+            "<tr>")
+        );
+      }
+
+      for(var i = 0; i < request.message_tasks.length; i++)
+      {
+        var message_task = request.message_tasks[i];
+        message_tasks_table.find("tbody").append(
+          $("<tr>"+
+              "<td>" + message_task.name + "</td>" +
+            "<tr>")
+        );
+      }
+
+      if(request.request_type == "phone" && request.phone)
+      {
+        infoContainer.find("#full-phone-number").append(
+          $("<table class='standart-table'><thead>" +
+            "<tr><th>Телефон</th></tr>" +
+            "</thead>" +
+            "<tbody>" +
+            "<tr><td>" + request.phone + "</td></tr>" +
+            "</tbody></table>")
+        );
+      }
+
+      var top = $(this).position().top + $(this).height() + "px";
+      var left = $(this).position().left + "px";
+      infoContainer.css("top", top)
+      .css("left", left)
+      .css("display", "block")
+      .css("opacity", "0").animate({
+        opacity: 1
+      }, 200, function() {});
+    }
+
+    function tableRowUnHover() {
+      var infoContainer = $("#full-request-info");
+      infoContainer.css("display", "none").css("opacity", "0");
+    }
+
+    element.hover(tableRowHover, tableRowUnHover);
+  },
+
+  insertRow: function(row, request) {
+    var self = this;
+    this.requests[request.id] = request;
+    this.hoverAction(row);
+
+    row.prependTo(this.tableSelector + " tbody")
     .animate({opacity: 1}, 500, function() {
       self.setDeleteAction();
       self.setEditAction();
     });
-  };
+  },
 
-  this.updateRow = function(row, request)
-  {
-    requests[request.id] = request;
-    row.hover(tableRowHover, tableRowUnHover);
+  updateRow: function(row, request) {
+    var self = this;
+    this.requests[request.id] = request;
+    this.hoverAction(row);
     
     row.insertAfter("#" + request.id);
     $("#" + request.id).remove();
-    $(editFormSelector).animate({opacity: 0}, 500, function() {
+    $(this.editFormSelector).animate({opacity: 0}, 500, function() {
       $(this).css("display", "none").empty();
         self.setDeleteAction();
         self.setEditAction();
     });
-  };
+  },
 
-  this.deleteRow = function(request_id)
-  {
-    $(tableSelector + " #" + request_id).animate({opacity: 0}, 500, function() {
+  deleteRow: function(request_id) {
+    $(this.tableSelector + " #" + request_id).animate({opacity: 0}, 500, function() {
       $(this).remove();
     });
 
-    delete requests[request_id];
-  };
-
-  function tableRowHover() {
-    var infoContainer = $("#full-request-info");
-    var request = requests[$(this).attr("id")];
-
-    var request_messages_table = infoContainer.find("#request-messages-table");
-    var message_tasks_table = infoContainer.find("#message-tasks-table");
-
-    for(var i = 0; i < request.request_messages.length; i++)
-    {
-      var request_message = request.request_messages[i];
-      request_messages_table.find("tbody").append(
-        $("<tr>"+
-            "<td>" + request_message + "</td>" +
-          "<tr>")
-      );
-    }
-
-    for(var i = 0; i < request.message_tasks.length; i++)
-    {
-      var message_task = request.message_tasks[i];
-      message_tasks_table.find("tbody").append(
-        $("<tr>"+
-            "<td>" + message_task.name + "</td>" +
-          "<tr>")
-      );
-    }
-
-    if(request.request_type == "phone" && request.phone)
-    {
-      infoContainer.find("#full-phone-number").append(
-        $("<table class='standart-table'><thead>" +
-          "<tr><th>Телефон</th></tr>" +
-          "</thead>" +
-          "<tbody>" +
-          "<tr><td>" + request.phone + "</td></tr>" +
-          "</tbody></table>")
-      );
-    }
-
-    var top = $(this).position().top + $(this).height() + "px";
-    var left = $(this).position().left + "px";
-    infoContainer.css("top", top)
-    .css("left", left)
-    .css("display", "block")
-    .css("opacity", "0").animate({
-      opacity: 1
-    }, 200, function() {});
+    delete this.requests[request_id];
   }
-
-  function tableRowUnHover() {
-    var infoContainer = $("#full-request-info");
-    infoContainer.css("display", "none").css("opacity", "0");
-    infoContainer.find("#request-messages-table tbody").empty();
-    infoContainer.find("#message-tasks-table tbody").empty();
-    infoContainer.find("#full-phone-number").empty();
-  }
-} 
+};
