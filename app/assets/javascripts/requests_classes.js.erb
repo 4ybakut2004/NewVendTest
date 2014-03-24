@@ -1,4 +1,4 @@
-function AllRequestsTemplate() {
+/*function AllRequestsTemplate() {
   this.requests = {};
   this.deleteActionSelector;
   this.editActionSelector;
@@ -146,4 +146,189 @@ AllRequestsTemplate.prototype = {
 
     delete this.requests[request_id];
   }
+};*/
+
+function extend(Child, Parent) {
+    var F = function () { };
+    F.prototype = Parent.prototype;
+
+    var f = new F();
+    
+    for (var prop in Child.prototype) f[prop] = Child.prototype[prop];
+    Child.prototype = f;
+    Child.superclass = Parent.prototype;
+}
+
+function IndexPageController() {
+  this.items = {};
+  this.deleteActionSelector;
+  this.editActionSelector;
+  this.tableSelector;
+  this.editFormSelector;
+  this.extractingSelector;
+  this.editTitle = "Редактирование";
+}
+
+IndexPageController.prototype = {
+  init: function(itemsArray) {
+    console.log(itemsArray);
+    for(var i = 0; i < itemsArray.length; i++) {
+      this.items[itemsArray[i].id] = itemsArray[i];
+    }
+  },
+
+  parmDeleteActionSelector: function(selector) {
+    this.deleteActionSelector = selector;
+  },
+
+  parmEditActionSelector: function(selector) {
+    this.editActionSelector = selector;
+  },
+
+  parmTableSelector: function(selector) {
+    this.tableSelector = selector;
+  },
+
+  parmEditFormSelector: function(selector) {
+    this.editFormSelector = selector;
+  },
+
+  parmExtractingSelector: function(selector) {
+    this.extractingSelector = selector;
+  },
+
+  parmEditTitle: function(title) {
+    this.editTitle = title;
+  },
+
+  setDeleteAction: function() {
+    if(this.deleteActionSelector) {
+      $(this.deleteActionSelector).on("ajax:success", function(e, data, status, xhr){
+      }).bind("ajax:error", function(e, xhr, status, error){
+        console.log(xhr.responseText);
+      });
+    }
+  },
+
+  setEditAction: function() {
+    Bubble($(this.editActionSelector), $(this.editFormSelector), this.extractingSelector, this.editTitle);
+  },
+
+  insertRow: function(row, item) {
+    var self = this;
+    this.items[item.id] = item;
+
+    row.prependTo(this.tableSelector + " tbody")
+    .animate({opacity: 1}, 500, function() {
+      self.setDeleteAction();
+      self.setEditAction();
+    });
+  },
+
+  updateRow: function(row, item) {
+    var self = this;
+    this.items[item.id] = item;
+    
+    row.insertAfter("#" + item.id);
+    $("#" + item.id).remove();
+    $(this.editFormSelector).animate({opacity: 0}, 500, function() {
+      $(this).css("display", "none").empty();
+        self.setDeleteAction();
+        self.setEditAction();
+    });
+  },
+
+  deleteRow: function(item_id) {
+    $(this.tableSelector + " #" + item_id).animate({opacity: 0}, 500, function() {
+      $(this).remove();
+    });
+
+    delete this.items[item_id];
+  }
 };
+
+function AllRequestsTemplate() {
+  this.items = {};
+}
+
+AllRequestsTemplate.prototype = {
+  setHoverAction: function() {
+    this.hoverAction($(this.tableSelector + " tbody tr"));
+  },
+
+  hoverAction: function(element) {
+    var self = this;
+
+    function tableRowHover() {
+      var infoContainer = $("#full-request-info");
+      infoContainer.find("#request-messages-table tbody").empty();
+      infoContainer.find("#message-tasks-table tbody").empty();
+      infoContainer.find("#full-phone-number").empty();
+
+      var request = self.items[$(this).attr("id")];
+
+      var request_messages_table = infoContainer.find("#request-messages-table");
+      var message_tasks_table = infoContainer.find("#message-tasks-table");
+
+      for(var i = 0; i < request.request_messages.length; i++)
+      {
+        var request_message = request.request_messages[i];
+        request_messages_table.find("tbody").append(
+          $("<tr>"+
+              "<td>" + request_message + "</td>" +
+            "<tr>")
+        );
+      }
+
+      for(var i = 0; i < request.message_tasks.length; i++)
+      {
+        var message_task = request.message_tasks[i];
+        message_tasks_table.find("tbody").append(
+          $("<tr>"+
+              "<td>" + message_task.name + "</td>" +
+            "<tr>")
+        );
+      }
+
+      if(request.request_type == "phone" && request.phone)
+      {
+        infoContainer.find("#full-phone-number").append(
+          $("<table class='standart-table'><thead>" +
+            "<tr><th>Телефон</th></tr>" +
+            "</thead>" +
+            "<tbody>" +
+            "<tr><td>" + request.phone + "</td></tr>" +
+            "</tbody></table>")
+        );
+      }
+
+      var top = $(this).position().top + $(this).height() + "px";
+      var left = $(this).position().left + "px";
+      infoContainer.css("top", top)
+      .css("left", left)
+      .css("display", "block")
+      .css("opacity", "0").animate({
+        opacity: 1
+      }, 200, function() {});
+    }
+
+    function tableRowUnHover() {
+      var infoContainer = $("#full-request-info");
+      infoContainer.css("display", "none").css("opacity", "0");
+    }
+
+    element.hover(tableRowHover, tableRowUnHover);
+  },
+
+  insertRow: function(row, request) {
+    this.hoverAction(row);
+    this.superclass.insertRow(row, request);
+  },
+
+  updateRow: function(row, request) {
+    this.hoverAction(row);
+    this.superclass.updateRow(row, request);
+  }
+};
+
+extend(AllRequestsTemplate, IndexPageController);
