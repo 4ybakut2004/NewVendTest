@@ -1,18 +1,26 @@
 <div id="request">
+  <h1>Заявка <%= @request.id %></h1>
   <div id="msg"></div>
 
-  <%= form_for(@request, remote: true) do |f| %>
-    <div class="field mandatory">
-      <%= f.select :request_type, options_for_select(Request.request_types.map { |k, v| [ v, k ] }) %>
+  <%= form_for(@request, remote: true, :html => {:class => "form-horizontal"}) do |f| %>
+    <div class="form-group">
+      <%= f.label :request_type, "Тип заявки", :class => "col-sm-2 control-label" %>
+      <div class="col-sm-10">
+        <%= f.select :request_type, options_for_select(Request.request_types.map { |k, v| [ v, k ] }), {}, { :class => "form-control" } %>
+      </div>
     </div>
-    <div class="field mandatory">
-      <%= f.label :machine_id, "Автомат" %><br>
-      <%= f.select :machine_id, options_for_select(Machine.all.collect {|m| [ m.name, m.id ] }, :selected => @request.machine_id ) %>
+    <div class="form-group">
+      <%= f.label :machine_id, "Автомат", :class => "col-sm-2 control-label" %>
+      <div class="col-sm-10">
+        <%= f.select :machine_id, options_for_select(Machine.all.collect {|m| [ m.name, m.id ] }, :selected => @request.machine_id ), {}, { :class => "form-control" } %>
+      </div>
     </div>
-    <div class="field">
-      <%= f.label :description, "Описание" %><br>
-      <%= f.text_field :description %>
+    <div class="form-group">
+      <%= f.label :description, "Описание", :class => "col-sm-2 control-label" %>
+      <div class="col-sm-10">
+        <%= f.text_field :description, :class => "form-control" %>
+      </div>
     </div>
-    <%= f.submit "Подтвердить", class: "btn btn-large" %>
+    <%= f.submit "Подтвердить", class: "btn btn-primary" %>
   <% end %>  
 </div>

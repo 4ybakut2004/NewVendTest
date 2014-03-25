@@ -10,9 +10,9 @@ function Switchable(containerSelector, clickMethod)
 
 	function onClickMethod() {
 		buttons.removeAttr('disabled');
-		buttons.removeClass('btn-activated');
+		buttons.removeClass('active');
 		$(this).attr('disabled', 'disabled');
-		$(this).addClass('btn-activated');
+		$(this).addClass('active');
 		container.attr('value', $(this).attr('value'));
 		clickMethod();
 	}
@@ -33,10 +33,10 @@ function FormSwitchable(containerSelector, submitMethod, inputSelector)
 
 	function onSubmitMethod() {
 		submitButtons.removeAttr('disabled');
-		submitButtons.removeClass('btn-activated');
+		submitButtons.removeClass('active');
 		var submitButton = $(this).find("input[type='submit']");
 		submitButton.attr('disabled', 'disabled');
-		submitButton.addClass('btn-activated');
+		submitButton.addClass('active');
 		container.attr('value', $(this).find(inputSelector).val());	
 		submitMethod();
 	}
@@ -47,7 +47,7 @@ function FormSwitchable(containerSelector, submitMethod, inputSelector)
 	{
 		container.attr('value', 'undefined');
 		submitButtons.removeAttr('disabled');
-		submitButtons.removeClass('btn-activated');
+		submitButtons.removeClass('active');
 	};
 }
 
@@ -57,12 +57,12 @@ function Checkable(button, clickMethod) {
 	$(button).click(function(event) {
 		if($(this).attr('activated') == 'true')
 		{
-			$(this).removeClass('btn-activated-toogle');
+			$(this).removeClass('active');
 			$(this).attr('activated', 'false');
 		}
 		else
 		{
-			$(this).addClass('btn-activated-toogle');
+			$(this).addClass('active');
 			$(this).attr('activated', 'true');
 		}
 		clickMethod();
@@ -70,7 +70,7 @@ function Checkable(button, clickMethod) {
 
 	this.checkOff = function()
 	{
-		$(button).removeClass('btn-activated-toogle');
+		$(button).removeClass('active');
 		$(button).attr('activated', 'false');
 		clickMethod();
 	};
@@ -80,13 +80,8 @@ function Checkable(button, clickMethod) {
 // По нажатию clickElement (Submit формы запроса) 
 // на странице появляется formElement с заголовком title.
 // Из респонза excractingElement помещается в тело formElement
-function Bubble(clickElement, formElement, extractingElement, title)
+function Bubble(clickElement, formElement, extractingElement)
 {
-    clickElement.click(function(e) {
-        formElement.css("top", e.pageY + "px")
-        .css("left", (e.pageX - formElement.width()) + "px");
-    });
-
     clickElement.on("ajax:success", function(e, data, status, xhr){
         formElement.empty();
 
@@ -96,13 +91,16 @@ function Bubble(clickElement, formElement, extractingElement, title)
                 formElement.css("display", "none").empty();
             });
         });
-        formElement.append($(btn));
+        var col2 = $("<div class='col-md-12 text-right'></div>");
+        var row = $("<div class='row'></div>");
+        row.append($(col2));
+        col2.append($(btn));
+        formElement.append($(row));
 
-        if(title)
-        {
-          formElement.append($("<h1>" + title + "</h1>"));
-        }
         formElement.append($(xhr.responseText).find(extractingElement));
+
+        formElement.css("top", $(this).position().top - formElement.height() + "px")
+        .css("left", ($(this).position().left - formElement.width()) + "px");
 
         formElement.css("display", "block");
         if(formElement.css("opacity") != 1)
@@ -134,15 +132,15 @@ function showMessage(message, container, type)
     switch(type)
     {
         case "error":
-          classes += "msg-error";
+          classes += "alert alert-danger";
           break;
 
         case "success":
-          classes += "msg-success";
+          classes += "alert alert-success";
           break;
     }
 
-    container.append($("<span class='" + classes + "'>" + message + "</span>"));
+    container.append($("<div class='" + classes + "'>" + message + "</div>"));
 
     container.css("display", "block");
     container.animate({opacity: 1}, 500)

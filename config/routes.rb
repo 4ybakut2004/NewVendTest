@@ -5,7 +5,7 @@ NewVend::Application.routes.draw do
   resources :sessions, only: [:new, :create, :destroy]
   resources :requests, only: [:index, :destroy, :create, :update, :edit]
   resources :messages, only: [:index, :destroy, :create, :update, :edit]
-  resources :message_tasks, only: [:index]
+  resources :message_tasks, only: [:index, :edit, :update]
   resources :tasks, only: [:index, :create, :destroy]
 
   root  'static_pages#home'

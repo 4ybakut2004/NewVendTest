@@ -8,18 +8,22 @@
     });
   </script>
   
-  <%= form_for(@task, remote: true) do |f| %>
-    <div id="name" class="field mandatory">
-      <%= f.label :name, "Наименование" %><br>
-      <%= f.text_field :name %>
+  <%= form_for(@task, remote: true, :html => {:class => "form-horizontal", :style => "margin-top: 15px;"}) do |f| %>
+    <div id="name" class="form-group">
+      <%= f.label :name, "Наименование", :class => "col-sm-2 control-label" %>
+      <div class="col-sm-10">
+        <%= f.text_field :name, :class => "form-control" %>
+      </div>
     </div>
-    <div id="message_id" class="field mandatory">
-      <%= f.label :message_id, "Сообщение" %><br>
-      <%= f.select :message_id, options_for_select(Message.all.map { |m| [ m.name, m.id ] }) %>
+    <div id="message_id" class="form-group">
+      <%= f.label :message_id, "Сообщение", :class => "col-sm-2 control-label" %>
+      <div class="col-sm-10">
+        <%= f.select :message_id, options_for_select(Message.all.map { |m| [ m.name, m.id ] }), {}, { :class => "form-control" } %>
+      </div>
     </div>
     <div id="msg"></div>
     <div class="form-footer">
-      <%= f.submit "Подтвердить", class: "btn btn-large" %>
+      <%= f.submit "Подтвердить", class: "btn btn-primary" %>
     </div>
   <% end %>  
 </div>

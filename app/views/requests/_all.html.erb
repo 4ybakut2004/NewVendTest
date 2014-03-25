@@ -7,17 +7,18 @@
     allRequestsTemplate.init(<%= raw (@requests.map{ |r| r.getFullInfo }).to_json %>);
     allRequestsTemplate.parmDeleteActionSelector("a[data-remote].delete");
     allRequestsTemplate.parmEditActionSelector("a[data-remote].edit");
-    allRequestsTemplate.parmTableSelector("#requests-table");
+    allRequestsTemplate.parmTableSelector("#requests-table-container");
     allRequestsTemplate.parmEditFormSelector("#request_edit");
+    allRequestsTemplate.parmExtractingSelector("#request");
 
     allRequestsTemplate.setDeleteAction();
     allRequestsTemplate.setEditAction();
     allRequestsTemplate.setHoverAction();
   });
 </script>
-<div class="standart-table-container">
-
-<table id="requests-table" class="standart-table table-autosort">
+<div id="requests-table-container" class="table-responsive standart-table-container">
+<h1>Заявки</h1>
+<table id="requests-table" class="table table-striped table-hover table-condensed table-bordered table-autosort">
   <thead>
     <tr>
       <th class="table-sortable:numeric table-sortable">Номер</th>
@@ -30,12 +31,12 @@
     </tr>
     <tr>
       <th>Фильтр:</th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
       <th>
-        <select onchange="Table.filter(this,this)">
+        <select class="form-control" onchange="Table.filter(this,this)">
         <option value>Все</option>
         <%= options_for_select(Request.request_types.map { |k, v| [ v, v ] }) %>
         </select>
@@ -46,7 +47,8 @@
 
   <tbody id ="requests">
     <% @requests.each do |request| %>
-      <tr id="<%= request.id %>">
+      <%= link_to(edit_request_path(request), remote: true, class: "edit") do %>
+      <tr id="<%= request.id %>" data-link="<%= edit_request_path(request) %>">
         <td><%= request.id %></td>
         <td><%= request.registrar.name %></td>
         <td><%= request.solver.name %></td>
@@ -55,17 +57,17 @@
         <td><%= Request.request_types[request.request_type.to_sym] %></td>
         <td class="actions">
           <%= link_to 'Удалить', request, method: :delete, data: { confirm: 'Вы уверены?' }, class: "delete", remote: true %>,
-          <%= link_to 'Править', edit_request_path(request), remote: true, class: "edit" %>, 
           <%= link_to 'Поручения', message_tasks_path(:request_id => request.id), class: "tasks" %>
         </td>
       </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>
 
 <div id="full-request-info" class="content bubble" style="min-width: 0;">
   <div id="full-request-messages" class="display-inline-block">
-    <table id="request-messages-table" class="standart-table">
+    <table id="request-messages-table" class="table table-condensed">
       <thead>
         <tr>
           <th>Сигналы заявки</th>
@@ -76,7 +78,7 @@
     </table>
   </div>
   <div id="full-message-tasks" class="display-inline-block">
-    <table id="message-tasks-table" class="standart-table">
+    <table id="message-tasks-table" class="table table-condensed">
       <thead>
         <tr>
           <th>Поручения заявки</th>
@@ -88,5 +90,6 @@
   </div>
   <div id="full-phone-number" class="display-inline-block"></div>
 </div>
-  
 </div>
+
+<div id="request_edit" class="text-center displacer"></div> 

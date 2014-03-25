@@ -4,13 +4,11 @@
       var form = $("#new_request");
       var machine_id = "#machine_id";
       var description = "#description";
-      var submit = "input[type='submit']";
+      var submit = "#submit-container";
       var otherButton = "#other-button";
       var otherButtonContainer = "#other-button-container";
       var phone = "#phone";
       var solver = "#solver_id";
-
-      $(submit).css("margin-top", "10px");
 
       function showElement(elem) {
         form.find(elem).removeClass('display-none');
@@ -56,16 +54,16 @@
         form.find("#request_description").val('');
         form.find("#request_phone").val('');
 
-        $("#messages").empty();
-        $("#tasks").empty();
+        form.find("#messages").empty();
+        form.find("#tasks").empty();
       },
       "#request_type");
 
       $("#btn-group form").on("ajax:success", function(e, data, status, xhr){
-        $("#messages").append($(xhr.responseText).find("#filtered-messages"));
-        $("#tasks").append($(xhr.responseText).find("#tasks-of-messages"));
+        form.find("#messages").append($(xhr.responseText).find("#filtered-messages"));
+        form.find("#tasks").append($(xhr.responseText).find("#tasks-of-messages"));
       }).bind("ajax:error", function(e, xhr, status, error){
-        console.log(xhr.responseText);
+        console.log(xhr.responseText );
       });
 
       $("#new_request").on("ajax:success", function(e, data, status, xhr){
@@ -74,8 +72,8 @@
         hideElement(submit);
         hideElement(otherButtonContainer);
         hideElement(phone);
-        $("#messages").empty();
-        $("#tasks").empty();
+        form.find("#messages").empty();
+        form.find("#tasks").empty();
         switchable.switchOff();
       }).bind("ajax:error", function(e, xhr, status, error){
         console.log(xhr.responseText);
@@ -83,45 +81,58 @@
     });
   </script>
   
-  <div id="btn-group">
+  <div id="btn-group" class="text-center">
     <% Request.request_types.each do |key, value| %>
       <%= form_tag('messages_for_request', :remote => true, :style => "display: inline-block;") do %>
         <%= hidden_field_tag 'request_type', key %>
-        <%= submit_tag value, :class => "btn" %>
+        <%= submit_tag value, :class => "btn btn-default" %>
       <% end %>
     <% end %>
   </div>
   
-  <%= form_for(@request, remote: true) do |f| %>
-    <div id="solver_id" class="field mandatory">
-      <%= f.label :solver_id, "Решатель" %><br>
-      <%= f.select :solver_id, options_for_select(Employee.order('name ASC').all.collect {|e| [ e.name, e.id ] }, :selected =>  signed_in? ? current_user.employee.id : nil ) %>
+  <%= form_for(@request, remote: true, :html => {:class => "form-horizontal", :style => "margin-top: 15px;"}) do |f| %>
+    <div id="solver_id" class="form-group">
+      <%= f.label :solver_id, "Решатель", :class => "col-sm-2 control-label" %>
+      <div class="col-sm-10">
+         <%= f.select :solver_id, options_for_select(Employee.order('name ASC').all.collect {|e| [ e.name, e.id ] }, :selected =>  signed_in? ? current_user.employee.id : nil ), {}, { :class => "form-control" } %>
+      </div>
     </div>
-    <div id="request_type" class="field mandatory display-none">
-      <%= f.label :request_type, "Тип заявки" %><br>
-      <%= f.select :request_type, options_for_select(Request.request_types.map { |k, v| [ v, k ] }) %>
+    <div id="request_type" class="form-group display-none">
+      <%= f.label :request_type, "Тип заявки", :class => "col-sm-2 control-label" %>
+      <div class="col-sm-10">
+        <%= f.select :request_type, options_for_select(Request.request_types.map { |k, v| [ v, k ] }), {}, { :class => "form-control" } %>
+      </div>
     </div>
-    <div id="machine_id" class="field mandatory display-none">
-      <%= f.label :machine_id, "Автомат" %><br>
-      <%= f.select :machine_id, options_for_select(Machine.order('name ASC').all.collect {|m| [ m.name, m.id ] }, :selected => @request.machine_id ) %>
+    <div id="machine_id" class="form-group display-none">
+      <%= f.label :machine_id, "Автомат", :class => "col-sm-2 control-label" %>
+      <div class="col-sm-10">
+        <%= f.select :machine_id, options_for_select(Machine.order('name ASC').all.collect {|m| [ m.name, m.id ] }, :selected => @request.machine_id ), {}, { :class => "form-control" } %>
+      </div>
     </div>
-    <div id="phone" class="field display-none">
-      <%= f.label :phone, "Номер телефона" %><br>
-      <%= f.text_field :phone %>
+    <div id="phone" class="form-group display-none">
+      <%= f.label :phone, "Номер телефона", :class => "col-sm-2 control-label" %>
+      <div class="col-sm-10">
+        <%= f.text_field :phone, :class => "form-control" %>
+      </div>
     </div>
-    <div id="messages" class="display-inline-block">
+    <div class="row text-center">
+      <div id="messages" class="display-inline-block"></div>
+      <div id="other-button-container" class="display-inline-block display-none">
+        <button id="other-button" type="button" class="btn btn-default">Другое</button>
+      </div>
     </div>
-    <div id="other-button-container" class="display-inline-block display-none">
-      <button id="other-button" type="button" class="btn">Другое</button>
+    
+    <div id="description" class="form-group display-none" style="margin-top: 15px;">
+      <%= f.label :description, "Описание", :class => "col-sm-2 control-label" %>
+      <div class="col-sm-10">
+        <%= f.text_field :description, :class => "form-control" %>
+      </div>
     </div>
-    <div id="description" class="field display-none">
-      <%= f.label :description, "Описание" %><br>
-      <%= f.text_field :description %>
-    </div>
+
     <div id="tasks"></div>
     <div id="msg"></div>
-    <div class="form-footer">
-      <%= f.submit "Подтвердить", class: "btn btn-large display-none" %>
+    <div id="submit-container" class="form-footer text-center display-none">
+      <%= f.submit "Подтвердить", class: "btn btn-primary" %>
     </div>
   <% end %>  
 </div>

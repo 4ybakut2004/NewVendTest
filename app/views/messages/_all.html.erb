@@ -1,6 +1,6 @@
-<div class="standart-table-container">
+<div class="table-responsive standart-table-container">
 
-<table id="messages-table" class="standart-table table-autosort">
+<table id="messages-table" class="table table-striped table-hover table-condensed table-bordered table-autosort">
   <thead>
     <tr>
       <th class="table-sortable:numeric table-sortable">Номер</th>
@@ -10,9 +10,9 @@
     </tr>
     <tr>
       <th>Фильтр:</th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
       <th>
-        <select onchange="Table.filter(this,this)">
+        <select class="form-control" onchange="Table.filter(this,this)">
         <option value>Все</option>
         <%= options_for_select(Request.request_types.map { |k, v| [ v, v ] }) %>
         </select>

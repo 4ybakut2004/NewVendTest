@@ -25,24 +25,28 @@ describe "Static pages" do
     expect(page).to have_title('Help')
 
     visit root_path
-    click_link "Заявки"
+    first(:link, "Заявки").click
     expect(page).to have_title('| Requests')
 
     visit root_path
-    click_link "Автоматы"
+    first(:link, "Автоматы").click
     expect(page).to have_title('| Machines')
 
     visit root_path
-    click_link "Сигналы"
+    first(:link, "Типы сигналов").click
     expect(page).to have_title('| Messages')
 
     visit root_path
-    click_link "Поручения сигналов"
+    first(:link, "Типы поручений").click
+    expect(page).to have_title('| Tasks')
+
+    visit root_path
+    first(:link, "Поручения").click
     expect(page).to have_title('| Message Tasks')
 
     visit root_path
-    click_link "Поручения"
-    expect(page).to have_title('| Tasks')
+    first(:link, "Мои поручения").click
+    expect(page).to have_title('| Message Tasks')
   end
 
 end

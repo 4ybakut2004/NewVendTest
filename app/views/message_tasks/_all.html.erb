@@ -1,14 +1,30 @@
-<div class="standart-table-container">
+<script type="text/javascript"> 
+  var messageTasksTemplate;
 
-<table class="standart-table table-autosort" id="message-tasks-table">
+  $(document).ready(function() {
+    messageTasksTemplate = new MessageTasksTemplate();
+
+    messageTasksTemplate.init(<%= raw (@message_tasks.map{ |r| r.getFullInfo }).to_json %>);
+    messageTasksTemplate.parmEditActionSelector("a[data-remote].edit");
+    messageTasksTemplate.parmTableSelector("#message-tasks-table-container");
+    messageTasksTemplate.parmEditFormSelector("#message_task_edit");
+    messageTasksTemplate.parmExtractingSelector("#message_task");
+
+    messageTasksTemplate.setEditAction();
+  });
+</script>
+
+<div id="message-tasks-table-container" class="table-responsive standart-table-container">
+<h1>Поручения</h1>
+<table class="table table-striped table-hover table-condensed table-bordered table-autosort" id="message-tasks-table">
   <thead>
     <tr>
       <th class="table-sortable:numeric table-sortable">Номер</th>
       <th class="table-sortable:numeric table-sortable">Номер заявки</th>
-      <th class="table-sortable:default table-sortable">Действие</th>
+      <th class="table-sortable:default table-sortable">Тип</th>
       <th class="table-sortable:default table-sortable">Назначатель</th>
       <th class="table-sortable:default table-sortable">Исполнитель</th>
-      <th class="table-sortable:default table-sortable">Контроллер</th>
+      <th class="table-sortable:default table-sortable">Контролер</th>
       <th class="table-sortable:default table-sortable">Описание</th>
       <th class="table-sortable:date table-sortable">Дата создания</th>
       <th class="table-sortable:date table-sortable">Дата выполнения</th>
@@ -16,26 +32,26 @@
     </tr>
     <tr>
       <th>Фильтр:</th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
     </tr>
   </thead>
   <tbody>
     <% @message_tasks.each do |message_task| %>
-      <tr id="<%= message_task.id %>">
+      <tr id="<%= message_task.id %>" data-link="<%= edit_message_task_path(message_task) %>">
         <td><%= message_task.id %></td>
         <td><%= link_to message_task.request_message.request_id, edit_request_path(message_task.request_message.request) %></td>
         <td><%= message_task.task.name %></td>
         <td><%= message_task.assigner.name %></td>
         <td><%= message_task.executor ? message_task.executor.name : "" %></td>
-        <td><%= message_task.auditor.name %></td>
+        <td><%= message_task.auditor ? message_task.auditor.name : "" %></td>
         <td><%= message_task.description %></td>
         <td><%= message_task.creation_date %></td>
         <td><%= message_task.execution_date %></td>
@@ -44,5 +60,6 @@
     <% end %>
   </tbody>
 </table>
-  
 </div>
+
+<div id="message_task_edit" class="text-center displacer"></div> 

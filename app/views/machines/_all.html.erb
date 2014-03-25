@@ -1,4 +1,5 @@
-<table id="machines-table" class="standart-table table-autosort">
+<div class="table-responsive standart-table-container">
+<table id="machines-table" class="table table-striped table-hover table-condensed table-bordered table-autosort">
   <thead>
     <tr>
       <th class="table-sortable:numeric table-sortable">Номер</th>
@@ -9,10 +10,10 @@
     </tr>
     <tr>
       <th>Фильтр:</th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
     </tr>
   </thead>
 
@@ -28,3 +29,4 @@
     <% end %>
   </tbody>
 </table>
+</div>

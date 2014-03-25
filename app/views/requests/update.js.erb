@@ -11,7 +11,7 @@ function updateRequest()
 	else
 	{
 		<% if @request.machine %>
-			var tr = $("<tr style='opacity: 1;' id='<%= @request.id %>'>" +
+			var tr = $("<tr style='opacity: 1;' id='<%= @request.id %>' data-link='<%= edit_request_path(@request) %>'>" +
 								"<td><%= @request.id %></td>" +
 				"<td><%= @request.registrar.name %></td>" +
 				"<td><%= @request.solver.name %></td>" +
@@ -20,7 +20,6 @@ function updateRequest()
 				"<td><%= Request.request_types[@request.request_type.to_sym] %></td>" +
 				"<td class='actions'>" + 
 					"<%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'delete', remote: true) %>, " +
-					"<%= if @request.id then escape_javascript(link_to 'Править', edit_request_path(@request), remote: true, class: 'edit') end %> " +
 					"<%= escape_javascript(link_to 'Поручения', message_tasks_path(:request_id => @request.id), class: 'tasks') %>" +
 				"</td>" +
 			"</tr>");

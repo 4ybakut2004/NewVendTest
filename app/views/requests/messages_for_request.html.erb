@@ -6,15 +6,15 @@
 			var button   = $(el).find('button');
 
 			function check(btn, chk){
-				if(btn.hasClass('btn-activated-toogle'))
+				if(btn.hasClass('active'))
 				{
-					btn.removeClass('btn-activated-toogle');
+					btn.removeClass('active');
 					chk.prop('checked', false);
 					$(".task#" + btn.attr('value')).addClass('display-none');
 				}
 				else
 				{
-					btn.addClass('btn-activated-toogle');
+					btn.addClass('active');
 					chk.prop('checked', true);
 
 					$(".task#" + btn.attr('value')).removeClass('display-none');
@@ -28,7 +28,7 @@
 </script>
 	<% @messages.each do |message| %>
 		<div class="message-checker">
-			<button class="btn" type="button" value="<%= message.id %>"><%= message.name %></button>
+			<button class="btn btn-default" type="button" value="<%= message.id %>"><%= message.name %></button>
 	    	<%= check_box_tag 'messages[]', message.id, false, :class => "display-none" %>
 		</div>
 	<% end %>

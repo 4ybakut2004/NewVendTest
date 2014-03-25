@@ -1,14 +1,17 @@
 <% provide(:title, 'Tasks') %>
-<div id="task_new" class="form">
-  <h1>Новое поручение</h1>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('li#tasks').addClass('active');
+	});
+</script>
+
+<div id="task_new" class="content text-center">
+  <h1>Новый тип поручения</h1>
   <%= render 'form_new' %>
 </div>
 
-<br>
-
 <div class="content">
-  <h1>Поручения</h1>
-  <hr>
+  <h1>Типы поручений</h1>
   <%= render 'all' %>
-  <br>
 </div>

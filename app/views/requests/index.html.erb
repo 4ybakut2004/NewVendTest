@@ -1,21 +1,20 @@
-<% provide(:title, 'Requests') %>
-<div id="request_new" class="form">
-  <h1>Новая заявка</h1>
-  <%= render 'form_new' %>
-</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('li#requests').addClass('active');
+	});
+</script>
 
-<br>
+<% provide(:title, 'Requests') %>
+<div id="request_new" class="content">
+	<div class="text-center">
+		<h1>Новая заявка</h1>
+	</div>
+  	<%= render 'form_new' %>
+</div>
 
 <div class="content">
-  <h1>Заявки</h1>
-  <hr>
   <%= render 'all' %>
-  <br>
 </div>
-
-<div id="request_edit" class="form bubble">
-  <h1>Редактирование заявки</h1>
-</div> 
 
 <div id="request_messages" class="content bubble" style="min-width: 300px;">
 </div> 

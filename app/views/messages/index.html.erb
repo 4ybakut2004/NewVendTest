@@ -1,14 +1,17 @@
 <% provide(:title, 'Messages') %>
-<div id="message_new" class="form">
-  <h1>Новый сигнал</h1>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('li#messages').addClass('active');
+	});
+</script>
+
+<div id="message_new" class="content text-center">
+  <h1>Новый тип сигнала</h1>
   <%= render 'form_new' %>
 </div>
 
-<br>
-
 <div class="content">
-  <h1>Сигналы</h1>
-  <hr>
+  <h1>Типы сигналов</h1>
   <%= render 'all' %>
-  <br>
 </div>

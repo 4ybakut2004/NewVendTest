@@ -1,0 +1,30 @@
+function updateMessageTask()
+{
+	var msg = $("#message_task_edit").find("#msg");
+
+	if("<%= @message_task.errors.count %>" != 0)
+	{
+		showErrorMessage("Количество ошибок: <%= @message_task.errors.count %><br>" +
+		                 "Проверьте обязательные для ввода поля",
+		                 msg);
+	}
+	else
+	{
+		var tr = $("<tr style='opacity: 1;' id='<%= @message_task.id %>' data-link='<%= edit_message_task_path(@message_task) %>'>" +
+		'<td><%= @message_task.id %></td>' + 
+        '<td><%= link_to @message_task.request_message.request_id, edit_request_path(@message_task.request_message.request) %></td>' +
+        '<td><%= @message_task.task.name %></td>' +
+        '<td><%= @message_task.assigner.name %></td>' +
+        '<td><%= @message_task.executor ? @message_task.executor.name : "" %></td>' +
+        '<td><%= @message_task.auditor ? @message_task.auditor.name : "" %></td>' +
+        '<td><%= @message_task.description %></td>' +
+        '<td><%= @message_task.creation_date %></td>' +
+        '<td><%= @message_task.execution_date %></td>' +
+        '<td><%= @message_task.audition_date %></td>' +
+		"</tr>");
+		
+		messageTasksTemplate.updateRow(tr, <%= raw @message_task.getFullInfo.to_json %>);
+	}
+}
+
+updateMessageTask();
