@@ -12,7 +12,6 @@ function extend(Child, Parent) {
 function IndexPageController() {
   this.items = {};
   this.deleteActionSelector;
-  this.editActionSelector;
   this.tableSelector;
   this.editFormSelector;
   this.extractingSelector;
@@ -27,10 +26,6 @@ IndexPageController.prototype = {
 
   parmDeleteActionSelector: function(selector) {
     this.deleteActionSelector = selector;
-  },
-
-  parmEditActionSelector: function(selector) {
-    this.editActionSelector = selector;
   },
 
   parmTableSelector: function(selector) {
@@ -61,10 +56,9 @@ IndexPageController.prototype = {
         type: "GET",
         url: $(this).parent().attr('data-link'),
         success: function(data) {
-          clickElement = $(self.editActionSelector);
-          formElement = $(self.editFormSelector);
-          extractingElement = self.extractingSelector;
-          tableElement = $(self.tableSelector);
+          var formElement = $(self.editFormSelector);
+          var extractingElement = self.extractingSelector;
+          var tableElement = $(self.tableSelector);
 
           formElement.empty();
           tableElement.css("display", "none");
@@ -117,8 +111,8 @@ IndexPageController.prototype = {
     var self = this;
     this.items[item.id] = item;
     
-    row.insertAfter(this.tableSelector + " #" + item.id);
-    $(this.tableSelector + " #" + item.id).remove();
+    row.insertAfter($(this.tableSelector).find("#" + item.id));
+    $($(this.tableSelector).find("#" + item.id)).remove();
     $(this.editFormSelector).animate({opacity: 0}, 500, function() {
       $(this).css("display", "none").empty();
         self.setDeleteAction();
@@ -127,7 +121,7 @@ IndexPageController.prototype = {
   },
 
   deleteRow: function(item_id) {
-    $(this.tableSelector + " #" + item_id).animate({opacity: 0}, 500, function() {
+    $($(this.tableSelector).find("#" + item_id)).animate({opacity: 0}, 500, function() {
       $(this).remove();
     });
 
@@ -137,6 +131,10 @@ IndexPageController.prototype = {
 
 function AllRequestsTemplate() {
   this.items = {};
+  this.deleteActionSelector;
+  this.tableSelector;
+  this.editFormSelector;
+  this.extractingSelector;
 }
 
 AllRequestsTemplate.prototype = {
@@ -190,7 +188,11 @@ AllRequestsTemplate.prototype = {
         );
       }
 
-      var top = $(this).position().top - infoContainer.height() - 40 + "px";
+      var topNumber = $(this).position().top - infoContainer.height() - 40;
+      if(topNumber < 0) {
+        topNumber = $(this).position().top + $(this).height();
+      }
+      var top = topNumber + "px";
       var left = $(this).position().left + "px";
       infoContainer.css("top", top)
       .css("left", left)
@@ -210,7 +212,6 @@ AllRequestsTemplate.prototype = {
 
   insertRow: function(row, request) {
     this.hoverAction(row);
-    //this.superclass.insertRow(row, request);
 
     var self = this;
     this.items[request.id] = request;
@@ -224,13 +225,12 @@ AllRequestsTemplate.prototype = {
 
   updateRow: function(row, request) {
     this.hoverAction(row);
-    //this.superclass.updateRow(row, request);
 
     var self = this;
     this.items[request.id] = request;
     
-    row.insertAfter("#" + request.id);
-    $("#" + request.id).remove();
+    row.insertAfter($(this.tableSelector).find("#" + request.id));
+    $($(this.tableSelector).find("#" + request.id)).remove();
     $(this.editFormSelector).animate({opacity: 0}, 500, function() {
       $(this).css("display", "none").empty();
         self.setDeleteAction();
@@ -243,6 +243,10 @@ extend(AllRequestsTemplate, IndexPageController);
 
 function MessageTasksTemplate() {
   this.items = {};
+  this.deleteActionSelector;
+  this.tableSelector;
+  this.editFormSelector;
+  this.extractingSelector;
 }
 
 MessageTasksTemplate.prototype = {

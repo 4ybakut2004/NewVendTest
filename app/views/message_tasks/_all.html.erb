@@ -5,7 +5,6 @@
     messageTasksTemplate = new MessageTasksTemplate();
 
     messageTasksTemplate.init(<%= raw (@message_tasks.map{ |r| r.getFullInfo }).to_json %>);
-    messageTasksTemplate.parmEditActionSelector("a[data-remote].edit");
     messageTasksTemplate.parmTableSelector("#message-tasks-table-container");
     messageTasksTemplate.parmEditFormSelector("#message_task_edit");
     messageTasksTemplate.parmExtractingSelector("#message_task");

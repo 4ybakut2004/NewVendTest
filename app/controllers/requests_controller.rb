@@ -4,7 +4,18 @@ class RequestsController < ApplicationController
   # GET /requests
   # GET /requests.json 
   def index
-    @requests = Request.order('created_at DESC').all
+    filter = {}
+    @action_type = params[:action_type]
+
+    if signed_in?
+      case @action_type
+      when "my"
+          filter[:registrar_id] = current_user.employee.id
+      end
+    end
+
+
+    @requests = Request.order('created_at DESC').where(filter)
     @request  = Request.new
     @messages = Message.all
   end

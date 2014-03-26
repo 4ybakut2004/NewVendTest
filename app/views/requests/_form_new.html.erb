@@ -66,7 +66,7 @@
         console.log(xhr.responseText );
       });
 
-      $("#new_request").on("ajax:success", function(e, data, status, xhr){
+      function hideAll() {
         hideElement(machine_id);
         hideElement(description);
         hideElement(submit);
@@ -75,6 +75,15 @@
         form.find("#messages").empty();
         form.find("#tasks").empty();
         switchable.switchOff();
+      }
+
+      $('#close-button').click(function(event) {
+        hideAll();
+      });
+
+      $("#new_request").on("ajax:success", function(e, data, status, xhr){
+        hideAll();
+        $('#newModal').modal('hide');
       }).bind("ajax:error", function(e, xhr, status, error){
         console.log(xhr.responseText);
       });
@@ -130,8 +139,7 @@
     </div>
 
     <div id="tasks"></div>
-    <div id="msg"></div>
-    <div id="submit-container" class="form-footer text-center display-none">
+    <div id="submit-container" class="form-footer text-right display-none">
       <%= f.submit "Подтвердить", class: "btn btn-primary" %>
     </div>
   <% end %>  

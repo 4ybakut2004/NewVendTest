@@ -1,9 +1,8 @@
 function addNewMessage()
 {
-	var msg = $("#message_new").find("#msg");
-
 	if("<%= @message.errors.count %>" != 0)
 	{
+		var msg = $("#error-msg");
 		showErrorMessage("Количество ошибок: <%= @message.errors.count %><br>" +
 		                                        "Проверьте обязательные для ввода поля",
 		                                        msg);
@@ -15,14 +14,17 @@ function addNewMessage()
 			"<td><%= @message.name %></td>" +
 			"<td><%= Request.request_types[@message.request_type.to_sym] %></td>" +
 			"<td><%= if @message.id then escape_javascript(link_to 'Удалить', @message, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'delete', remote: true) end %></td>" +
-		"</tr>").prependTo("#messages")
+		"</tr>").prependTo("#messages-table #messages")
 		.animate({opacity: 1}, 500, function() {
 		});
 
+		var msg = $("#success-msg");
 		showSuccessMessage("Сигнал успешно создан", msg);
 
 		var form = $("#new_message");
     	form.find("#message_name").val('');
+
+    	$('#newModal').modal('hide');
 	}
 }
 

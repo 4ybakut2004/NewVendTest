@@ -1,18 +1,33 @@
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('li#requests').addClass('active');
+		if("<%= params[:action_type] %>" == "my") {
+			$('li#my-requests').addClass('active');
+		}
+		else {
+			$('li#requests').addClass('active');
+		}
 	});
 </script>
 
 <% provide(:title, 'Requests') %>
-<div id="request_new" class="content">
-	<div class="text-center">
-		<h1>Новая заявка</h1>
-	</div>
-  	<%= render 'form_new' %>
+
+<div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button id="close-button" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="newModalLabel">Новая заявка</h4>
+      </div>
+      <div class="modal-body">
+        <div id="error-msg"></div>
+        <%= render 'form_new' %>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="content">
+  <div id="success-msg"></div>
   <%= render 'all' %>
 </div>
 

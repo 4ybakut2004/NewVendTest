@@ -1,9 +1,8 @@
 function addNewRequest()
 {
-	var msg = $("#request_new").find("#msg");
-
 	if("<%= @request.errors.count %>" != 0)
 	{
+		var msg = $("#error-msg");
 		showErrorMessage("Количество ошибок: <%= @request.errors.count %><br>" +
 		                 "Проверьте обязательные для ввода поля",
 		                 msg);
@@ -20,13 +19,13 @@ function addNewRequest()
 				"<td><%= @request.description %></td>" +
 				"<td><%= Request.request_types[@request.request_type.to_sym] %></td>" +
 				"<td class='actions'>" + 
-					"<%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'delete', remote: true) %>, " +
-					"<%= escape_javascript(link_to 'Поручения', message_tasks_path(:request_id => @request.id), class: 'tasks') %>" +
+					"<%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'delete', remote: true) %>" +
 				"</td>" +
 			"</tr>");
 
 			allRequestsTemplate.insertRow(tr, <%= raw @request.getFullInfo.to_json %>);
 
+			var msg = $("#success-msg");
 			showSuccessMessage("Заявка успешно создана", msg);
 
 			var form = $("#new_request");

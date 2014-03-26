@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'sessions_helper'
+include SessionsHelper
 
 describe "Static pages" do
   subject { page }
@@ -8,24 +10,21 @@ describe "Static pages" do
 
     it { should have_content('Новый Вендинг') }
     it { should have_title('New Vending') }
-  end
 
-  describe "Help page" do
-    before { visit help_path }
-
-    it { should have_content('Помощь') }
-    it { should have_title('| Help') }
+    it { should have_content('Войти') }
   end
 
   it "should have the right links on the layout" do
     visit root_path
     click_link "Главная"
     expect(page).to have_title('New Vending')
-    click_link "Помощь"
-    expect(page).to have_title('Help')
 
     visit root_path
     first(:link, "Заявки").click
+    expect(page).to have_title('| Requests')
+
+    visit root_path
+    first(:link, "Мои заявки").click
     expect(page).to have_title('| Requests')
 
     visit root_path

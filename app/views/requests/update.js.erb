@@ -19,8 +19,7 @@ function updateRequest()
 				"<td><%= @request.description %></td>" +
 				"<td><%= Request.request_types[@request.request_type.to_sym] %></td>" +
 				"<td class='actions'>" + 
-					"<%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'delete', remote: true) %>, " +
-					"<%= escape_javascript(link_to 'Поручения', message_tasks_path(:request_id => @request.id), class: 'tasks') %>" +
+					"<%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'delete', remote: true) %>" +
 				"</td>" +
 			"</tr>");
 			

@@ -18,7 +18,7 @@
 </script>
 
 <header>
-  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container-fluid">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
@@ -41,8 +41,9 @@
         </form>
         <ul class="nav navbar-nav navbar-right">
           <li id="home-page"><%= link_to "Главная", root_path %></li>
-          <li id="help-page"><%= link_to "Помощь",  help_path %></li>
           <% if signed_in? %>
+            <li id="user-page"><%= link_to current_user.name, user_path(current_user) %></li>
+            <li><%= link_to "Настройки", "#" %></li>
             <li><%= link_to "Выйти", signout_path, method: "delete" %></li>
           <% else %>
             <li><%= link_to "Войти", signin_path %></li>

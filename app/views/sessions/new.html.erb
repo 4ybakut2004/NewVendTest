@@ -1,20 +1,27 @@
 <% provide(:title, "Sign in") %>
 
-<div class="form">
+<div class="content">
 
-	<h1>Вход</h1>
+	<h1 class="text-center">Вход</h1>
 
-	<%= form_for(:session, url: sessions_path) do |f| %>
+	<%= form_for(:session, url: sessions_path, :html => {:class => "form-horizontal" }) do |f| %>
 
-	<div class="field">
-		<%= f.label :name, 'Имя' %>
-	  	<%= f.text_field :name %>
+	<div class="form-group">
+		<%= f.label :name, 'Имя', :class => "col-sm-2 control-label" %>
+		<div class="col-sm-10">
+	  		<%= f.text_field :name, :class => "form-control" %>
+	  	</div>
 	</div>
-	<div class="field">
-		<%= f.label :password, 'Пароль' %>
-		<%= f.password_field :password %>	
+	<div class="form-group">
+		<%= f.label :password, 'Пароль', :class => "col-sm-2 control-label" %>
+		<div class="col-sm-10">
+			<%= f.password_field :password, :class => "form-control" %>
+		</div>	
 	</div>
-	  
-	  <%= f.submit "Войти", class: "btn btn-large" %>
+	 
+	<div class="text-center">
+		<%= f.submit "Войти", class: "btn btn-primary" %>
+	</div>
+	
 	<% end %>
 </div>
