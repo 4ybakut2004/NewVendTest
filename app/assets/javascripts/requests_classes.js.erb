@@ -70,16 +70,15 @@ IndexPageController.prototype = {
             });
           }
 
-          var btn = $("<input type='button' value='X' class='btn' style='float: right;'>");
-          btn.bind("click", closeForm);
-          var col2 = $("<div class='col-md-12 text-right'></div>");
-          var row = $("<div class='row'></div>");
-          row.append($(col2));
-          col2.append($(btn));
-          formElement.append($(row));
-
           formElement.append($(data).find(extractingElement));
           formElement.find('input[type="submit"]').bind("click", closeForm);
+
+          var btn = $("<input type='button' value='X' class='btn btn-default' style='float: right;'>");
+          btn.bind("click", closeForm);
+          var col2 = $("<div class='col-md-2 text-right' style='padding-top: 5px;'></div>");
+          var row = formElement.find("#edit-label");
+          row.append($(col2));
+          col2.append($(btn));
 
           formElement.css("display", "block");
           if(formElement.css("opacity") != 1)

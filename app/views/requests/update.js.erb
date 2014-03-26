@@ -1,9 +1,8 @@
 function updateRequest()
 {
-	var msg = $("#request_edit").find("#msg");
-
 	if("<%= @request.errors.count %>" != 0)
 	{
+		var msg = $("#error-msg");
 		showErrorMessage("Количество ошибок: <%= @request.errors.count %><br>" +
 		                 "Проверьте обязательные для ввода поля",
 		                 msg);

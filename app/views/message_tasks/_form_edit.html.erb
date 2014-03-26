@@ -1,6 +1,7 @@
 <div id="message_task">
-  <h1>Поручение <%= @message_task.id %></h1>
-  <div id="msg"></div>
+  <div class="row" id="edit-label">
+    <div class="col-md-10 text-center"><h1>Поручение <%= @message_task.id %></h1></div>
+  </div>
 
   <%= form_for(@message_task, remote: true, :html => {:class => "form-horizontal"}) do |f| %>
 

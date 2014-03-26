@@ -1,9 +1,8 @@
 function updateMessageTask()
 {
-	var msg = $("#message_task_edit").find("#msg");
-
 	if("<%= @message_task.errors.count %>" != 0)
 	{
+		var msg = $("#error-msg");
 		showErrorMessage("Количество ошибок: <%= @message_task.errors.count %><br>" +
 		                 "Проверьте обязательные для ввода поля",
 		                 msg);

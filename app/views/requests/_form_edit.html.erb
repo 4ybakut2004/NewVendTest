@@ -1,6 +1,7 @@
 <div id="request">
-  <h1 class="text-center">Заявка <%= @request.id %></h1>
-  <div id="msg"></div>
+  <div class="row" id="edit-label">
+    <div class="col-md-10 text-center"><h1>Заявка <%= @request.id %></h1></div>
+  </div>
 
   <%= form_for(@request, remote: true, :html => {:class => "form-horizontal"}) do |f| %>
     <div class="row">
@@ -12,10 +13,6 @@
         <div class="form-group">
           <%= f.label :solver_name, "Решатель", :class => "col-sm-4 text-right" %>
           <div class="col-sm-8 text-left" id="solver_name"><%= @request.solver.name %></div>
-        </div>
-        <div class="form-group">
-          <%= f.label :machine_name, "Автомат", :class => "col-sm-4 text-right" %>
-          <div class="col-sm-8 text-left" id="machine_name"><%= link_to @request.machine.name, machine_path(@request.machine) %></div>
         </div>
       </div>
 
