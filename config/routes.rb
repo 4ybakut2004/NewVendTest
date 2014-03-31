@@ -7,6 +7,7 @@ NewVend::Application.routes.draw do
   resources :messages, only: [:index, :destroy, :create, :update, :edit]
   resources :message_tasks, only: [:index, :edit, :update]
   resources :tasks, only: [:index, :create, :destroy]
+  resources :employees, only: [:index, :create, :destroy, :edit, :update]
 
   root  'static_pages#home'
   match '/help', to: 'static_pages#help',       via: 'get'
@@ -15,6 +16,8 @@ NewVend::Application.routes.draw do
   match '/signout', to: 'sessions#destroy',     via: 'delete'
 
   post 'messages_for_request' => 'requests#messages_for_request', :as => :messages_for_request
+  post 'request_group_destroy' => 'requests#request_group_destroy', :as => :request_group_destroy
+  post 'employee_group_destroy' => 'employees#employee_group_destroy', :as => :employee_group_destroy
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

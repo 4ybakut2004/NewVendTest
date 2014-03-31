@@ -1,17 +1,21 @@
 require 'spec_helper'
 require 'sessions_helper'
-include SessionsHelper
 
 describe "Static pages" do
   subject { page }
+  before do
+    @employee = Employee.create(:name => "Employee")
+    @user = User.create(:name => "User", :password => "password", :employee_id => @employee.id)
+    sign_in @user 
+  end
 
   describe "Home page" do
-    before { visit root_path }
-
+    before { visit root_path  }
     it { should have_content('Новый Вендинг') }
     it { should have_title('New Vending') }
 
-    it { should have_content('Войти') }
+    it { should_not have_content('Войти') }
+    it { should have_content('Выйти') }
   end
 
   it "should have the right links on the layout" do
@@ -21,10 +25,6 @@ describe "Static pages" do
 
     visit root_path
     first(:link, "Заявки").click
-    expect(page).to have_title('| Requests')
-
-    visit root_path
-    first(:link, "Мои заявки").click
     expect(page).to have_title('| Requests')
 
     visit root_path
@@ -44,8 +44,9 @@ describe "Static pages" do
     expect(page).to have_title('| Message Tasks')
 
     visit root_path
-    first(:link, "Мои поручения").click
-    expect(page).to have_title('| Message Tasks')
+    first(:link, "Сотрудники").click
+    expect(page).to have_title('| Employees')
+
   end
 
 end

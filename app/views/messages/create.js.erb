@@ -6,6 +6,14 @@ function addNewMessage()
 		showErrorMessage("Количество ошибок: <%= @message.errors.count %><br>" +
 		                                        "Проверьте обязательные для ввода поля",
 		                                        msg);
+
+		var errors = <%= raw @message.errors.to_json %>;
+
+		for(var key in errors) {
+			if(errors[key].length > 0) {
+				$('#newModal').find('#' + key).addClass('has-error');
+			}
+		}
 	}
 	else
 	{
@@ -19,10 +27,12 @@ function addNewMessage()
 		});
 
 		var msg = $("#success-msg");
-		showSuccessMessage("Сигнал успешно создан", msg);
+		showSuccessMessage("Тип сигнала успешно создан", msg);
 
 		var form = $("#new_message");
     	form.find("#message_name").val('');
+
+    	$('#newModal div').removeClass('has-error');
 
     	$('#newModal').modal('hide');
 	}

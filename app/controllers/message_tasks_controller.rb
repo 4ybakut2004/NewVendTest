@@ -1,5 +1,6 @@
 class MessageTasksController < ApplicationController
 	before_action :set_message_task, only: [:show, :edit, :update, :destroy]
+	before_action :signed_in_user
 
 	def edit
 	end
@@ -7,19 +8,18 @@ class MessageTasksController < ApplicationController
 	def index
 		filter = { }
 		@request_id  = params[:request_id]
-		@action_type = params[:action_type]
+		@who_am_i = params[:who_am_i]
+		if !@who_am_i
+			@who_am_i = []
+		end
+		
 		if @request_id != "" && @request_id
 			filter[:request_messages] = { :request_id => @request_id }
 		end
 
 		if signed_in?
-			case @action_type
-			when "my"
-			  	filter[:assigner_id] = current_user.employee.id
-			when "to_me"
-			  	filter[:executor_id] = current_user.employee.id
-			when "to_audit"
-			  	filter[:auditor_id] = current_user.employee.id
+			@who_am_i.each do |i|
+				filter[(i + "_id").to_sym] = current_user.employee.id
 			end
 		end
 
@@ -40,6 +40,10 @@ class MessageTasksController < ApplicationController
 	    end
 	end
 
+	def signed_in_user
+      redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
+    end
+
 	private
 
 		def set_message_task
@@ -47,6 +51,6 @@ class MessageTasksController < ApplicationController
 		end
 
 		def message_task_params
-			params.require(:message_task).permit(:executor_id, :auditor_id, :description, :execution_date, :audition_date)
+			params.require(:message_task).permit(:executor_id, :auditor_id, :description, :execution_date, :audition_date, :deadline_date)
 		end
 end

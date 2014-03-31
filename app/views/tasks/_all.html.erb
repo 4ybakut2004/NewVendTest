@@ -29,8 +29,8 @@
     <% @tasks.each do |task| %>
       <tr id="<%= task.id %>">
         <td><%= task.id %></td>
-        <td><%= task.name %></td>
         <td><%= task.message.name %></td>
+        <td><%= task.name %></td>
         <td><%= link_to 'Удалить', task, method: :delete, data: { confirm: 'Вы уверены?' }, class: "delete", remote: true %></td>
       </tr>
     <% end %>

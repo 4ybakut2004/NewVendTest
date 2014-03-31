@@ -9,16 +9,16 @@
   </script>
   
   <%= form_for(@task, remote: true, :html => {:class => "form-horizontal", :style => "margin-top: 15px;"}) do |f| %>
-    <div id="name" class="form-group">
-      <%= f.label :name, "Наименование", :class => "col-sm-4 control-label" %>
-      <div class="col-sm-8">
-        <%= f.text_field :name, :class => "form-control" %>
-      </div>
-    </div>
     <div id="message_id" class="form-group">
       <%= f.label :message_id, "Сообщение", :class => "col-sm-4 control-label" %>
       <div class="col-sm-8">
         <%= f.select :message_id, options_for_select(Message.all.map { |m| [ m.name, m.id ] }), {}, { :class => "form-control" } %>
+      </div>
+    </div>
+    <div id="name" class="form-group">
+      <%= f.label :name, "Наименование", :class => "col-sm-4 control-label" %>
+      <div class="col-sm-8">
+        <%= f.text_field :name, :class => "form-control" %>
       </div>
     </div>
     <div id="msg"></div>

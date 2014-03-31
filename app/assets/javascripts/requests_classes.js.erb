@@ -1,3 +1,5 @@
+// Наследует класс Child от класса Parent.
+// Копирует все методы и свойства родителя
 function extend(Child, Parent) {
     var F = function () { };
     F.prototype = Parent.prototype;
@@ -9,6 +11,25 @@ function extend(Child, Parent) {
     Child.superclass = Parent.prototype;
 }
 
+// ------------------------------------------------------------------------------------
+// Класс, управляющий страницей просмотра и редактирования.
+// Использование:
+// var pageController = new IndexPageController();
+// pageController.init(json с элементами);
+// pageController.parmDeleteActionSelector('селектор ссылок на удаление элементов в таблице');
+// pageController.parmTableSelector('Селектор контейнера, содержащего таблицу с элементами');
+// pageController.parmExtractingSelector('Селектор контейнера, который следует вытащить страницы редактирования');
+// pageController.parmEditFormSelector('Селектор, куда поместить форму редактирования');
+// pageController.setDeleteAction(); // Задает deleteAction для ссылок на удаление элементов
+// pageController.setEditAction(); // Превращает строки таблицы в ссылки на редактирование элементов
+// pageController.insertRow($('строка таблицы')); // Вставляет строку в таблицу
+// pageController.updateRow($('строка таблицы'), id_строки); // Замещает троку на обновленную
+// pageController.deleteRow(id); // Удаляет строку с указанным id
+// ------------------------------------------------------------------------------------
+// Для корректрой работы класса строкам таблицы неоходимо присвоить id элементов в базе данных,
+// а так же прописать каждой строке ссылку на редактирование соответствующей записи в атрибут 
+// data-link
+// ------------------------------------------------------------------------------------
 function IndexPageController() {
   this.items = {};
   this.deleteActionSelector;
@@ -137,105 +158,7 @@ function AllRequestsTemplate() {
 }
 
 AllRequestsTemplate.prototype = {
-  setHoverAction: function() {
-    this.hoverAction($(this.tableSelector + " tbody tr"));
-  },
-
-  hoverAction: function(element) {
-    var self = this;
-
-    function tableRowHover() {
-      var infoContainer = $("#full-request-info");
-      infoContainer.find("#request-messages-table tbody").empty();
-      infoContainer.find("#message-tasks-table tbody").empty();
-      infoContainer.find("#full-phone-number").empty();
-
-      var request = self.items[$(this).attr("id")];
-
-      var request_messages_table = infoContainer.find("#request-messages-table");
-      var message_tasks_table = infoContainer.find("#message-tasks-table");
-
-      for(var i = 0; i < request.request_messages.length; i++)
-      {
-        var request_message = request.request_messages[i];
-        request_messages_table.find("tbody").append(
-          $("<tr>"+
-              "<td>" + request_message + "</td>" +
-            "<tr>")
-        );
-      }
-
-      for(var i = 0; i < request.message_tasks.length; i++)
-      {
-        var message_task = request.message_tasks[i];
-        message_tasks_table.find("tbody").append(
-          $("<tr>"+
-              "<td>" + message_task.name + "</td>" +
-            "<tr>")
-        );
-      }
-
-      if(request.request_type == "phone" && request.phone)
-      {
-        infoContainer.find("#full-phone-number").append(
-          $("<table class='table table-condensed'><thead>" +
-            "<tr><th>Телефон</th></tr>" +
-            "</thead>" +
-            "<tbody>" +
-            "<tr><td>" + request.phone + "</td></tr>" +
-            "</tbody></table>")
-        );
-      }
-
-      var topNumber = $(this).position().top - infoContainer.height() - 40;
-      if(topNumber < 0) {
-        topNumber = $(this).position().top + $(this).height();
-      }
-      var top = topNumber + "px";
-      var left = $(this).position().left + "px";
-      infoContainer.css("top", top)
-      .css("left", left)
-      .css("display", "block")
-      .css("opacity", "0").animate({
-        opacity: 1
-      }, 200, function() {});
-    }
-
-    function tableRowUnHover() {
-      var infoContainer = $("#full-request-info");
-      infoContainer.css("display", "none").css("opacity", "0");
-    }
-
-    element.hover(tableRowHover, tableRowUnHover);
-  },
-
-  insertRow: function(row, request) {
-    this.hoverAction(row);
-
-    var self = this;
-    this.items[request.id] = request;
-
-    row.prependTo(this.tableSelector + " tbody")
-    .animate({opacity: 1}, 500, function() {
-      self.setDeleteAction();
-      self.setEditAction();
-    });
-  },
-
-  updateRow: function(row, request) {
-    this.hoverAction(row);
-
-    var self = this;
-    this.items[request.id] = request;
-    
-    row.insertAfter($(this.tableSelector).find("#" + request.id));
-    $($(this.tableSelector).find("#" + request.id)).remove();
-    $(this.editFormSelector).animate({opacity: 0}, 500, function() {
-      $(this).css("display", "none").empty();
-        self.setDeleteAction();
-        self.setEditAction();
-    });
-  }
+  
 };
 
 extend(AllRequestsTemplate, IndexPageController);
@@ -253,3 +176,17 @@ MessageTasksTemplate.prototype = {
 };
 
 extend(MessageTasksTemplate, IndexPageController);
+
+function EmployeesTemplate() {
+  this.items = {};
+  this.deleteActionSelector;
+  this.tableSelector;
+  this.editFormSelector;
+  this.extractingSelector;
+}
+
+EmployeesTemplate.prototype = {
+  
+};
+
+extend(EmployeesTemplate, IndexPageController);

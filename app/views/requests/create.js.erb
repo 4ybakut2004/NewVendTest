@@ -6,21 +6,29 @@ function addNewRequest()
 		showErrorMessage("Количество ошибок: <%= @request.errors.count %><br>" +
 		                 "Проверьте обязательные для ввода поля",
 		                 msg);
+
+		var errors = <%= raw @request.errors.to_json %>;
+
+		for(var key in errors) {
+			if(errors[key].length > 0) {
+				$('#newModal').find('#' + key).addClass('has-error');
+			}
+		}
 	}
 	else
 	{
 		<% if @request.machine %>
 		
 			var tr = $("<tr style='opacity: 0;' id='<%= @request.id %>' data-link='<%= edit_request_path(@request) %>'>" +
+				"<td class='actions'>" + 
+					"<%= escape_javascript(check_box_tag 'for_destroy[]', @request.id, false) %>" +
+				"</td>" +
 				"<td><%= @request.id %></td>" +
 				"<td><%= @request.registrar.name %></td>" +
 				"<td><%= @request.solver.name %></td>" +
 				"<td><%= escape_javascript(link_to @request.machine.name, machine_path(@request.machine)) %></td>" +
 				"<td><%= @request.description %></td>" +
 				"<td><%= Request.request_types[@request.request_type.to_sym] %></td>" +
-				"<td class='actions'>" + 
-					"<%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'delete', remote: true) %>" +
-				"</td>" +
 			"</tr>");
 
 			allRequestsTemplate.insertRow(tr, <%= raw @request.getFullInfo.to_json %>);
@@ -30,6 +38,8 @@ function addNewRequest()
 
 			var form = $("#new_request");
         	form.find("#request_description").val('');
+
+        	$('#newModal div').removeClass('has-error');
 
 		<% end %>
 	}

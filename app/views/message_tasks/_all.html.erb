@@ -13,19 +13,35 @@
   });
 </script>
 
-<h1>Поручения</h1>
+<h1 style="display: inline-block;">Поручения, где я
+<%= form_tag(message_tasks_path, method: "get", :style => "display: inline-block;") do %>
+<div class="btn-group" data-toggle="buttons">
+  <label class="btn btn-link btn-lg <%= @who_am_i.include?("assigner") ? "active" : "" %>">
+    <%= check_box_tag 'who_am_i[]', "assigner", @who_am_i.include?("assigner"), :class => "display-none" %> Назначатель,
+  </label>
+  <label class="btn btn-link btn-lg <%= @who_am_i.include?("executor") ? "active" : "" %>">
+    <%= check_box_tag 'who_am_i[]', "executor", (@who_am_i.include? "executor"), :class => "display-none" %> Исполнитель,
+  </label>
+  <label class='btn btn-link btn-lg <%= @who_am_i.include?("auditor") ? "active" : "" %>'>
+    <%= check_box_tag 'who_am_i[]', "auditor", (@who_am_i.include? "auditor"), :class => "display-none" %> Контролер
+  </label>
+</div>
+<%= submit_tag("Применить", class: "btn btn-default") %>
+<% end %></h1>
+<br>
+
 <div id="message-tasks-table-container" class="table-responsive standart-table-container">
 <table class="table table-striped table-hover table-condensed table-bordered table-autosort" id="message-tasks-table">
   <thead>
     <tr>
       <th class="table-sortable:numeric table-sortable">Номер</th>
-      <th class="table-sortable:numeric table-sortable">Номер заявки</th>
       <th class="table-sortable:default table-sortable">Тип</th>
       <th class="table-sortable:default table-sortable">Назначатель</th>
       <th class="table-sortable:default table-sortable">Исполнитель</th>
       <th class="table-sortable:default table-sortable">Контролер</th>
       <th class="table-sortable:default table-sortable">Описание</th>
       <th class="table-sortable:date table-sortable">Дата создания</th>
+      <th class="table-sortable:date table-sortable">Плановая дата</th>
       <th class="table-sortable:date table-sortable">Дата выполнения</th>
       <th class="table-sortable:date table-sortable">Дата проверки</th>
     </tr>
@@ -46,15 +62,15 @@
     <% @message_tasks.each do |message_task| %>
       <tr id="<%= message_task.id %>" data-link="<%= edit_message_task_path(message_task) %>">
         <td><%= message_task.id %></td>
-        <td><%= link_to message_task.request_message.request_id, edit_request_path(message_task.request_message.request) %></td>
         <td><%= message_task.task.name %></td>
         <td><%= message_task.assigner.name %></td>
         <td><%= message_task.executor ? message_task.executor.name : "" %></td>
         <td><%= message_task.auditor ? message_task.auditor.name : "" %></td>
         <td><%= message_task.description %></td>
-        <td><%= message_task.creation_date %></td>
-        <td><%= message_task.execution_date %></td>
-        <td><%= message_task.audition_date %></td>
+        <td><%= message_task.creation_date.to_s(:db) %></td>
+        <td><%= message_task.deadline_date ? message_task.deadline_date.to_s(:db) : "" %></td>
+        <td><%= message_task.execution_date ? message_task.execution_date.to_s(:db) : "" %></td>
+        <td><%= message_task.audition_date ? message_task.audition_date.to_s(:db) : "" %></td>
       </tr>
     <% end %>
   </tbody>

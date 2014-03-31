@@ -2,19 +2,9 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		if("<%= params[:action_type] %>" == "my") {
-			$('li#my-message-tasks').addClass('active');
-		}
-		else {
-			$('li#message-tasks').addClass('active');
-		}
+		$('li#message-tasks').addClass('active');
 	});
 </script>
-
-<!--<div class="content text-center">
-  <h1>Фильтр поручений</h1>
-  <%= render 'filter' %>
-</div>-->
 
 <div class="content">
   <%= render 'all' %>

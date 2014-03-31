@@ -1,16 +1,19 @@
 class RequestsController < ApplicationController
   before_action :set_request, only: [:show, :edit, :update, :destroy]
+  before_action :signed_in_user
 
   # GET /requests
   # GET /requests.json 
   def index
     filter = {}
-    @action_type = params[:action_type]
+    @who_am_i = params[:who_am_i]
+    if !@who_am_i
+      @who_am_i = []
+    end
 
     if signed_in?
-      case @action_type
-      when "my"
-          filter[:registrar_id] = current_user.employee.id
+      @who_am_i.each do |i|
+        filter[(i + "_id").to_sym] = current_user.employee.id
       end
     end
 
@@ -62,7 +65,7 @@ class RequestsController < ApplicationController
         format.js   {}
         format.json { render json: @request, status: :created, location: @request }
       else
-        format.html { render action: 'new' }
+        format.html { render action: 'index' }
         format.js   {}
         format.json { render json: @request.errors, status: :unprocessable_entity }
       end
@@ -104,6 +107,19 @@ class RequestsController < ApplicationController
     @messages = Message.where(:request_type => request_type)
 
     render template: "/requests/messages_for_request.html.erb"
+  end
+
+  def request_group_destroy
+    @request_ids = params[:for_destroy]
+    Request.where(:id => @request_ids).destroy_all
+
+    respond_to do |format|
+      format.js {}
+    end
+  end
+
+  def signed_in_user
+    redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
   end
 
   private

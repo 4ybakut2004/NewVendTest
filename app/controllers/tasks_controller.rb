@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
 	before_action :set_task, only: [:show, :edit, :update, :destroy]
+	before_action :signed_in_user
 
 	def index
 		@tasks = Task.order("created_at DESC").all
@@ -30,6 +31,10 @@ class TasksController < ApplicationController
 	      format.json { head :no_content }
     	end
 	end
+
+	def signed_in_user
+      redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
+    end
 
 	private
 

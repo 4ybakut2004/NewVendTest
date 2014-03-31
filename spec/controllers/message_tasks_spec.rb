@@ -10,8 +10,6 @@ describe "Message Tasks pages" do
     it { should have_title('Message Tasks') }
 
     it { should have_css('table#message-tasks-table') }
-
-    it { should have_content('Фильтр поручений') }
   end
 
 

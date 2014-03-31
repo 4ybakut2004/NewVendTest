@@ -6,6 +6,14 @@ function addNewTask()
 		showErrorMessage("Количество ошибок: <%= @task.errors.count %><br>" +
 		                                        "Проверьте обязательные для ввода поля",
 		                                        msg);
+		
+		var errors = <%= raw @task.errors.to_json %>;
+
+		for(var key in errors) {
+			if(errors[key].length > 0) {
+				$('#newModal').find('#' + key).addClass('has-error');
+			}
+		}
 	}
 	else
 	{
@@ -19,10 +27,12 @@ function addNewTask()
 		});
 
 		var msg = $("#success-msg");
-		showSuccessMessage("Поручение успешно создано", msg);
+		showSuccessMessage("Тип поручения успешно создан", msg);
 
 		var form = $("#new_task");
     	form.find("#task_name").val('');
+
+    	$('#newModal div').removeClass('has-error');
 
     	$('#newModal').modal('hide');
 	}

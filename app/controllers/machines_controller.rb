@@ -1,5 +1,6 @@
 class MachinesController < ApplicationController
   before_action :set_machine, only: [:show]
+  before_action :signed_in_user
 
   # GET /machines
   # GET /machines.json 
@@ -28,6 +29,10 @@ class MachinesController < ApplicationController
         format.json { render json: @machine.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def signed_in_user
+    redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
   end
 
   private

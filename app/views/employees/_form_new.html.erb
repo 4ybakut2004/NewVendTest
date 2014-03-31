@@ -1,0 +1,23 @@
+<div id="request">
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#new_employee").on("ajax:success", function(e, data, status, xhr){
+      }).bind("ajax:error", function(e, xhr, status, error){
+        console.log(xhr.responseText);
+      });
+    });
+  </script>
+  
+  <%= form_for(@employee, remote: true, :html => {:class => "form-horizontal", :style => "margin-top: 15px;"}) do |f| %>
+    <div id="name" class="form-group">
+      <%= f.label :name, "Имя", :class => "col-sm-2 control-label" %>
+      <div class="col-sm-10">
+         <%= f.text_field :name, :class => "form-control" %>
+      </div>
+    </div>
+
+    <div id="submit-container" class="form-footer text-right">
+      <%= f.submit "Подтвердить", class: "btn btn-primary" %>
+    </div>
+  <% end %>  
+</div>

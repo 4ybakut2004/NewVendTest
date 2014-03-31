@@ -1,5 +1,7 @@
 class Employee < ActiveRecord::Base
 	has_many :users
+
+	validates :name, presence: true
 end
 
 class Registrar < Employee

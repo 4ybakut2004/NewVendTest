@@ -1,5 +1,6 @@
 class MessagesController < ApplicationController
 	before_action :set_message, only: [:show, :edit, :update, :destroy]
+	before_action :signed_in_user
 
 	def index
 		@messages = Message.all
@@ -32,6 +33,10 @@ class MessagesController < ApplicationController
 	      format.json { head :no_content }
     	end
 	end
+
+	def signed_in_user
+      redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
+    end
 
 	private
 	    # Use callbacks to share common setup or constraints between actions.

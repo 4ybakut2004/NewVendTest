@@ -11,15 +11,15 @@ function updateRequest()
 	{
 		<% if @request.machine %>
 			var tr = $("<tr style='opacity: 1;' id='<%= @request.id %>' data-link='<%= edit_request_path(@request) %>'>" +
-								"<td><%= @request.id %></td>" +
+				"<td class='actions'>" + 
+					"<%= escape_javascript(check_box_tag 'for_destroy[]', @request.id, false) %>" +
+				"</td>" +
+				"<td><%= @request.id %></td>" +
 				"<td><%= @request.registrar.name %></td>" +
 				"<td><%= @request.solver.name %></td>" +
 				"<td><%= escape_javascript(link_to @request.machine.name, machine_path(@request.machine)) %></td>" +
 				"<td><%= @request.description %></td>" +
 				"<td><%= Request.request_types[@request.request_type.to_sym] %></td>" +
-				"<td class='actions'>" + 
-					"<%= escape_javascript(link_to 'Удалить', @request, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'delete', remote: true) %>" +
-				"</td>" +
 			"</tr>");
 			
 			allRequestsTemplate.updateRow(tr, <%= raw @request.getFullInfo.to_json %>);
