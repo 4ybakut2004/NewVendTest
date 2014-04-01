@@ -1,20 +1,20 @@
 <script type="text/javascript"> 
-  var messageTasksTemplate;
+  var requestTasksTemplate;
 
   $(document).ready(function() {
-    messageTasksTemplate = new MessageTasksTemplate();
+    requestTasksTemplate = new RequestTasksTemplate();
 
-    messageTasksTemplate.init(<%= raw (@message_tasks.map{ |r| r.getFullInfo }).to_json %>);
-    messageTasksTemplate.parmTableSelector("#message-tasks-table-container");
-    messageTasksTemplate.parmEditFormSelector("#message_task_edit");
-    messageTasksTemplate.parmExtractingSelector("#message_task");
+    requestTasksTemplate.init(<%= raw (@request_tasks.map{ |r| r.getFullInfo }).to_json %>);
+    requestTasksTemplate.parmTableSelector("#request-tasks-table-container");
+    requestTasksTemplate.parmEditFormSelector("#request_task_edit");
+    requestTasksTemplate.parmExtractingSelector("#request_task");
 
-    messageTasksTemplate.setEditAction();
+    requestTasksTemplate.setEditAction();
   });
 </script>
 
 <h1 style="display: inline-block;">Поручения, где я
-<%= form_tag(message_tasks_path, method: "get", :style => "display: inline-block;") do %>
+<%= form_tag(request_tasks_path, method: "get", :style => "display: inline-block;") do %>
 <div class="btn-group" data-toggle="buttons">
   <label class="btn btn-link btn-lg <%= @who_am_i.include?("assigner") ? "active" : "" %>">
     <%= check_box_tag 'who_am_i[]', "assigner", @who_am_i.include?("assigner"), :class => "display-none" %> Назначатель,
@@ -30,8 +30,8 @@
 <% end %></h1>
 <br>
 
-<div id="message-tasks-table-container" class="table-responsive standart-table-container">
-<table class="table table-striped table-hover table-condensed table-bordered table-autosort" id="message-tasks-table">
+<div id="request-tasks-table-container" class="table-responsive standart-table-container">
+<table class="table table-striped table-hover table-condensed table-bordered table-autosort" id="request-tasks-table">
   <thead>
     <tr>
       <th class="table-sortable:numeric table-sortable">Номер</th>
@@ -59,22 +59,22 @@
     </tr>
   </thead>
   <tbody>
-    <% @message_tasks.each do |message_task| %>
-      <tr id="<%= message_task.id %>" data-link="<%= edit_message_task_path(message_task) %>">
-        <td><%= message_task.id %></td>
-        <td><%= message_task.task.name %></td>
-        <td><%= message_task.assigner.name %></td>
-        <td><%= message_task.executor ? message_task.executor.name : "" %></td>
-        <td><%= message_task.auditor ? message_task.auditor.name : "" %></td>
-        <td><%= message_task.description %></td>
-        <td><%= message_task.creation_date.to_s(:db) %></td>
-        <td><%= message_task.deadline_date ? message_task.deadline_date.to_s(:db) : "" %></td>
-        <td><%= message_task.execution_date ? message_task.execution_date.to_s(:db) : "" %></td>
-        <td><%= message_task.audition_date ? message_task.audition_date.to_s(:db) : "" %></td>
+    <% @request_tasks.each do |request_task| %>
+      <tr id="<%= request_task.id %>" data-link="<%= edit_request_task_path(request_task) %>">
+        <td><%= request_task.id %></td>
+        <td><%= request_task.task.name %></td>
+        <td><%= request_task.assigner.name %></td>
+        <td><%= request_task.executor ? request_task.executor.name : "" %></td>
+        <td><%= request_task.auditor ? request_task.auditor.name : "" %></td>
+        <td><%= request_task.description %></td>
+        <td><%= request_task.creation_date.to_s(:db) %></td>
+        <td><%= request_task.deadline_date ? request_task.deadline_date.to_s(:db) : "" %></td>
+        <td><%= request_task.execution_date ? request_task.execution_date.to_s(:db) : "" %></td>
+        <td><%= request_task.audition_date ? request_task.audition_date.to_s(:db) : "" %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 </div>
 
-<div id="message_task_edit" class="text-center displacer"></div> 
+<div id="request_task_edit" class="text-center displacer"></div> 

@@ -1,4 +1,4 @@
-<div id="message_task">
+<div id="request_task">
   <script type="text/javascript">
   $(document).ready(function() {
     $('.datetime').datetimepicker({
@@ -8,16 +8,16 @@
   </script>
 
   <div class="row" id="edit-label">
-    <div class="col-md-10 text-center"><h1>Поручение <%= @message_task.id %></h1></div>
+    <div class="col-md-10 text-center"><h1>Поручение <%= @request_task.id %></h1></div>
   </div>
 
-  <%= form_for(@message_task, remote: true, :html => {:class => "form-horizontal"}) do |f| %>
+  <%= form_for(@request_task, remote: true, :html => {:class => "form-horizontal"}) do |f| %>
 
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
           <%= f.label :request_id, "Номер заявки", :class => "col-sm-4 text-right" %>
-          <div class="col-sm-8 text-left" id="request_id"><%= link_to @message_task.request_message.request_id, edit_request_path(@message_task.request_message.request) %></div>
+          <div class="col-sm-8 text-left" id="request_id"><%= link_to @request_task.request_message.request_id, edit_request_path(@request_task.request_message.request) %></div>
         </div>
       </div>
     </div>
@@ -25,14 +25,14 @@
     <div class="form-group">
       <%= f.label :executor_id, "Исполнитель", :class => "col-sm-2 control-label" %>
       <div class="col-sm-10">
-        <%= f.select :executor_id, options_for_select([['', nil]] + Employee.all.map { |k| [ k.name, k.id ] }, :selected => (@message_task.executor ? @message_task.executor.id : nil)), {}, { :class => "form-control" } %>
+        <%= f.select :executor_id, options_for_select([['', nil]] + Employee.all.map { |k| [ k.name, k.id ] }, :selected => (@request_task.executor ? @request_task.executor.id : nil)), {}, { :class => "form-control" } %>
       </div>
     </div>
 
     <div class="form-group">
       <%= f.label :auditor_id, "Контролер", :class => "col-sm-2 control-label" %>
       <div class="col-sm-10">
-        <%= f.select :auditor_id, options_for_select([['', nil]] + Employee.all.map { |k| [ k.name, k.id ] }, :selected => (@message_task.auditor ? @message_task.auditor.id : nil)), {}, { :class => "form-control" } %>
+        <%= f.select :auditor_id, options_for_select([['', nil]] + Employee.all.map { |k| [ k.name, k.id ] }, :selected => (@request_task.auditor ? @request_task.auditor.id : nil)), {}, { :class => "form-control" } %>
       </div>
     </div>
 
@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <% if current_user.employee.id == @message_task.assigner_id || current_user.employee.id == @message_task.auditor_id  %>
+    <% if current_user.employee.id == @request_task.assigner_id || current_user.employee.id == @request_task.auditor_id  %>
 
     <div class="form-group">
       <%= f.label :audition_date, "Плановая дата", :class => "col-sm-2 control-label" %>
@@ -56,7 +56,7 @@
 
     <div class="form-group">
       <%= f.label :deadline_date, "Плановая дата", :class => "col-sm-2 text-right" %>
-      <div class="col-sm-10 text-left" id="deadline_date"><%= @message_task.deadline_date ? @message_task.deadline_date.to_s(:db) : "" %></div>
+      <div class="col-sm-10 text-left" id="deadline_date"><%= @request_task.deadline_date ? @request_task.deadline_date.to_s(:db) : "" %></div>
     </div>
 
     <% end %>

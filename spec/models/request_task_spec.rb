@@ -1,15 +1,15 @@
 require 'spec_helper'
 
-describe MessageTask do	
+describe RequestTask do	
 	before { 
 		@user = User.create(name: "Example User", password: "Very Strong Password")
-		@message_task = MessageTask.new(:assigner_id => @user.id,
+		@request_task = RequestTask.new(:assigner_id => @user.id,
 										:executor_id => @user.id,
 										:auditor_id => @user.id,
 										:description => "Descr") 
 	}
 
-  	subject { @message_task }
+  	subject { @request_task }
 
   	it { should respond_to(:assigner_id) }
   	it { should respond_to(:executor_id) }

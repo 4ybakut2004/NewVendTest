@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140328100544) do
+ActiveRecord::Schema.define(version: 20140401033637) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,21 +34,6 @@ ActiveRecord::Schema.define(version: 20140328100544) do
   add_index "machines", ["name"], name: "index_machines_on_name", using: :btree
   add_index "machines", ["uid"], name: "index_machines_on_uid", using: :btree
 
-  create_table "message_tasks", force: true do |t|
-    t.integer  "assigner_id"
-    t.integer  "executor_id"
-    t.integer  "auditor_id"
-    t.string   "description"
-    t.integer  "request_message_id"
-    t.integer  "task_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "creation_date"
-    t.datetime "execution_date"
-    t.datetime "audition_date"
-    t.datetime "deadline_date"
-  end
-
   create_table "messages", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -61,6 +46,21 @@ ActiveRecord::Schema.define(version: 20140328100544) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "message_id"
+  end
+
+  create_table "request_tasks", force: true do |t|
+    t.integer  "assigner_id"
+    t.integer  "executor_id"
+    t.integer  "auditor_id"
+    t.string   "description"
+    t.integer  "request_message_id"
+    t.integer  "task_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "creation_date"
+    t.datetime "execution_date"
+    t.datetime "audition_date"
+    t.datetime "deadline_date"
   end
 
   create_table "requests", force: true do |t|

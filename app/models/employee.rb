@@ -13,13 +13,13 @@ class Solver < Employee
 end
 
 class Assigner < Employee
-	has_many :message_tasks
+	has_many :request_tasks
 end
 
 class Executor < Employee
-	has_many :message_tasks
+	has_many :request_tasks
 end
 
 class Auditor < Employee
-	has_many :message_tasks
+	has_many :request_tasks
 end

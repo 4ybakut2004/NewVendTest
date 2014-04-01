@@ -1,4 +1,4 @@
-class MessageTask < ActiveRecord::Base
+class RequestTask < ActiveRecord::Base
 	belongs_to :task
 	belongs_to :request_message
 

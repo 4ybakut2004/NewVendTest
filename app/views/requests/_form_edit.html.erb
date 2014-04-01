@@ -66,14 +66,14 @@
     </div>
     <% end %>
 
-    <% if @request.message_tasks.size != 0 %>
+    <% if @request.request_tasks.size != 0 %>
     <div class="col-md-4">
       <table class="table table-striped table-hover table-condensed table-bordered">
         <thead>
-          <tr><th><%= link_to 'Поручения', message_tasks_path(:request_id => @request.id) %></th></tr>
+          <tr><th><%= link_to 'Поручения', request_tasks_path(:request_id => @request.id) %></th></tr>
         </thead>
         <tbody>
-          <% @request.message_tasks.each do |task| %>
+          <% @request.request_tasks.each do |task| %>
           <tr><td> <%= task.task.name %> </td></tr>
           <% end %>
         </tbody>

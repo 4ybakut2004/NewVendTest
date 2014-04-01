@@ -41,7 +41,7 @@ describe "Static pages" do
 
     visit root_path
     first(:link, "Поручения").click
-    expect(page).to have_title('| Message Tasks')
+    expect(page).to have_title('| Request Tasks')
 
     visit root_path
     first(:link, "Сотрудники").click

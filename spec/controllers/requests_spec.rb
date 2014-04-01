@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe "Requests pages" do
+  before { sign_in_user }
   subject { page }
 
   describe "Index page" do

@@ -1,0 +1,29 @@
+function updateRequestTask()
+{
+	if("<%= @request_task.errors.count %>" != 0)
+	{
+		var msg = $("#error-msg");
+		showErrorMessage("Количество ошибок: <%= @request_task.errors.count %><br>" +
+		                 "Проверьте обязательные для ввода поля",
+		                 msg);
+	}
+	else
+	{
+		var tr = $("<tr style='opacity: 1;' id='<%= @request_task.id %>' data-link='<%= edit_request_task_path(@request_task) %>'>" +
+		'<td><%= @request_task.id %></td>' + 
+        '<td><%= @request_task.task.name %></td>' +
+        '<td><%= @request_task.assigner.name %></td>' +
+        '<td><%= @request_task.executor ? @request_task.executor.name : "" %></td>' +
+        '<td><%= @request_task.auditor ? @request_task.auditor.name : "" %></td>' +
+        '<td><%= @request_task.description %></td>' +
+        '<td><%= @request_task.creation_date.to_s(:db) %></td>' +
+        '<td><%= @request_task.deadline_date ? @request_task.deadline_date.to_s(:db) : "" %></td>' +
+        '<td><%= @request_task.execution_date ? @request_task.execution_date.to_s(:db) : "" %></td>' +
+        '<td><%= @request_task.audition_date ? @request_task.audition_date.to_s(:db) : "" %></td>' +
+		"</tr>");
+		
+		requestTasksTemplate.updateRow(tr, <%= raw @request_task.getFullInfo.to_json %>);
+	}
+}
+
+updateRequestTask();

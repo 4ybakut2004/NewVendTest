@@ -4,7 +4,7 @@ class Request < ActiveRecord::Base
 	belongs_to :registrar, :class_name => "Employee", :foreign_key => "registrar_id"
 	has_many :request_messages, dependent: :destroy
   	has_many :messages, through: :request_messages
-  	has_many :message_tasks, through: :request_messages
+  	has_many :request_tasks, through: :request_messages
 
 	validates :machine_id, presence: true
 	validates :registrar_id, presence: true
@@ -32,7 +32,7 @@ class Request < ActiveRecord::Base
     def getFullInfo
     	fullInfo = self.attributes
     	fullInfo["request_messages"] = self.request_messages.map { |m| m.message.name }
-    	fullInfo["message_tasks"] = self.message_tasks.map { |t|
+    	fullInfo["request_tasks"] = self.request_tasks.map { |t|
     		t_attrs = t.attributes
     		t_attrs["name"] = t.task.name
     		t_attrs

@@ -53,7 +53,7 @@ class RequestsController < ApplicationController
             request_message = RequestMessage.create(:request_id => @request.id,
                                                     :message_id => message)
             Message.find(message).tasks.each { |task|
-              message_task = MessageTask.create(:assigner_id => @request.solver_id,
+              request_task = RequestTask.create(:assigner_id => @request.solver_id,
                                                 :auditor_id  => @request.solver_id,
                                                 :task_id => task.id,
                                                 :request_message_id => request_message.id,
