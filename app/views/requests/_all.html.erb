@@ -11,11 +11,16 @@
     allRequestsTemplate.parmExtractingSelector("#request");
 
     allRequestsTemplate.setEditAction();
+
+    var filterForm = $('#filter-form');
+    filterForm.find('input[type="checkbox"]').bind('change', function(){
+      filterForm.submit();
+    });
   });
 </script>
 
 <h1 style="display: inline-block;">Заявки, где я
-<%= form_tag(requests_path, method: "get", :style => "display: inline-block;") do %>
+<%= form_tag(requests_path, method: "get", :style => "display: inline-block;", :id => "filter-form") do %>
 <div class="btn-group" data-toggle="buttons">
   <label class="btn btn-link btn-lg <%= @who_am_i.include?("registrar") ? "active" : "" %>">
     <%= check_box_tag 'who_am_i[]', "registrar", @who_am_i.include?("registrar"), :class => "display-none" %> Регистратор,
@@ -24,7 +29,6 @@
     <%= check_box_tag 'who_am_i[]', "solver", (@who_am_i.include? "solver"), :class => "display-none" %> Решатель
   </label>
 </div>
-<%= submit_tag("Применить", class: "btn btn-default") %>
 <% end %></h1>
 <br>
 

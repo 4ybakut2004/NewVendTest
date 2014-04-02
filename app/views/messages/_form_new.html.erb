@@ -5,6 +5,27 @@
       }).bind("ajax:error", function(e, xhr, status, error){
         console.log(xhr.responseText);
       });
+
+      var firstShow = true;
+
+      $('#newModal').on('shown.bs.modal', function (e) {
+        if(firstShow) {
+          $('#ms1').magicSuggest({
+              id: 'ms1',
+              name: 'tasks',
+              data: <%= raw Task.all.collect { |t| { :id => t.id, :taskName => t.name } }.to_json %>,
+              displayField: 'taskName',
+              selectionPosition: 'bottom',
+              selectionStacked: true,
+              emptyText: 'Существующий или новый',
+              noSuggestionText: 'Нет совпадений',
+              width: '100%'
+          });
+
+          firstShow = false;
+        }
+      });
+
     });
   </script>
   
@@ -19,6 +40,12 @@
       <%= f.label :name, "Наименование", :class => "col-sm-4 control-label" %>
       <div class="col-sm-8">
         <%= f.text_field :name, :class => "form-control" %>
+      </div>
+    </div>
+    <div id="tasks" class="form-group">
+      <%= label_tag :task_for_messages, "Типы поручений", :class => "col-sm-4 control-label" %>
+      <div class="col-sm-8">
+        <div id="ms1"></div>
       </div>
     </div>
     <div class="form-footer text-right">

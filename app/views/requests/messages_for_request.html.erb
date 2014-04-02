@@ -1,34 +1,42 @@
 <div id="filtered-messages">
 <script type="text/javascript">
 	$(document).ready(function() {
+		var buttons = $('.task-button');
+
 		$(".message-checker").each(function(index, el) {
 			var checkbox = $(el).find("input[type='checkbox']");
-			var button   = $(el).find('button');
+			var button  = $(el).find('button.task-button');
 
 			function check(btn, chk){
+				$('.task').addClass('display-none');
+
 				if(btn.hasClass('active'))
 				{
 					btn.removeClass('active');
 					chk.prop('checked', false);
-					$(".task#" + btn.attr('value')).addClass('display-none');
 				}
 				else
 				{
 					btn.addClass('active');
 					chk.prop('checked', true);
-
-					$(".task#" + btn.attr('value')).removeClass('display-none');
 				}
+
+				buttons.each(function(index, but) {
+					if($(but).hasClass('active')) {
+						$(".task" + $(but).attr('value')).removeClass('display-none');	
+					}				
+				});
 			}
+
 			button.click(function(event) {
-				check(button, checkbox);
+				check($(this), checkbox);
 			});
 		});
 	});
 </script>
 	<% @messages.each do |message| %>
 		<div class="message-checker">
-			<button class="btn btn-default" type="button" value="<%= message.id %>"><%= message.name %></button>
+			<button class="btn btn-default task-button" type="button" value="<%= message.id %>"><%= message.name %></button>
 	    	<%= check_box_tag 'messages[]', message.id, false, :class => "display-none" %>
 		</div>
 	<% end %>
@@ -36,13 +44,11 @@
 
 <div id="tasks-of-messages">
 	<% if @messages.size != 0 %>
-	<h3>Создадутся поручения:</h3>
-	<% end %>
-	<% @messages.each do |message| %>
-		<div id="<%= message.id %>" class="task display-none">
-			<% message.tasks.each do |task| %>
-				<%= task.name %><br>
-			<% end %>
-		</div>
+	  <h3>Создадутся поручения:</h3>
+	  <% Task.all.each do |task| %>
+		  <div class='task display-none <%= task.messages.collect { |m| "task" + m.id.to_s }.join(" ") %>'>
+		  	<%= task.name %>
+		  </div>
+	  <% end %>
 	<% end %>
 </div>

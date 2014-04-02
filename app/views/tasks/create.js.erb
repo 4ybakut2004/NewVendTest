@@ -19,8 +19,8 @@ function addNewTask()
 	{
 		$("<tr style='opacity: 0;' id='<%= @task.id %>'>" +
 			"<td><%= @task.id %></td>" +
+			'<td><%= @task.messages.collect{ |m| m.name }.join(", ") %></td>' +
 			"<td><%= @task.name %></td>" +
-			"<td><%= if @task.message_id then @task.message.name end %></td>" +
 			"<td><%= if @task.id then escape_javascript(link_to 'Удалить', @task, method: :delete, data: { confirm: 'Вы уверены?' }, class: 'delete', remote: true) end %></td>" +
 		"</tr>").prependTo("#tasks-table #tasks")
 		.animate({opacity: 1}, 500, function() {
@@ -31,6 +31,14 @@ function addNewTask()
 
 		var form = $("#new_task");
     	form.find("#task_name").val('');
+
+    	function multiselect_deselectAll($el) {
+		  $('option', $el).each(function(element) {
+			$el.multiselect('deselect', $(this).val());
+		  });
+		}
+		
+    	multiselect_deselectAll($('#messages_for_task'));
 
     	$('#newModal div').removeClass('has-error');
 

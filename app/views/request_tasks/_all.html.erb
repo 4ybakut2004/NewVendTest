@@ -10,11 +10,16 @@
     requestTasksTemplate.parmExtractingSelector("#request_task");
 
     requestTasksTemplate.setEditAction();
+
+    var filterForm = $('#filter-form');
+    filterForm.find('input[type="checkbox"]').bind('change', function(){
+      filterForm.submit();
+    });
   });
 </script>
 
 <h1 style="display: inline-block;">Поручения, где я
-<%= form_tag(request_tasks_path, method: "get", :style => "display: inline-block;") do %>
+<%= form_tag(request_tasks_path, method: "get", :style => "display: inline-block;", :id => "filter-form") do %>
 <div class="btn-group" data-toggle="buttons">
   <label class="btn btn-link btn-lg <%= @who_am_i.include?("assigner") ? "active" : "" %>">
     <%= check_box_tag 'who_am_i[]', "assigner", @who_am_i.include?("assigner"), :class => "display-none" %> Назначатель,
@@ -26,7 +31,6 @@
     <%= check_box_tag 'who_am_i[]', "auditor", (@who_am_i.include? "auditor"), :class => "display-none" %> Контролер
   </label>
 </div>
-<%= submit_tag("Применить", class: "btn btn-default") %>
 <% end %></h1>
 <br>
 

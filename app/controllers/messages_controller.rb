@@ -9,9 +9,26 @@ class MessagesController < ApplicationController
 
 	def create
 	    @message  = Message.new(message_params)
+	    tasks = params[:tasks]
+	    puts tasks
+	    if !tasks
+	    	tasks = []
+	    else 
+	    	tasks = eval(tasks)
+	    end
 
 	    respond_to do |format|
 	      if @message.save
+	      	tasks.each do |t|
+	      		if t.instance_of?(String)
+	      			task = Task.create(:name => t)
+	      		else
+	      			task = Task.find(t)
+	      		end
+				message_task = MessageTask.create(:message_id => @message.id,
+					:task_id => task.id)
+			end
+
 	        format.html { redirect_to @message, notice: 'Message was successfully created.' }
 	        format.js   {}
 	        format.json { render json: @message, status: :created, location: @message }

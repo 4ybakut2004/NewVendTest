@@ -5,14 +5,37 @@
       }).bind("ajax:error", function(e, xhr, status, error){
         console.log(xhr.responseText);
       });
+
+      $('#messages_for_task').multiselect({
+        numberDisplayed: 2,
+        buttonText: function(options, select) {
+          if (options.length == 0) {
+            return "Не выбрано" + ' <b class="caret"></b>';
+          }
+          else {
+            if (options.length > this.numberDisplayed) {
+              return options.length + ' ' + "выбрано" + ' <b class="caret"></b>';
+            }
+            else {
+              var selected = '';
+              options.each(function() {
+                var label = ($(this).attr('label') !== undefined) ? $(this).attr('label') : $(this).html();
+   
+                selected += label + ', ';
+              });
+              return selected.substr(0, selected.length - 2) + ' <b class="caret"></b>';
+            }
+          }
+        }
+      });
     });
   </script>
   
   <%= form_for(@task, remote: true, :html => {:class => "form-horizontal", :style => "margin-top: 15px;"}) do |f| %>
-    <div id="message_id" class="form-group">
-      <%= f.label :message_id, "Сообщение", :class => "col-sm-4 control-label" %>
+    <div id="messages" class="form-group">
+      <%= label_tag :messages_for_task, "Типы сигналов", :class => "col-sm-4 control-label" %>
       <div class="col-sm-8">
-        <%= f.select :message_id, options_for_select(Message.all.map { |m| [ m.name, m.id ] }), {}, { :class => "form-control" } %>
+        <%= select_tag :messages_for_task, options_for_select(Message.all.collect { |m| [ m.name, m.id ] }), :class => "multiselect", :multiple => "multiple", :name => "messages[]" %>
       </div>
     </div>
     <div id="name" class="form-group">

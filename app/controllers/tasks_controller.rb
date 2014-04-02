@@ -9,9 +9,18 @@ class TasksController < ApplicationController
 
 	def create
 		@task = Task.new(task_params)
+		messages = params[:messages]
+		if !messages
+			messages = []
+		end
 
 		respond_to do |format|
 			if @task.save
+				messages.each do |m|
+					message_task = MessageTask.create(:message_id => m,
+						:task_id => @task.id)
+				end
+
 				format.html { redirect_to @task, notice: 'Task was successfully created.' }
 				format.js   {}
 			else
@@ -43,6 +52,10 @@ class TasksController < ApplicationController
 		end
 
 		def task_params
-			params.require(:task).permit(:name, :message_id)
+			params.require(:task).permit(:name)
+		end
+
+		def messages_params
+			params.permit(:messages)
 		end
 end

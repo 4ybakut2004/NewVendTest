@@ -8,18 +8,13 @@
   <thead>
     <tr>
       <th class="table-sortable:numeric table-sortable">Номер</th>
-      <th class="table-sortable:default table-sortable">Тип сигнала</th>
+      <th class="table-sortable:numeric table-sortable">Типы сигналов</th>
       <th class="table-sortable:default table-sortable">Наименование</th>
       <th>Действия</th>
     </tr>
     <tr>
       <th>Фильтр:</th>
-      <th>
-        <select class="form-control" onchange="Table.filter(this,this)">
-        <option value>Все</option>
-        <%= options_for_select(Message.all.map { |k| [ k.name, k.name ] }) %>
-        </select>
-      </th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
       <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
       <th></th>
     </tr>
@@ -29,7 +24,7 @@
     <% @tasks.each do |task| %>
       <tr id="<%= task.id %>">
         <td><%= task.id %></td>
-        <td><%= task.message.name %></td>
+        <td><%= task.messages.collect{ |m| m.name }.join(", ") %></td>
         <td><%= task.name %></td>
         <td><%= link_to 'Удалить', task, method: :delete, data: { confirm: 'Вы уверены?' }, class: "delete", remote: true %></td>
       </tr>
