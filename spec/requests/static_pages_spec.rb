@@ -5,7 +5,7 @@ describe "Static pages" do
   subject { page }
   before do
     @employee = Employee.create(:name => "Employee")
-    @user = User.create(:name => "User", :password => "password", :employee_id => @employee.id)
+    @user = User.create(:name => "User", :password_digest => "password", :employee_id => @employee.id)
     sign_in @user 
   end
 

@@ -12,8 +12,10 @@ class RequestsController < ApplicationController
     end
 
     if signed_in?
-      @who_am_i.each do |i|
-        filter[(i + "_id").to_sym] = current_user.employee.id
+      if current_user.employee
+        @who_am_i.each do |i|
+          filter[(i + "_id").to_sym] = current_user.employee.id
+        end
       end
     end
 
@@ -43,7 +45,7 @@ class RequestsController < ApplicationController
   def create
     @requests = Request.all
     @request  = Request.new(request_params)
-    @request.registrar_id = current_user.employee.id
+    @request.registrar_id = current_user.employee ? current_user.employee.id : nil
     messages = params[:messages]
 
     respond_to do |format|

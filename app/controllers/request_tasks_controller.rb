@@ -18,8 +18,10 @@ class RequestTasksController < ApplicationController
 		end
 
 		if signed_in?
-			@who_am_i.each do |i|
-				filter[(i + "_id").to_sym] = current_user.employee.id
+			if current_user.employee
+				@who_am_i.each do |i|
+					filter[(i + "_id").to_sym] = current_user.employee.id
+				end
 			end
 		end
 

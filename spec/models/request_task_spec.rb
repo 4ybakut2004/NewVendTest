@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe RequestTask do	
 	before { 
-		@user = User.create(name: "Example User", password: "Very Strong Password")
+		@user = User.create(name: "Example User", password_digest: "Very Strong Password")
 		@request_task = RequestTask.new(:assigner_id => @user.id,
 										:executor_id => @user.id,
 										:auditor_id => @user.id,

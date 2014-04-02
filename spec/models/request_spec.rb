@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Request do	
 	before { 
-		@user = User.create(name: "Example User", password: "Very Strong Password")
+		@user = User.create(name: "Example User", password_digest: "Very Strong Password")
 		@machine  = Machine.create
 		@request = Request.new(description: "Новая заявка", 
 									request_type: :phone, 

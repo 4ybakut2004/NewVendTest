@@ -1,0 +1,23 @@
+<%= form_for(@user, :html => {:class => "form-horizontal"}) do |f| %>
+	<h1 class="text-center">Новый пользователь</h1><br>
+    <div class="form-group">
+      <%= f.label :name, "Имя", :class => "col-sm-4 control-label" %>
+      <div class="col-sm-6">
+        <%= f.text_field :name, :class => "form-control" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :password, "Пароль", :class => "col-sm-4 control-label" %>
+      <div class="col-sm-6">
+        <%= f.password_field :password, :class => "form-control" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :password_confirmation, "Подтверждение пароля", :class => "col-sm-4 control-label" %>
+      <div class="col-sm-6">
+        <%= f.password_field :password_confirmation, :class => "form-control" %>
+      </div>
+    </div>
+
+    <div class="text-center"><%= f.submit "Подтвердить", class: "btn btn-primary" %></div>
+<% end %> 

@@ -1,0 +1,11 @@
+<% provide(:title, @user.name) %>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#user-page').addClass('active');
+	});
+</script>
+
+<div class="content">
+	<%= render 'form_edit' %>
+</div>

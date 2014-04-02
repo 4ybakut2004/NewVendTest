@@ -1,7 +1,7 @@
 NewVend::Application.routes.draw do
   get "machines/new"
   resources :machines, only: [:index, :show, :create, :new]
-  resources :users, only: [:show]
+  resources :users, only: [:show, :edit, :update, :new, :create]
   resources :sessions, only: [:new, :create, :destroy]
   resources :requests, only: [:index, :destroy, :create, :update, :edit]
   resources :messages, only: [:index, :destroy, :create, :update, :edit]

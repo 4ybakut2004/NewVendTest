@@ -13,12 +13,15 @@
         <span id="name" class="col-sm-10 text-left"><%= @user.name %></span>
 	</div>
 
+	<% if @user.employee %>
 	<div class="row">
 		<%= label_tag(:name, "Сотрудник", :class => "col-sm-2 control-label text-right") %>
         <span id="employee" class="col-sm-10 text-left"><%= @user.employee.name %></span>
 	</div>
+	<% end %>
 
 	<div class="text-center">
+		<%= link_to "Редактировать", edit_user_path(@user), :class => "btn btn-primary" %>
 		<%= link_to "Выйти", signout_path, method: "delete", :class => "btn btn-primary" %>
 	</div>
 </div>

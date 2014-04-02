@@ -1,14 +1,12 @@
 class User < ActiveRecord::Base
-	validates :name,     presence: true, uniqueness: { case_sensitive: false }
-	validates :password, presence: true
+	validates :name,     presence: true, uniqueness: { case_sensitive: false }, length: { maximum: 50 }
+	validates :password_digest, presence: true
 
 	belongs_to :employee
 
 	before_create :create_remember_token
 
-	def authenticate(not_encrypted_password)
-		self.password == not_encrypted_password && self
-	end
+	has_secure_password
 
 	def User.new_remember_token
 		SecureRandom.urlsafe_base64
