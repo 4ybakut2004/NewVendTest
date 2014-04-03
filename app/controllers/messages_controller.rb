@@ -7,26 +7,34 @@ class MessagesController < ApplicationController
 		@message = Message.new
 	end
 
+	def edit
+
+	end
+
 	def create
 	    @message  = Message.new(message_params)
 	    tasks = params[:tasks]
-	    puts tasks
+	    new_tasks = params[:new_tasks]
+
 	    if !tasks
 	    	tasks = []
-	    else 
-	    	tasks = eval(tasks)
-	    end
+		end
+
+		if !new_tasks
+			new_tasks = []
+		end
 
 	    respond_to do |format|
 	      if @message.save
 	      	tasks.each do |t|
-	      		if t.instance_of?(String)
-	      			task = Task.create(:name => t)
-	      		else
-	      			task = Task.find(t)
-	      		end
 				message_task = MessageTask.create(:message_id => @message.id,
-					:task_id => task.id)
+					:task_id => t)
+			end
+
+			new_tasks.each do |t|
+				new_task = Task.create(:name => t)
+				message_task = MessageTask.create(:message_id => @message.id,
+					:task_id => new_task.id)
 			end
 
 	        format.html { redirect_to @message, notice: 'Message was successfully created.' }
@@ -40,6 +48,20 @@ class MessagesController < ApplicationController
 	    end
 	end
 
+	def update
+		respond_to do |format|
+		  if @message.update(message_params)
+		    format.html { redirect_to @message, notice: 'Message was successfully updated.' }
+		    format.js   {}
+		    format.json { render json: @message, status: :created, location: @message }
+		  else
+		    format.html { render action: 'edit' }
+		    format.js   {}
+		    format.json { render json: @message.errors, status: :unprocessable_entity }
+		  end
+		end
+	end
+
 	def destroy
 		@messages = Request.all
     
@@ -49,6 +71,15 @@ class MessagesController < ApplicationController
 	      format.js   {}
 	      format.json { head :no_content }
     	end
+	end
+
+	def message_group_destroy
+		@message_ids = params[:for_destroy]
+		Message.where(:id => @message_ids).destroy_all
+
+		respond_to do |format|
+		  format.js {}
+		end
 	end
 
 	def signed_in_user

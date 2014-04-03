@@ -8,6 +8,10 @@ class UsersController < ApplicationController
 	def edit
 	end
 
+	def index
+		@users = User.all
+	end
+
 	def new
 		@user = User.new
 	end
@@ -43,13 +47,7 @@ class UsersController < ApplicationController
 	end
 
 	def signed_in_user
-	  if !signed_in?
-	  	redirect_to signin_url
-	  else
-	  	if current_user.name != @user.name
-	  		redirect_to signin_url
-	  	end
-	  end
+	  redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
 	end
 
 	private

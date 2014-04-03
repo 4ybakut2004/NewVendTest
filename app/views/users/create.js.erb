@@ -1,0 +1,16 @@
+<% if @user.errors.count != 0 %>
+	var errors = <%= raw @user.errors.to_json %>;
+
+	for(var key in errors) {
+		if(errors[key].length > 0) {
+			$('#newUser').find('#' + key).addClass('has-error');
+		}
+	}
+
+	var msg = $("#error-msg");
+	showErrorMessage("Количество ошибок: <%= @user.errors.count %><br>" +
+	                 "Проверьте обязательные для ввода поля",
+	                 msg);
+<% else %>
+	
+<% end %>

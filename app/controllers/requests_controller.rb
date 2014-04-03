@@ -37,7 +37,7 @@ class RequestsController < ApplicationController
 
   # GET /requests/1/edit
   def edit
-
+    
   end
 
   # POST /requests
@@ -79,7 +79,7 @@ class RequestsController < ApplicationController
   def update
     respond_to do |format|
       if @request.update(request_params)
-        format.html { redirect_to @request, notice: 'Request was successfully updated.' }
+        
         format.js   {}
         format.json { render json: @request, status: :created, location: @request }
       else

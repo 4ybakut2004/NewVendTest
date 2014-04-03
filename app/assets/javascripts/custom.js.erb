@@ -76,43 +76,6 @@ function Checkable(button, clickMethod) {
 	};
 }
 
-// Превращает элемент во всплывающее окно
-// По нажатию clickElement (Submit формы запроса) 
-// на странице появляется formElement с заголовком title.
-// Из респонза excractingElement помещается в тело formElement
-function Bubble(clickElement, formElement, extractingElement)
-{
-    clickElement.on("ajax:success", function(e, data, status, xhr){
-        formElement.empty();
-
-        var btn = $("<input type='button' value='X' class='btn' style='float: right;'>");
-        btn.bind("click", function(event) {
-            formElement.animate({opacity: 0}, 300, function() {
-                formElement.css("display", "none").empty();
-            });
-        });
-        var col2 = $("<div class='col-md-12 text-right'></div>");
-        var row = $("<div class='row'></div>");
-        row.append($(col2));
-        col2.append($(btn));
-        formElement.append($(row));
-
-        formElement.append($(xhr.responseText).find(extractingElement));
-
-        formElement.css("top", $(this).position().top - formElement.height() + "px")
-        .css("left", ($(this).position().left - formElement.width()) + "px");
-
-        formElement.css("display", "block");
-        if(formElement.css("opacity") != 1)
-        {
-            formElement.css("opacity", "0");
-            formElement.animate({opacity: 1}, 200, function() {});
-        }
-    }).bind("ajax:error", function(e, xhr, status, error){
-        console.log(xhr.responseText);
-    });
-}
-
 function showErrorMessage(message, container)
 {
   showMessage(message, container, "error");

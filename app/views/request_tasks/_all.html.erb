@@ -18,7 +18,7 @@
   });
 </script>
 
-<h1 style="display: inline-block;">Поручения, где я
+<h1 style="display: inline-block;">Поручения, где я:
 <%= form_tag(request_tasks_path, method: "get", :style => "display: inline-block;", :id => "filter-form") do %>
 <div class="btn-group" data-toggle="buttons">
   <label class="btn btn-link btn-lg <%= @who_am_i.include?("assigner") ? "active" : "" %>">

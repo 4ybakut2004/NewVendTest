@@ -1,7 +1,7 @@
 NewVend::Application.routes.draw do
   get "machines/new"
   resources :machines, only: [:index, :show, :create, :new]
-  resources :users, only: [:show, :edit, :update, :new, :create]
+  resources :users, only: [:show, :edit, :update, :new, :create, :index]
   resources :sessions, only: [:new, :create, :destroy]
   resources :requests, only: [:index, :destroy, :create, :update, :edit]
   resources :messages, only: [:index, :destroy, :create, :update, :edit]
@@ -18,6 +18,7 @@ NewVend::Application.routes.draw do
   post 'messages_for_request' => 'requests#messages_for_request', :as => :messages_for_request
   post 'request_group_destroy' => 'requests#request_group_destroy', :as => :request_group_destroy
   post 'employee_group_destroy' => 'employees#employee_group_destroy', :as => :employee_group_destroy
+  post 'message_group_destroy' => 'messages#message_group_destroy', :as => :message_group_destroy
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

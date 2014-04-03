@@ -1,18 +1,18 @@
-<%= form_for(@user, :html => {:class => "form-horizontal"}) do |f| %>
+<%= form_for(@user, :remote => true, :html => {:class => "form-horizontal"}) do |f| %>
 	<h1 class="text-center">Новый пользователь</h1><br>
-    <div class="form-group">
+    <div id="name" class="form-group">
       <%= f.label :name, "Имя", :class => "col-sm-4 control-label" %>
       <div class="col-sm-6">
         <%= f.text_field :name, :class => "form-control" %>
       </div>
     </div>
-    <div class="form-group">
+    <div id="password" class="form-group">
       <%= f.label :password, "Пароль", :class => "col-sm-4 control-label" %>
       <div class="col-sm-6">
         <%= f.password_field :password, :class => "form-control" %>
       </div>
     </div>
-    <div class="form-group">
+    <div id="password_confirmation" class="form-group">
       <%= f.label :password_confirmation, "Подтверждение пароля", :class => "col-sm-4 control-label" %>
       <div class="col-sm-6">
         <%= f.password_field :password_confirmation, :class => "form-control" %>

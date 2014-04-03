@@ -19,6 +19,6 @@ end
 
 def sign_in_user
     @employee = Employee.create(:name => "Employee")
-    @user = User.create(:name => "User", :password_digest => "password", :employee_id => @employee.id)
+    @user = User.create(:name => "User", :password => "password", :password_confirmation => "password")
     sign_in @user 
 end

@@ -70,9 +70,11 @@ IndexPageController.prototype = {
     }
   },
 
-  setEditAction: function() {
+  setEditAction: function(element) {
     var self = this;
-    $(this.tableSelector).find('td:not(.actions)').click(function() {
+
+    function editAction() {
+      console.log($(this).parent().attr('data-link'));
       $.ajax({
         type: "GET",
         url: $(this).parent().attr('data-link'),
@@ -87,11 +89,13 @@ IndexPageController.prototype = {
           function closeForm(event) {
             formElement.animate({opacity: 0}, 300, function() {
                 formElement.css("display", "none").empty();
+                console.log("Спрятали");
                 tableElement.css("display", "");
             });
           }
 
           formElement.append($(data).find(extractingElement));
+          console.log("Открыли");
           formElement.find('input[type="submit"]').bind("click", closeForm);
 
           var btn = $("<input type='button' value='X' class='btn btn-default' style='float: right;'>");
@@ -113,7 +117,14 @@ IndexPageController.prototype = {
           return false;
         }
       });
-    });
+    }
+
+    if(element) {
+      element.find('td:not(.actions)').click(editAction);
+    }
+    else {
+      $(this.tableSelector).find('td:not(.actions)').click(editAction);
+    }
   },
 
   insertRow: function(row, item) {
@@ -123,7 +134,7 @@ IndexPageController.prototype = {
     row.prependTo(this.tableSelector + " tbody")
     .animate({opacity: 1}, 500, function() {
       self.setDeleteAction();
-      self.setEditAction();
+      self.setEditAction(row);
     });
   },
 
@@ -133,11 +144,8 @@ IndexPageController.prototype = {
     
     row.insertAfter($(this.tableSelector).find("#" + item.id));
     $($(this.tableSelector).find("#" + item.id)).remove();
-    $(this.editFormSelector).animate({opacity: 0}, 500, function() {
-      $(this).css("display", "none").empty();
-        self.setDeleteAction();
-        self.setEditAction();
-    });
+    this.setDeleteAction();
+    this.setEditAction(row);
   },
 
   deleteRow: function(item_id) {
@@ -190,3 +198,31 @@ EmployeesTemplate.prototype = {
 };
 
 extend(EmployeesTemplate, IndexPageController);
+
+function UsersTemplate() {
+  this.items = {};
+  this.deleteActionSelector;
+  this.tableSelector;
+  this.editFormSelector;
+  this.extractingSelector;
+}
+
+UsersTemplate.prototype = {
+  
+};
+
+extend(UsersTemplate, IndexPageController);
+
+function MessagesTemplate() {
+  this.items = {};
+  this.deleteActionSelector;
+  this.tableSelector;
+  this.editFormSelector;
+  this.extractingSelector;
+}
+
+MessagesTemplate.prototype = {
+  
+};
+
+extend(MessagesTemplate, IndexPageController);

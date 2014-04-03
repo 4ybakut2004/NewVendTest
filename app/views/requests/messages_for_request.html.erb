@@ -8,7 +8,7 @@
 			var button  = $(el).find('button.task-button');
 
 			function check(btn, chk){
-				$('.task').addClass('display-none');
+				$('.message-task').addClass('display-none');
 
 				if(btn.hasClass('active'))
 				{
@@ -23,7 +23,7 @@
 
 				buttons.each(function(index, but) {
 					if($(but).hasClass('active')) {
-						$(".task" + $(but).attr('value')).removeClass('display-none');	
+						$(".message" + $(but).attr('value')).removeClass('display-none');	
 					}				
 				});
 			}
@@ -45,10 +45,12 @@
 <div id="tasks-of-messages">
 	<% if @messages.size != 0 %>
 	  <h3>Создадутся поручения:</h3>
-	  <% Task.all.each do |task| %>
-		  <div class='task display-none <%= task.messages.collect { |m| "task" + m.id.to_s }.join(" ") %>'>
-		  	<%= task.name %>
-		  </div>
+
+	  <% @messages.each do |m| %>
+	  	<% m.tasks.each do |t| %>
+	  	  <p class="message-task message<%= m.id %> display-none"><%= t.name %></p>
+	  	<% end %>
 	  <% end %>
+
 	<% end %>
 </div>

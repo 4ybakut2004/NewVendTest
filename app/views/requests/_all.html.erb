@@ -19,7 +19,7 @@
   });
 </script>
 
-<h1 style="display: inline-block;">Заявки, где я
+<h1 style="display: inline-block;">Заявки, где я:
 <%= form_tag(requests_path, method: "get", :style => "display: inline-block;", :id => "filter-form") do %>
 <div class="btn-group" data-toggle="buttons">
   <label class="btn btn-link btn-lg <%= @who_am_i.include?("registrar") ? "active" : "" %>">

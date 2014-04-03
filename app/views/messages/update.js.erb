@@ -1,0 +1,25 @@
+function updateMessage()
+{
+	if("<%= @message.errors.count %>" != 0)
+	{
+		var msg = $("#error-msg");
+		showErrorMessage("Количество ошибок: <%= @message.errors.count %><br>" +
+		                 "Проверьте обязательные для ввода поля",
+		                 msg);
+	}
+	else
+	{
+		var tr = $("<tr style='opacity: 1;' id='<%= @message.id %>' data-link='<%= edit_message_path(@message) %>'>" +
+			'<td class="actions">' +
+	          '<%= check_box_tag "for_destroy[]", @message.id, false %>' +
+	        '</td>' +
+			"<td><%= @message.id %></td>" +
+			"<td><%= @message.name %></td>" +
+			"<td><%= Request.request_types[@message.request_type.to_sym] %></td>" +
+		"</tr>");
+		
+		messagesTemplate.updateRow(tr, <%= raw @message.attributes.to_json %>);
+	}
+}
+
+updateMessage();

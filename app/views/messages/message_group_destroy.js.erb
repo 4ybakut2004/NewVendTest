@@ -1,0 +1,4 @@
+var ids = <%= raw @message_ids %>
+for(var id in ids) {
+	messagesTemplate.deleteRow(ids[id]);
+}

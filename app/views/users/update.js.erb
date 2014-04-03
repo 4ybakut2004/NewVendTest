@@ -1,0 +1,28 @@
+function updateUser()
+{
+	if("<%= @user.errors.count %>" != 0)
+	{
+		var msg = $("#error-msg");
+		showErrorMessage("Количество ошибок: <%= @user.errors.count %><br>" +
+		                 "Проверьте обязательные для ввода поля",
+		                 msg);
+	}
+	else
+	{
+		var tr = $("<tr style='opacity: 1;' id='<%= @user.id %>' data-link='<%= edit_user_path(@user) %>'>" +
+			'<td><%= @user.id %></td>' +
+	        '<td><%= @user.name %></td>' +
+	        '<td><%= @user.employee ? @user.employee.name : nil %></td>' +
+		"</tr>");
+
+		var msg = $("#success-msg");
+		if(msg){
+			showSuccessMessage("Пользователь обновлен",
+		                 msg);
+		}
+		
+		usersTemplate.updateRow(tr, <%= raw @user.attributes.to_json %>);
+	}
+}
+
+updateUser();
