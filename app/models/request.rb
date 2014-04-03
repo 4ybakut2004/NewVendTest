@@ -1,4 +1,6 @@
 class Request < ActiveRecord::Base
+    include ActiveModel::Dirty
+
 	belongs_to :machine
 	belongs_to :solver, :class_name => "Employee", :foreign_key => "solver_id"
 	belongs_to :registrar, :class_name => "Employee", :foreign_key => "registrar_id"
@@ -11,6 +13,8 @@ class Request < ActiveRecord::Base
 	validates :solver_id, presence: true
 	validate :validate_machine_id
 	validates_inclusion_of :request_type, :in => [:phone, :other]
+
+    after_save :after_request_save
 
 	REQUEST_TYPES = {
 	    :phone => "С Телефона",
@@ -27,6 +31,14 @@ class Request < ActiveRecord::Base
 
     def self.request_types
     	REQUEST_TYPES
+    end
+
+    def after_request_save
+        if self.solver_id_changed?
+            self.request_tasks.each do |rt|
+                rt.update(:assigner_id => self.solver_id)
+            end
+        end
     end
 
     def getFullInfo
