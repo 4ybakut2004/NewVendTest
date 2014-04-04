@@ -1,0 +1,1 @@
+var newVending = angular.module('newVending', ['ngResource', 'ngRoute']);

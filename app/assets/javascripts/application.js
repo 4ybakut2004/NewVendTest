@@ -12,7 +12,12 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require angular.min
+//= require angular-route.min
+//= require angular-resource.min
 //= require bootstrap.min
 //= require collapse
 //= require turbolinks
+//= require newVending.js
+//= require_tree ./angular
 //= require_tree .

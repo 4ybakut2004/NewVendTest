@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app='newVending'>
 <head>
   <title><%= full_title(yield(:title)) %></title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
@@ -16,6 +16,7 @@
 		$(".content").animate({opacity: 1, 'top': "0px"}, 300, function() {});
 	});
 </script>
+
 <%= render 'layouts/header' %>
 
 <div class="container-fluid">
