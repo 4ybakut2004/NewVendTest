@@ -5,6 +5,12 @@ class EmployeesController < ApplicationController
   def index
   	@employees = Employee.all
   	@employee = Employee.new
+    @ng_controller = "Employees"
+
+    respond_to do |format|
+      format.html {}
+      format.json { render json: @employees.collect { |e| e.attrs } }
+    end
   end
 
   def edit
@@ -17,11 +23,11 @@ class EmployeesController < ApplicationController
       if @employee.save
         format.html { redirect_to @employee, notice: 'Employee was successfully created.' }
         format.js   {}
-        format.json { render json: @employee, status: :created, location: @employee }
+        format.json { render json: @employee.attrs, status: :created, location: @employee }
       else
         format.html { render action: 'index' }
         format.js   {}
-        format.json { render json: @employee.errors, status: :unprocessable_entity }
+        format.json { render json: @employee, status: :unprocessable_entity }
       end
     end
   end
@@ -45,7 +51,7 @@ class EmployeesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to employees_url }
       format.js   {}
-      format.json { head :no_content }
+      format.json { render json: @employee }
     end
   end
 
