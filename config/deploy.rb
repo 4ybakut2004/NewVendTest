@@ -186,4 +186,4 @@ namespace :deploy do
 
 end
 
-before :deploy, 'git:deploy'
+#before :deploy, 'git:deploy'
