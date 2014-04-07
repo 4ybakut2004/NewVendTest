@@ -15,7 +15,7 @@ set :deploy_to, '/var/www/apps/NewVend'
 set :deploy_via, :copy
 set :scm, :git
 set :repo_url, 'git@github.com:4ybakut2004/NewVendTest.git'
-set :branch, 'production'
+set :branch, 'master'
 application = 'NewVend'
 set :rvm_type, :user
 set :rvm_ruby_version, '2.0.0-p247'
