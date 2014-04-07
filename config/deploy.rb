@@ -8,6 +8,7 @@ set :rvm_type, :user
 set :rvm_ruby_version, '2.0.0-p247'
 set :deploy_to, '/var/www/apps/NewVend'
 set :port, 2222
+set :branch, 'production'
 
 #set :application, 'NewVend'
 #set :deploy_to, '/var/www/apps/NewVend'
