@@ -19,4 +19,5 @@
 //= require collapse
 //= require newVending.js
 //= require_tree ./angular
+//= require turbolinks
 //= require_tree .
