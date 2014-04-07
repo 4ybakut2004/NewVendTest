@@ -13,10 +13,15 @@
       <th>Номер</th>
       <th>Имя</th>
     </tr>
+    <tr>
+      <td></td>
+      <td><input ng-model="search.id" class="form-control" placeholder="Поиск по номеру"></td>
+      <td><input ng-model="search.name" class="form-control" placeholder="Поиск по имени"></td>
+    </tr>
   </thead>
 
   <tbody>
-    <tr ng-repeat="employee in employees">
+    <tr ng-repeat="employee in employees | filter:search">
       <td><input type="checkbox" ng-model="employee.checked"></td>
       <td ng-click="clickEmployee($index)">{{employee.id}}</td>
       <td ng-click="clickEmployee($index)">{{employee.name}}</td>
