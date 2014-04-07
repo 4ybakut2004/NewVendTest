@@ -1,34 +1,23 @@
 class EmployeesController < ApplicationController
-  before_action :set_employee , only: [:show, :edit, :destroy, :update]
+  before_action :set_employee , only: [:edit, :destroy, :update]
   before_action :signed_in_user
+
+  respond_to :html, :json
 
   def index
   	@employees = Employee.all
-  	@employee = Employee.new
     @ng_controller = "Employees"
 
-    respond_to do |format|
-      format.html {}
-      format.json { render json: @employees.collect { |e| e.attrs } }
-    end
-  end
-
-  def edit
+    respond_with @employees
   end
 
   def create
-    @employee  = Employee.new(employee_params)
+    @employee = Employee.new(employee_params)
 
-    respond_to do |format|
-      if @employee.save
-        format.html { redirect_to @employee, notice: 'Employee was successfully created.' }
-        format.js   {}
-        format.json { render json: @employee.attrs, status: :created, location: @employee }
-      else
-        format.html { render action: 'index' }
-        format.js   {}
-        format.json { render json: @employee, status: :unprocessable_entity }
-      end
+    if @employee.save
+      respond_with(@employee, :status => :created, :location => @employee)
+    else
+      respond_with(@employee.errors, :status => :unprocessable_entity)
     end
   end
 
@@ -36,11 +25,9 @@ class EmployeesController < ApplicationController
     respond_to do |format|
       if @employee.update(employee_params)
         format.html { redirect_to @employee, notice: 'Employee was successfully updated.' }
-        format.js   {}
-        format.json { render json: @employee, status: :created, location: @employee }
+        format.json { render json: @employee, status: :created }
       else
         format.html { render action: 'edit' }
-        format.js   {}
         format.json { render json: @employee.errors, status: :unprocessable_entity }
       end
     end
@@ -50,17 +37,7 @@ class EmployeesController < ApplicationController
     @employee.destroy
     respond_to do |format|
       format.html { redirect_to employees_url }
-      format.js   {}
       format.json { render json: @employee }
-    end
-  end
-
-  def employee_group_destroy
-    @employee_ids = params[:for_destroy]
-    Employee.where(:id => @employee_ids).destroy_all
-
-    respond_to do |format|
-      format.js {}
     end
   end
 
