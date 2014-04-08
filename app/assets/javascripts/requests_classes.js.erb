@@ -96,7 +96,7 @@ IndexPageController.prototype = {
 
           formElement.append($(data).find(extractingElement));
           console.log("Открыли");
-          formElement.find('input[type="submit"]').bind("click", closeForm);
+          formElement.find('form').bind("submit", closeForm);
 
           var btn = $("<input type='button' value='X' class='btn btn-default' style='float: right;'>");
           btn.bind("click", closeForm);
