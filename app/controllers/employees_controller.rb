@@ -1,5 +1,5 @@
 class EmployeesController < ApplicationController
-  before_action :set_employee , only: [:edit, :destroy, :update]
+  before_action :set_employee , only: [:destroy, :update]
   before_action :signed_in_user
 
   respond_to :html, :json
