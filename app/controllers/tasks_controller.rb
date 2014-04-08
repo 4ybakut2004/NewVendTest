@@ -52,7 +52,7 @@ class TasksController < ApplicationController
 		end
 
 		def task_params
-			params.require(:task).permit(:name)
+			params.require(:task).permit(:name, :deadline)
 		end
 
 		def messages_params

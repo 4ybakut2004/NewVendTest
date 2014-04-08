@@ -4,4 +4,5 @@ class Task < ActiveRecord::Base
 	has_many :request_tasks, dependent: :destroy
 
 	validates :name, presence: true
+	validates :deadline, presence: true, numericality: { :greater_than_or_equal_to => 0 } 
 end

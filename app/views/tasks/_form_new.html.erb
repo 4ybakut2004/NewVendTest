@@ -44,6 +44,12 @@
         <%= f.text_field :name, :class => "form-control" %>
       </div>
     </div>
+    <div id="deadline" class="form-group">
+      <%= f.label :deadline, "Плановый срок (дней)", :class => "col-sm-4 control-label" %>
+      <div class="col-sm-8">
+        <%= f.number_field :deadline, :class => "form-control" %>
+      </div>
+    </div>
     <div id="msg"></div>
     <div class="form-footer text-right">
       <%= f.submit "Подтвердить", class: "btn btn-primary" %>

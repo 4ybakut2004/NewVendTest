@@ -59,7 +59,8 @@ class RequestsController < ApplicationController
                                                 :auditor_id  => @request.solver_id,
                                                 :task_id => task.id,
                                                 :request_message_id => request_message.id,
-                                                :creation_date => Time.now)
+                                                :creation_date => Time.now,
+                                                :deadline_date => task.deadline.days.from_now)
             }
           }
         end
