@@ -2,6 +2,10 @@ class Employee < ActiveRecord::Base
 	has_many :users
 
 	validates :name, presence: true
+
+	def attrs
+		self.attributes.merge!({ "checked" => false })
+	end
 end
 
 class Registrar < Employee

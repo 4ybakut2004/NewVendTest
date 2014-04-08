@@ -1,16 +1,16 @@
-<div id="employee">
-  <div class="row" id="edit-label">
-    <div class="col-md-10 text-center"><h1>Сотрудник <%= @employee.id %></h1></div>
-  </div>
-
-  <%= form_for(@employee, remote: true, :html => {:class => "form-horizontal"}) do |f| %> 
-    <div class="form-group">
-      <%= f.label :name, "Имя", :class => "col-sm-2 control-label" %>
-      <div class="col-sm-10">
-        <%= f.text_field :name, :class => "form-control" %>
+<div ng-show="editing" class="border-top">
+<button type="button" class="close" ng-click="editing=false">&times;</button>
+  <h1 class="text-center">Сотрудник {{editingId}}</h1>
+  <form ng-submit="updateEmployee()" class="form-horizontal">
+    <div id="name" class="form-group" ng-class='{"has-warning": !editingInputs.name, "has-success": editingInputs.name}'>
+      <label class="col-sm-2 control-label" for="name">Имя</label>
+      <div class="col-sm-8">
+        <input id="name" type="text" ng-model='editingName' placeholder="Введите имя" class="form-control" ng-required="true">
       </div>
     </div>
-
-    <div class="text-center"><%= f.submit "Подтвердить", class: "btn btn-primary" %></div>
-  <% end %> 
+    <div class="row">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-8"><input type="submit" value="Сохранить" class="btn btn-primary"></div>
+    </div>
+  </form>
 </div>

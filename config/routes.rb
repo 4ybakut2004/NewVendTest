@@ -10,7 +10,7 @@ NewVend::Application.routes.draw do
   resources :employees, only: [:index, :create, :destroy, :edit, :update]
 
   root  'static_pages#home'
-  match '/help', to: 'static_pages#help',       via: 'get'
+  match '/help',  to: 'static_pages#help',       via: 'get'
 
   match '/signin',  to: 'sessions#new',         via: 'get'
   match '/signout', to: 'sessions#destroy',     via: 'delete'

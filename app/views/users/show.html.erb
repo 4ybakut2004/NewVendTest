@@ -7,7 +7,7 @@
 </script>
 
 <div id="user" class="content">
-	<h1 class="text-center">Пользователь</h1>
+	<h1 class="text-center">Пользователь <%= @user.id %></h1>
 	<div class="row">
 		<%= label_tag(:name, "Имя", :class => "col-sm-2 control-label text-right") %>
         <span id="name" class="col-sm-10 text-left"><%= @user.name %></span>
