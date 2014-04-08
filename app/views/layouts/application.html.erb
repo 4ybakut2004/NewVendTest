@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app='newVending'>
+<html>
 <head>
   <title><%= full_title(yield(:title)) %></title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
@@ -7,7 +7,7 @@
   <%= csrf_meta_tags %>
   <%= render 'layouts/shim' %>	
 </head>
-<body ng-controller="<%= @ng_controller || 'Application' %>Ctrl">
+<body>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -17,19 +17,21 @@
 	});
 </script>
 
-<%= render 'layouts/header' %>
+<div id="newVending" ng-controller="<%= @ng_controller || 'Application' %>Ctrl">
+	<%= render 'layouts/header' %>
 
-<div class="container-fluid">
-	<div class="row">
-		<% if signed_in? %>
-		<div class="col-md-2">
-			<%= render 'layouts/menu' %>
-		</div>
-		<% else %>
-		<div class="col-md-1"></div>
-		<% end %>
-		<div class="col-md-10">
-			<%= yield %>
+	<div class="container-fluid">
+		<div class="row">
+			<% if signed_in? %>
+			<div class="col-md-2">
+				<%= render 'layouts/menu' %>
+			</div>
+			<% else %>
+			<div class="col-md-1"></div>
+			<% end %>
+			<div class="col-md-10">
+				<%= yield %>
+			</div>
 		</div>
 	</div>
 </div>

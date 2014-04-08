@@ -26,5 +26,5 @@ doc/
 
 /config/database.yml
 /Procfile
-/config/deploy/
+# /config/deploy/
 /shared/
