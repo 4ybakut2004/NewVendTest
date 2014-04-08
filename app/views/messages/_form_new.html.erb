@@ -7,12 +7,12 @@
       });
 
       $('#new-type-button').find('button').click(function(event) {
-        var liElem = $('<li></li>');
+        var liElem = $('<li><div class="row"><div class="col-md-8"></div><div class="col-md-2 text-left"></div></div></li>');
         var inputElem = $('<input type="text" class="form-control" placeholder="Введите новый тип">');
+        var createButton = $('<button type="button" class="btn btn-default">Создать</button>');
 
-        inputElem.bind('keypress', function(event) {
-          if ( event.which == 13 ) {
-            var checkBoxElem = $('<%= check_box_tag "new_tasks[]", nil, true %> ').val($(this).val());
+        createButton.click(function(event) {
+            var checkBoxElem = $('<%= check_box_tag "new_tasks[]", nil, true %> ').val(inputElem.val());
             var checkBoxLiElem = $('<li class="new-type">' +
             '<div class="btn-group" data-toggle="buttons">' +
               '<label id="newCheck" class="btn btn-default active"></label>' +
@@ -24,19 +24,15 @@
             });
 
             checkBoxLiElem.find("#newCheck").append(checkBoxElem);
-            checkBoxLiElem.find("#newCheck").append($(this).val());
+            checkBoxLiElem.find("#newCheck").append(inputElem.val());
 
             checkBoxLiElem.insertBefore(liElem);
             liElem.remove();
             event.preventDefault();
-          }
         });
 
-        inputElem.bind('blur', function(){
-          liElem.remove();
-        });
-
-        liElem.append(inputElem);
+        liElem.find(".col-md-8").first().append(inputElem);
+        liElem.find(".col-md-2").first().append(createButton);
         liElem.insertBefore($('#new-type-button'));
         inputElem.focus();
       });

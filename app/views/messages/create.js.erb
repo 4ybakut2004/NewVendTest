@@ -17,7 +17,7 @@ function addNewMessage()
 	}
 	else
 	{
-		var tr = $("<tr style='opacity: 0;' id='<%= @message.id %>'>" +
+		var tr = $("<tr style='opacity: 0;' id='<%= @message.id %>' data-link='<%= edit_message_path(@message) %>'>" +
 			'<td class="actions">' +
 	          '<%= check_box_tag "for_destroy[]", @message.id, false %>' +
 	        '</td>' +
