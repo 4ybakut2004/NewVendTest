@@ -17,6 +17,7 @@
 //= require angular-resource.min
 //= require bootstrap.min
 //= require collapse
-//= require turbolinks
 //= require newVending.js
+//= require_tree ./angular
+//= require turbolinks
 //= require_tree .
