@@ -4,6 +4,8 @@ class Message < ActiveRecord::Base
   	has_many :message_tasks, dependent: :destroy
   	has_many :tasks, through: :message_tasks
 
+  	belongs_to :employee
+
   	validates :name, presence: true
   	validates :request_type, presence: true
 end

@@ -1,7 +1,6 @@
 function addNewMessage()
 {
-	if("<%= @message.errors.count %>" != 0)
-	{
+	<% if @message.errors.count != 0 %>
 		var msg = $("#error-msg");
 		showErrorMessage("Количество ошибок: <%= @message.errors.count %><br>" +
 		                                        "Проверьте обязательные для ввода поля",
@@ -14,9 +13,7 @@ function addNewMessage()
 				$('#newModal').find('#' + key).addClass('has-error');
 			}
 		}
-	}
-	else
-	{
+	<% else %>
 		var tr = $("<tr style='opacity: 0;' id='<%= @message.id %>' data-link='<%= edit_message_path(@message) %>'>" +
 			'<td class="actions">' +
 	          '<%= check_box_tag "for_destroy[]", @message.id, false %>' +
@@ -24,6 +21,7 @@ function addNewMessage()
 			"<td><%= @message.id %></td>" +
 			"<td><%= @message.name %></td>" +
 			"<td><%= Request.request_types[@message.request_type.to_sym] %></td>" +
+			"<td><%= @message.employee ? @message.employee.name : nil %></td>" +
 		"</tr>");
 
 		messagesTemplate.insertRow(tr, <%= raw @message.attributes.to_json %>);
@@ -37,7 +35,7 @@ function addNewMessage()
     	$('#newModal div').removeClass('has-error');
 
     	$('#newModal').modal('hide');
-	}
+	<% end %>
 }
 
 addNewMessage();

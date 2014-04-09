@@ -51,12 +51,14 @@ class RequestsController < ApplicationController
     respond_to do |format|
       if @request.save
         if messages
-          messages.each { |message|
+          messages.each { |message_id|
             request_message = RequestMessage.create(:request_id => @request.id,
-                                                    :message_id => message)
-            Message.find(message).tasks.each { |task|
-              request_task = RequestTask.create(:assigner_id => @request.solver_id,
-                                                :auditor_id  => @request.solver_id,
+                                                    :message_id => message_id)
+            message = Message.find(message_id)
+            assigner_id = message.employee_id ? message.employee_id : @request.registrar_id
+            message.tasks.each { |task|
+              request_task = RequestTask.create(:assigner_id => assigner_id,
+                                                :auditor_id  => assigner_id,
                                                 :task_id => task.id,
                                                 :request_message_id => request_message.id,
                                                 :creation_date => Time.now,
@@ -133,6 +135,6 @@ class RequestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def request_params
-      params.require(:request).permit(:machine_id, :description, :request_type, :phone, :solver_id)
+      params.require(:request).permit(:machine_id, :description, :request_type, :phone)
     end
 end

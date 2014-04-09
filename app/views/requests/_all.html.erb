@@ -23,10 +23,7 @@
 <%= form_tag(requests_path, method: "get", :style => "display: inline-block;", :id => "filter-form") do %>
 <div class="btn-group" data-toggle="buttons">
   <label class="btn btn-link btn-lg <%= @who_am_i.include?("registrar") ? "active" : "" %>">
-    <%= check_box_tag 'who_am_i[]', "registrar", @who_am_i.include?("registrar"), :class => "display-none" %> Регистратор,
-  </label>
-  <label class="btn btn-link btn-lg <%= @who_am_i.include?("solver") ? "active" : "" %>">
-    <%= check_box_tag 'who_am_i[]', "solver", (@who_am_i.include? "solver"), :class => "display-none" %> Решатель
+    <%= check_box_tag 'who_am_i[]', "registrar", @who_am_i.include?("registrar"), :class => "display-none" %> Регистратор
   </label>
 </div>
 <% end %></h1>
@@ -45,14 +42,12 @@
       <th></th>
       <th class="table-sortable:numeric table-sortable">Номер</th>
       <th class="table-sortable:default table-sortable">Регистратор</th>
-      <th class="table-sortable:default table-sortable">Решатель</th>
       <th class="table-sortable:default table-sortable">Автомат</th>
       <th class="table-sortable:default table-sortable">Описание</th>
       <th class="table-sortable:default table-sortable">Тип</th>
     </tr>
     <tr>
       <th></th>
-      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
       <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
       <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
       <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
@@ -74,7 +69,6 @@
         </td>
         <td><%= request.id %></td>
         <td><%= request.registrar.name %></td>
-        <td><%= request.solver.name %></td>
         <td><%= link_to request.machine.name, machine_path(request.machine) %></td>
         <td><%= request.description %></td>
         <td><%= Request.request_types[request.request_type.to_sym] %></td>

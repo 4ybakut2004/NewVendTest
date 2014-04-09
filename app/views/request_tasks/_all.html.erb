@@ -18,8 +18,8 @@
   });
 </script>
 
-<h1 style="display: inline-block;">Поручения, где я:
 <%= form_tag(request_tasks_path, method: "get", :style => "display: inline-block;", :id => "filter-form") do %>
+<h1 style="display: inline-block;">Поручения, где я:
 <div class="btn-group" data-toggle="buttons">
   <label class="btn btn-link btn-lg <%= @who_am_i.include?("assigner") ? "active" : "" %>">
     <%= check_box_tag 'who_am_i[]', "assigner", @who_am_i.include?("assigner"), :class => "display-none" %> Назначатель,
@@ -31,8 +31,19 @@
     <%= check_box_tag 'who_am_i[]', "auditor", (@who_am_i.include? "auditor"), :class => "display-none" %> Контролер
   </label>
 </div>
-<% end %></h1>
+</h1>
 <br>
+
+<h1 style="display: inline-block;">Которые:
+<div class="btn-group" data-toggle="buttons">
+  <label class="btn btn-link btn-lg <%= @overdued.include?("done") ? "active" : "" %>">
+    <%= check_box_tag 'overdued[]', "done", @overdued.include?("done"), :class => "display-none" %> Просрочены и сделаны,
+  </label>
+  <label class="btn btn-link btn-lg <%= @overdued.include?("not_done") ? "active" : "" %>">
+    <%= check_box_tag 'overdued[]', "not_done", (@overdued.include? "not_done"), :class => "display-none" %> Просрочены и не сделаны
+  </label>
+</div>
+<% end %></h1>
 
 <div id="request-tasks-table-container" class="table-responsive standart-table-container">
 <table class="table table-striped table-hover table-condensed table-bordered table-autosort" id="request-tasks-table">

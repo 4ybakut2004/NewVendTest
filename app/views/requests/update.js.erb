@@ -16,7 +16,6 @@ function updateRequest()
 				"</td>" +
 				"<td><%= @request.id %></td>" +
 				"<td><%= @request.registrar.name %></td>" +
-				"<td><%= @request.solver.name %></td>" +
 				"<td><%= escape_javascript(link_to @request.machine.name, machine_path(@request.machine)) %></td>" +
 				"<td><%= @request.description %></td>" +
 				"<td><%= Request.request_types[@request.request_type.to_sym] %></td>" +

@@ -2,13 +2,16 @@ class MessagesController < ApplicationController
 	before_action :set_message, only: [:show, :edit, :update, :destroy]
 	before_action :signed_in_user
 
+	respond_to :html, :json
+
 	def index
 		@messages = Message.all
 		@message = Message.new
+
+		respond_with @messages
 	end
 
 	def edit
-
 	end
 
 	def create
@@ -94,6 +97,6 @@ class MessagesController < ApplicationController
 
 	    # Never trust parameters from the scary internet, only allow the white list through.
 	    def message_params
-	      params.require(:message).permit(:name, :request_type)
+	      params.require(:message).permit(:name, :request_type, :employee_id)
 	    end
 end

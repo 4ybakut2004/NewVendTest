@@ -7,10 +7,16 @@ class RequestTasksController < ApplicationController
 
 	def index
 		filter = { }
+		date_filter = []
 		@request_id  = params[:request_id]
 		@who_am_i = params[:who_am_i]
+		@overdued = params[:overdued]
 		if !@who_am_i
 			@who_am_i = []
+		end
+
+		if !@overdued
+			@overdued = []
 		end
 		
 		if @request_id != "" && @request_id
@@ -23,9 +29,18 @@ class RequestTasksController < ApplicationController
 					filter[(i + "_id").to_sym] = current_user.employee.id
 				end
 			end
+
+			@overdued.each do |type|
+				case type
+				when "done"
+				  date_filter << "execution_date IS NOT NULL AND deadline_date < '#{DateTime.now}'"
+				when "not_done"
+				  date_filter << "execution_date IS NULL AND deadline_date < '#{DateTime.now}'"
+				end
+			end
 		end
 
-		@request_tasks = RequestTask.joins(:request_message).order("created_at DESC").where(filter)
+		@request_tasks = RequestTask.joins(:request_message).order("created_at DESC").where(filter).where(date_filter.join(' OR '))
 	end
 
 	def update

@@ -27,12 +27,6 @@
     </div>
     
     <div class="form-group">
-      <%= f.label :solver_id, "Решатель", :class => "col-sm-2 control-label" %>
-      <div class="col-sm-10">
-        <%= f.select :solver_id, options_for_select(Employee.all.collect {|e| [ e.name, e.id ] }, :selected => @request.solver_id ), {}, { :class => "form-control" } %>
-      </div>
-    </div>
-    <div class="form-group">
       <%= f.label :machine_id, "Автомат", :class => "col-sm-2 control-label" %>
       <div class="col-sm-10">
         <%= f.select :machine_id, options_for_select(Machine.all.collect {|m| [ m.name, m.id ] }, :selected => @request.machine_id ), {}, { :class => "form-control" } %>

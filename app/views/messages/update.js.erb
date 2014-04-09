@@ -16,6 +16,7 @@ function updateMessage()
 			"<td><%= @message.id %></td>" +
 			"<td><%= @message.name %></td>" +
 			"<td><%= Request.request_types[@message.request_type.to_sym] %></td>" +
+			"<td><%= @message.employee ? @message.employee.name : nil %></td>" +
 		"</tr>");
 		
 		messagesTemplate.updateRow(tr, <%= raw @message.attributes.to_json %>);
