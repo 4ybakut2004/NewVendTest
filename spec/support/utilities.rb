@@ -7,7 +7,7 @@ def sign_in(user, options={})
   else
     visit signin_path
     fill_in "session_name",    with: user.name
-    fill_in "session_password", with: user.password_digest
+    fill_in "session_password", with: user.password
     click_button "Войти"
   end
 end

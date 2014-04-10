@@ -35,7 +35,7 @@ class TasksController < ApplicationController
 	def update
 		respond_to do |format|
 		  if @task.update(task_params)
-		    format.html { redirect_to @task, notice: 'Employee was successfully updated.' }
+		    format.html { redirect_to @task, notice: 'Task was successfully updated.' }
 		    format.json { render json: @task.attrs, status: :created }
 		  else
 		    format.html { render action: 'edit' }

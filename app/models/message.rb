@@ -3,6 +3,7 @@ class Message < ActiveRecord::Base
   	has_many :requests, through: :request_messages
   	has_many :message_tasks, dependent: :destroy
   	has_many :tasks, through: :message_tasks
+  	has_many :message_attributes, dependent: :destroy
 
   	belongs_to :employee
 

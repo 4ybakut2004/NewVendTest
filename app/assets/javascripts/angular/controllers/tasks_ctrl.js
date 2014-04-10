@@ -1,4 +1,4 @@
-function TasksCtrl($scope, Task, MessageTask, Message) {
+function TasksCtrl($scope, Task, Message) {
 	$scope.tasks = Task.all();
 	$scope.messages = Message.all();
 
@@ -38,7 +38,6 @@ function TasksCtrl($scope, Task, MessageTask, Message) {
 		angular.forEach($scope.messages, function(message){
 			if(message.checked) {
 				attr.messages.push(message.id);
-				message.checked = false;
 			}
 		});
 		var newTask = Task.create(attr);
@@ -96,4 +95,4 @@ function TasksCtrl($scope, Task, MessageTask, Message) {
 	};
 }
 
-newVending.controller("TasksCtrl",['$scope', 'Task', 'MessageTask', 'Message', TasksCtrl]);
+newVending.controller("TasksCtrl",['$scope', 'Task', 'Message', TasksCtrl]);

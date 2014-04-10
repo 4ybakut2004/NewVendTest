@@ -17,14 +17,24 @@ class MessagesController < ApplicationController
 	def create
 	    @message  = Message.new(message_params)
 	    tasks = params[:tasks]
+	    attributes = params[:attributes]
 	    new_tasks = params[:new_tasks]
+	    new_attributes = params[:new_attributes]
 
 	    if !tasks
 	    	tasks = []
 		end
 
+		if !attributes
+	    	attributes = []
+		end
+
 		if !new_tasks
 			new_tasks = []
+		end
+
+		if !new_attributes
+			new_attributes = []
 		end
 
 	    respond_to do |format|
@@ -34,10 +44,21 @@ class MessagesController < ApplicationController
 					:task_id => t)
 			end
 
+			attributes.each do |a|
+				message_attribute = MessageAttribute.create(:message_id => @message.id,
+					:attribute_id => a)
+			end
+
 			new_tasks.each do |t|
 				new_task = Task.create(:name => t)
 				message_task = MessageTask.create(:message_id => @message.id,
 					:task_id => new_task.id)
+			end
+
+			new_attributes.each do |a|
+				new_attribute = Attribute.create(:name => a, :attribute_type => Attribute.attribute_types.keys.first)
+				message_attribute = MessageAttribute.create(:message_id => @message.id,
+					:attribute_id => new_attribute.id)
 			end
 
 	        format.html { redirect_to @message, notice: 'Message was successfully created.' }

@@ -11,10 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140409045136) do
+ActiveRecord::Schema.define(version: 20140409083922) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "attributes", force: true do |t|
+    t.string   "name"
+    t.string   "attribute_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "employees", force: true do |t|
     t.string   "name"
@@ -33,6 +40,13 @@ ActiveRecord::Schema.define(version: 20140409045136) do
 
   add_index "machines", ["name"], name: "index_machines_on_name", using: :btree
   add_index "machines", ["uid"], name: "index_machines_on_uid", using: :btree
+
+  create_table "message_attributes", force: true do |t|
+    t.integer  "message_id"
+    t.integer  "attribute_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "message_tasks", force: true do |t|
     t.integer  "message_id"

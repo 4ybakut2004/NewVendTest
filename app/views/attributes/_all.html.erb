@@ -1,0 +1,34 @@
+<h1>Типы атрибутов</h1>
+
+<div class="btn-group" style="margin-bottom: 15px;">
+  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newAttribute">Создать</button>
+  <button type="button" class="btn btn-default" ng-click="deleteAttributes()">Удалить</button>
+</div>
+
+<div class="table-responsive standart-table-container" ng-show="!editing">
+<table class="table table-striped table-hover table-condensed table-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Номер</th>
+      <th>Наименование</th>
+      <th>Тип</th>
+    </tr>
+    <tr>
+      <td></td>
+      <td><input ng-model="search.id" class="form-control" placeholder="Поиск по номеру"></td>
+      <td><input ng-model="search.name" class="form-control" placeholder="Поиск по наименованию"></td>
+      <td><input ng-model="search.attribute_type_name" class="form-control" placeholder="Поиск по типу"></td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr ng-repeat="attribute in attributes | filter:search">
+      <td><input type="checkbox" ng-model="attribute.checked"></td>
+      <td ng-click="clickAttribute($index)">{{attribute.id}}</td>
+      <td ng-click="clickAttribute($index)">{{attribute.name}}</td>
+      <td ng-click="clickAttribute($index)">{{attribute.attribute_type_name}}</td>
+    </tr>
+  </tbody>
+</table>
+</div>

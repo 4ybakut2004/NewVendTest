@@ -2,7 +2,7 @@
 <button type="button" class="close" ng-click="editing=false">&times;</button>
   <h1 class="text-center">Пользователь {{editingId}}</h1>
   <form ng-submit="updateUser()" class="form-horizontal">
-    <div id="employee_id" class="form-group" ng-class='{"has-warning": !editingInputs.employee_id, "has-success": editingInputs.employee_id}'>
+    <div class="form-group" ng-class='{"has-warning": !editingInputs.employee_id, "has-success": editingInputs.employee_id}'>
       <label class="col-sm-2 control-label" for="employee_id">Сотрудник</label>
       <div class="col-sm-8">
       <%= select_tag :employee_id, options_for_select([["", nil]] + Employee.all.collect { |e| [e.name, e.id] }), :class => "form-control", 'ng-model' => 'editingEmployeeId' %>
