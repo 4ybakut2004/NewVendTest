@@ -3,7 +3,7 @@ NewVend::Application.routes.draw do
   resources :machines, only: [:index, :show, :create, :new]
   resources :users, only: [:show, :edit, :update, :new, :create, :index]
   resources :sessions, only: [:new, :create, :destroy]
-  resources :requests, only: [:index, :destroy, :create, :update, :edit]
+  resources :requests, only: [:index, :destroy, :create, :update, :edit, :show]
   resources :messages, only: [:index, :destroy, :create, :update, :edit]
   resources :request_tasks, only: [:index, :edit, :update]
   resources :tasks, only: [:index, :create, :destroy, :update]

@@ -31,12 +31,11 @@ class Request < ActiveRecord::Base
 
     def getFullInfo
     	fullInfo = self.attributes
+        fullInfo["registrar_name"] = self.registrar.name
+        fullInfo["machine_name"] = self.machine.name
+        fullInfo["request_type_name"] = Request.request_types[self.request_type]
     	fullInfo["request_messages"] = self.request_messages.map { |m| m.message.name }
-    	fullInfo["request_tasks"] = self.request_tasks.map { |t|
-    		t_attrs = t.attributes
-    		t_attrs["name"] = t.task.name
-    		t_attrs
-    	}
+    	fullInfo["request_tasks"] = self.request_tasks.map { |t| t.task.name }
     	return fullInfo
     end
 
