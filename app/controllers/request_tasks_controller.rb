@@ -26,6 +26,12 @@ class RequestTasksController < ApplicationController
 		end
 
 		@request_tasks = RequestTask.joins(:request_message).order("created_at DESC").where(filter)
+		
+		respond_to do |format|
+	        format.html { }
+	        format.js   {}
+	        format.json { render json: @request_tasks, status: :created}
+	    end
 	end
 
 	def update
