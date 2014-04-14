@@ -1,5 +1,9 @@
 function RequestTasksCtrl($scope, RequestTask, Employee) {
-	$scope.requestTasks = RequestTask.all();
+	function getURLParameter(name) {
+		return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+	}
+
+	$scope.requestTasks = RequestTask.all({ request_id: getURLParameter('request_id') });
 	$scope.employees = Employee.all();
 	$scope.editing = false;
 
@@ -10,6 +14,17 @@ function RequestTasksCtrl($scope, RequestTask, Employee) {
 		deadlineDate: false,
 		executionDate: false,
 		auditionDate: false
+	};
+
+	$scope.whoAmI = {
+		assigner: false,
+		executor: false,
+		auditor: false
+	};
+
+	$scope.overdued = {
+		done: false,
+		not_done: false
 	};
 
 	$scope.$watch('editingExecutorId', function() {
@@ -105,6 +120,37 @@ function RequestTasksCtrl($scope, RequestTask, Employee) {
 		return ($scope.editingIdx != null) ? 
 			(employee_id == $scope.requestTasks[$scope.editingIdx].auditor_id) :
 			false;
+	};
+
+	function requestTasksFilter() {
+		var attr = {
+			'who_am_i[]': [],
+			'overdued[]': []
+		};
+
+		for(var key in $scope.overdued) {
+			if($scope.overdued[key]) {
+				attr['overdued[]'].push(key);
+			}
+		}
+
+		for(var key in $scope.whoAmI) {
+			if($scope.whoAmI[key]) {
+				attr['who_am_i[]'].push(key);
+			}
+		}
+
+		$scope.requestTasks = RequestTask.all(attr);
+	}
+
+	$scope.whoAmIFilter = function(str) {
+		$scope.whoAmI[str] = !$scope.whoAmI[str];
+		requestTasksFilter();
+	};
+
+	$scope.overduedFilter = function(str) {
+		$scope.overdued[str] = !$scope.overdued[str];
+		requestTasksFilter();
 	};
 }
 

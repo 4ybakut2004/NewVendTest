@@ -5,8 +5,8 @@ newVending.factory('RequestTask', ['$resource', function($resource) {
                              {update: { method: 'PUT' }});
   }
 
-  RequestTask.prototype.all = function() {
-    return this.service.query();
+  RequestTask.prototype.all = function(attr) {
+    return this.service.query(attr);
   };
 
   RequestTask.prototype.get = function(id) {
