@@ -28,6 +28,7 @@
       <th class="table-sortable:numeric table-sortable">Номер</th>
       <th class="table-sortable:default table-sortable">Наименование</th>
       <th class="table-sortable:default table-sortable">Тип заявки</th>
+      <th class="table-sortable:default table-sortable">Решатель</th>
     </tr>
     <tr>
       <th></th>
@@ -39,6 +40,7 @@
         <%= options_for_select(Request.request_types.map { |k, v| [ v, v ] }) %>
         </select>
       </th>
+      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
     </tr>
   </thead>
 
@@ -51,6 +53,7 @@
         <td><%= message.id %></td>
         <td><%= message.name %></td>
         <td><%= Request.request_types[message.request_type.to_sym] %></td>
+        <td><%= message.employee ? message.employee.name : nil %></td>
       </tr>
     <% end %>
   </tbody>

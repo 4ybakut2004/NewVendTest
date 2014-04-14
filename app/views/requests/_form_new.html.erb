@@ -1,146 +1,69 @@
-<div id="request">
-  <script type="text/javascript">
-    $(document).ready(function() {
-      var form = $("#new_request");
-      var machine_id = "#machine_id";
-      var description = "#description";
-      var submit = "#submit-container";
-      var otherButton = "#other-button";
-      var otherButtonContainer = "#other-button-container";
-      var phone = "#phone";
-      var solver = "#solver_id";
-
-      function showElement(elem) {
-        form.find(elem).removeClass('display-none');
-      }
-
-      function hideElement(elem) {
-        form.find(elem).addClass('display-none');
-      }
-
-      var checkable = new Checkable(otherButton, function() {
-          switch($(otherButton).attr('activated'))
-          {
-            case 'true':
-              showElement(description);
-              break;
-            case 'false':
-              hideElement(description);
-              form.find("#request_description").val('');
-              break;
-          }
-      });
-
-      var switchable = new FormSwitchable("#btn-group", function(){
-        checkable.checkOff();
-        showElement(machine_id);
-        showElement(submit);
-        showElement(otherButtonContainer);
-
-        switch($("#btn-group").attr("value"))
-        {
-          case 'phone':
-            showElement(phone);
-            break;
-          case 'other':
-            hideElement(phone);
-            break;
-        }
-
-        form.find("#request_request_type")
-        .find("option[value='" + $("#btn-group").attr('value') + "']")
-        .attr('selected', 'selected');
-
-        form.find("#request_description").val('');
-        form.find("#request_phone").val('');
-
-        form.find("#messages").empty();
-        form.find("#tasks").empty();
-      },
-      "#request_type");
-
-      $("#btn-group form").on("ajax:success", function(e, data, status, xhr){
-        form.find("#messages").append($(xhr.responseText).find("#filtered-messages"));
-        form.find("#tasks").append($(xhr.responseText).find("#tasks-of-messages"));
-      }).bind("ajax:error", function(e, xhr, status, error){
-        console.log(xhr.responseText );
-      });
-
-      function hideAll() {
-        hideElement(machine_id);
-        hideElement(description);
-        hideElement(submit);
-        hideElement(otherButtonContainer);
-        hideElement(phone);
-        form.find("#messages").empty();
-        form.find("#tasks").empty();
-        switchable.switchOff();
-      }
-
-      $('#close-button').click(function(event) {
-        hideAll();
-      });
-
-      $("#new_request").on("ajax:success", function(e, data, status, xhr){
-        hideAll();
-      }).bind("ajax:error", function(e, xhr, status, error){
-        console.log(xhr.responseText);
-      });
-    });
-  </script>
-  
-  <div id="btn-group" class="text-center">
+<form ng-submit="createRequest()" class="form-horizontal">
+  <div class="text-center">
     <% Request.request_types.each do |key, value| %>
-      <%= form_tag('messages_for_request', :remote => true, :style => "display: inline-block;") do %>
-        <%= hidden_field_tag 'request_type', key %>
-        <%= submit_tag value, :class => "btn btn-default" %>
-      <% end %>
+    <button type="button" class="btn btn-default" ng-class='{active: newRequestType == "<%= key %>"}' ng-click='setNewRequestType("<%= key %>")'><%= value %></button>
     <% end %>
-  </div>
-  
-  <%= form_for(@request, remote: true, :html => {:class => "form-horizontal", :style => "margin-top: 15px;"}) do |f| %>
-    <div id="solver_id" class="form-group">
-      <%= f.label :solver_id, "Решатель", :class => "col-sm-2 control-label" %>
-      <div class="col-sm-10">
-         <%= f.select :solver_id, options_for_select(Employee.order('name ASC').all.collect {|e| [ e.name, e.id ] }, :selected =>  signed_in? ? (current_user.employee ? current_user.employee.id : nil) : nil ), {}, { :class => "form-control" } %>
-      </div>
-    </div>
-    <div id="request_type" class="form-group display-none">
-      <%= f.label :request_type, "Тип заявки", :class => "col-sm-2 control-label" %>
-      <div class="col-sm-10">
-        <%= f.select :request_type, options_for_select(Request.request_types.map { |k, v| [ v, k ] }), {}, { :class => "form-control" } %>
-      </div>
-    </div>
-    <div id="machine_id" class="form-group display-none">
-      <%= f.label :machine_id, "Автомат", :class => "col-sm-2 control-label" %>
-      <div class="col-sm-10">
-        <%= f.select :machine_id, options_for_select(Machine.order('name ASC').all.collect {|m| [ m.name, m.id ] }, :selected => @request.machine_id ), {}, { :class => "form-control" } %>
-      </div>
-    </div>
-    <div id="phone" class="form-group display-none">
-      <%= f.label :phone, "Номер телефона", :class => "col-sm-2 control-label" %>
-      <div class="col-sm-10">
-        <%= f.text_field :phone, :class => "form-control" %>
-      </div>
-    </div>
-    <div class="row text-center">
-      <div id="messages" class="display-inline-block"></div>
-      <div id="other-button-container" class="display-inline-block display-none">
-        <button id="other-button" type="button" class="btn btn-default">Другое</button>
-      </div>
-    </div>
-    
-    <div id="description" class="form-group display-none" style="margin-top: 15px;">
-      <%= f.label :description, "Описание", :class => "col-sm-2 control-label" %>
-      <div class="col-sm-10">
-        <%= f.text_field :description, :class => "form-control" %>
-      </div>
-    </div>
+  </div><br>
 
-    <div id="tasks"></div>
-    <div id="submit-container" class="form-footer text-right display-none">
-      <%= f.submit "Подтвердить", class: "btn btn-primary" %>
+  <div class="form-group" ng-class='{"has-warning": !inputs.machineId, "has-success": inputs.machineId}' ng-show="inputs.requestType">
+    <label class="col-sm-3 control-label" for="machine_id">Автомат</label>
+    <div class="col-sm-9">
+      <select ng-model="newMachineId" 
+        ng-options="machine.id as machine.name for machine in machines"
+        class="form-control">
+      </select>
     </div>
-  <% end %>  
-</div>
+  </div>
+
+  <div class="form-group" ng-class='{"has-success": inputs.phone}' ng-show='newRequestType=="phone"'>
+    <label class="col-sm-3 control-label" for="phone">Телефон</label>
+    <div class="col-sm-9">
+      <input id="phone" type="text" ng-model='newPhone' placeholder="Введите номер телефона" class="form-control">
+    </div>
+  </div>
+
+  <div class="text-center" ng-show="inputs.requestType">
+    <button style="margin: 5px;" ng-repeat="message in messages | filter:{request_type: newRequestType}" type="button" class="btn btn-default" ng-click="addMessage(message)">{{message.name}}</button>
+    <button style="margin: 5px;" type="button" class="btn btn-default">Другое</button>
+  </div>
+
+  <div class="row" ng-show="newMessages.length">
+    <div class="col-md-12"><h4>Создадутся сигналы:</h4></div>
+  </div>
+
+  <div class="panel panel-default" ng-repeat="message in newMessages track by $index">
+    <div class="panel-heading">
+      <span>{{message.name}}</span>
+      <button type="button" class="close" ng-click="deleteMessage($index)">&times;</button>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-6">
+          <small>
+          <ul class="non-point">
+            <li ng-repeat="attribute in message.attributes">
+              <label for="{{attribute.id}}">{{attribute.name}}</label>
+              <input type="{{inputType(attribute.attribute_type)}}" class="form-control input-sm" id="{{attribute.id}}" ng-model="attribute.value">
+            </li>
+          </ul>
+          </small>
+        </div>
+        <div class="col-md-6">
+          <small>
+          <ul class="non-point">
+            <li><label>Поручения</label></li>
+            <li ng-repeat="task in message.tasks">
+              {{task.name}}
+            </li>
+          </ul>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row form-footer" ng-show="inputs.requestType">
+    <div class="col-sm-12 text-right"><input type="submit" value="Создать" class="btn btn-primary"></div>
+  </div>
+</form>
 

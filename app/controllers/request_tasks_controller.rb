@@ -2,15 +2,19 @@ class RequestTasksController < ApplicationController
 	before_action :set_request_task, only: [:show, :edit, :update, :destroy]
 	before_action :signed_in_user
 
-	def edit
-	end
-
 	def index
 		filter = { }
+		date_filter = []
+		@ng_controller = "RequestTasks"
 		@request_id  = params[:request_id]
 		@who_am_i = params[:who_am_i]
+		@overdued = params[:overdued]
 		if !@who_am_i
 			@who_am_i = []
+		end
+
+		if !@overdued
+			@overdued = []
 		end
 		
 		if @request_id != "" && @request_id
@@ -23,14 +27,22 @@ class RequestTasksController < ApplicationController
 					filter[(i + "_id").to_sym] = current_user.employee.id
 				end
 			end
+
+			@overdued.each do |type|
+				case type
+				when "done"
+				  date_filter << "execution_date IS NOT NULL AND deadline_date < '#{DateTime.now}'"
+				when "not_done"
+				  date_filter << "execution_date IS NULL AND deadline_date < '#{DateTime.now}'"
+				end
+			end
 		end
 
-		@request_tasks = RequestTask.joins(:request_message).order("created_at DESC").where(filter)
-		
+		@request_tasks = RequestTask.joins(:request_message).order("created_at DESC").where(filter).where(date_filter.join(' OR '))
+	
 		respond_to do |format|
-	        format.html { }
-	        format.js   {}
-	        format.json { render json: @request_tasks, status: :created}
+	      format.html { }
+	      format.json { render json: @request_tasks.collect { |rt| rt.attrs } }
 	    end
 	end
 
@@ -38,11 +50,9 @@ class RequestTasksController < ApplicationController
 		respond_to do |format|
 	      if @request_task.update(request_task_params)
 	        format.html { redirect_to @request_task, notice: 'Request_task was successfully updated.' }
-	        format.js   {}
-	        format.json { render json: @request_task, status: :created, location: @request_task }
+	        format.json { render json: @request_task.attrs, status: :created, location: @request_task }
 	      else
 	        format.html { render action: 'edit' }
-	        format.js   {}
 	        format.json { render json: @request_task.errors, status: :unprocessable_entity }
 	      end
 	    end

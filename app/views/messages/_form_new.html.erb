@@ -6,13 +6,13 @@
         console.log(xhr.responseText);
       });
 
-      $('#new-type-button').find('button').click(function(event) {
+      function newElement(inputName, self) {
         var liElem = $('<li><div class="row"><div class="col-md-8"></div><div class="col-md-2 text-left"></div></div></li>');
         var inputElem = $('<input type="text" class="form-control" placeholder="Введите новый тип">');
         var createButton = $('<button type="button" class="btn btn-default">Создать</button>');
 
         createButton.click(function(event) {
-            var checkBoxElem = $('<%= check_box_tag "new_tasks[]", nil, true %> ').val(inputElem.val());
+            var checkBoxElem = $('<%= check_box_tag "name", nil, true %> ').val(inputElem.val()).attr("name", inputName);
             var checkBoxLiElem = $('<li class="new-type">' +
             '<div class="btn-group" data-toggle="buttons">' +
               '<label id="newCheck" class="btn btn-default active"></label>' +
@@ -33,8 +33,16 @@
 
         liElem.find(".col-md-8").first().append(inputElem);
         liElem.find(".col-md-2").first().append(createButton);
-        liElem.insertBefore($('#new-type-button'));
+        liElem.insertBefore($(self));
         inputElem.focus();
+      }
+
+      $('#new-type-button').find('button').click(function(event) {
+        newElement("new_tasks[]", this);
+      });
+
+      $('#new-attribute-button').find('button').click(function(event) {
+        newElement("new_attributes[]", this);
       });
 
       $('#newModal').on('hidden.bs.modal', function (e) {
@@ -56,20 +64,45 @@
         <%= f.text_field :name, :class => "form-control" %>
       </div>
     </div>
+    <div class="form-group">
+      <%= f.label :employee_id, "Решатель", :class => "col-sm-4 control-label" %>
+      <div class="col-sm-8">
+        <%= f.select :employee_id, options_for_select([["", nil]] + Employee.all.collect { |e| [ e.name, e.id ] }, :selected => @message.employee_id), {}, { :class => "form-control" } %>
+      </div>
+    </div>
 
-    <h3 class="text-center">Типы поручений</h3>
-    <ul class="non-point">
-      <% Task.all.each do |task| %>
-        <li>
-        <div class="btn-group" data-toggle="buttons">
-          <label class="btn btn-default">
-            <%= check_box_tag "tasks[]", task.id, false %> <%= task.name %>
-          </label>
-        </div>
-        </li>
-      <% end %>
-      <li id="new-type-button"><button type="button" class="btn btn-default">Новый тип поручения</button></li>
-    </ul>
+    <div class="row">
+      <div class="col-md-6">
+        <h3 class="text-center">Типы поручений</h3>
+        <ul class="non-point">
+          <% Task.all.each do |task| %>
+            <li>
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-default">
+                <%= check_box_tag "tasks[]", task.id, false %> <%= task.name %>
+              </label>
+            </div>
+            </li>
+          <% end %>
+          <li id="new-type-button"><button type="button" class="btn btn-default">Новый тип поручения</button></li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <h3 class="text-center">Типы атрибутов</h3>
+        <ul class="non-point">
+          <% Attribute.all.each do |attribute| %>
+            <li>
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-default">
+                <%= check_box_tag "attributes[]", attribute.id, false %> <%= attribute.name %>
+              </label>
+            </div>
+            </li>
+          <% end %>
+          <li id="new-attribute-button"><button type="button" class="btn btn-default">Новый тип атрибута</button></li>
+        </ul>
+      </div>
+    </div>
     <div class="form-footer text-right">
       <%= f.submit "Подтвердить", class: "btn btn-primary" %>
     </div>

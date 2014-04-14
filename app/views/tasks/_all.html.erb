@@ -1,35 +1,34 @@
+<h1>Типы поручений</h1>
+
 <div class="btn-group" style="margin-bottom: 15px;">
-  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newModal">Создать</button>
+  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newTask">Создать</button>
+  <button type="button" class="btn btn-default" ng-click="deleteTasks()">Удалить</button>
 </div>
 
-<div class="table-responsive standart-table-container">
-
-<table id="tasks-table" class="table table-striped table-hover table-condensed table-bordered table-autosort">
+<div class="table-responsive standart-table-container" ng-show="!editing">
+<table class="table table-striped table-hover table-condensed table-bordered">
   <thead>
     <tr>
-      <th class="table-sortable:numeric table-sortable">Номер</th>
-      <th class="table-sortable:numeric table-sortable">Типы сигналов</th>
-      <th class="table-sortable:default table-sortable">Наименование</th>
-      <th>Действия</th>
+      <th></th>
+      <th>Номер</th>
+      <th>Наименование</th>
+      <th>Плановый срок (дней)</th>
     </tr>
     <tr>
-      <th>Фильтр:</th>
-      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
-      <th></th>
+      <td></td>
+      <td><input ng-model="search.id" class="form-control" placeholder="Поиск по номеру"></td>
+      <td><input ng-model="search.name" class="form-control" placeholder="Поиск по наименованию"></td>
+      <td><input ng-model="search.deadline" class="form-control" placeholder="Поиск по сроку"></td>
     </tr>
   </thead>
 
-  <tbody id ="tasks">
-    <% @tasks.each do |task| %>
-      <tr id="<%= task.id %>">
-        <td><%= task.id %></td>
-        <td><%= task.messages.collect{ |m| m.name }.join(", ") %></td>
-        <td><%= task.name %></td>
-        <td><%= link_to 'Удалить', task, method: :delete, data: { confirm: 'Вы уверены?' }, class: "delete", remote: true %></td>
-      </tr>
-    <% end %>
+  <tbody>
+    <tr ng-repeat="task in tasks | filter:search">
+      <td><input type="checkbox" ng-model="task.checked"></td>
+      <td ng-click="clickTask($index)">{{task.id}}</td>
+      <td ng-click="clickTask($index)">{{task.name}}</td>
+      <td ng-click="clickTask($index)">{{task.deadline}}</td>
+    </tr>
   </tbody>
 </table>
-  
 </div>

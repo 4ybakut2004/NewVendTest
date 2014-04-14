@@ -2,7 +2,6 @@ class Request < ActiveRecord::Base
     include ActiveModel::Dirty
 
 	belongs_to :machine
-	belongs_to :solver, :class_name => "Employee", :foreign_key => "solver_id"
 	belongs_to :registrar, :class_name => "Employee", :foreign_key => "registrar_id"
 	has_many :request_messages, dependent: :destroy
   	has_many :messages, through: :request_messages
@@ -10,11 +9,8 @@ class Request < ActiveRecord::Base
 
 	validates :machine_id, presence: true
 	validates :registrar_id, presence: true
-	validates :solver_id, presence: true
 	validate :validate_machine_id
 	validates_inclusion_of :request_type, :in => [:phone, :other]
-
-    after_save :after_request_save
 
 	REQUEST_TYPES = {
 	    :phone => "С Телефона",
@@ -33,23 +29,29 @@ class Request < ActiveRecord::Base
     	REQUEST_TYPES
     end
 
-    def after_request_save
-        if self.solver_id_changed?
-            self.request_tasks.each do |rt|
-                rt.update(:assigner_id => self.solver_id)
-            end
-        end
-    end
-
     def getFullInfo
     	fullInfo = self.attributes
-    	fullInfo["request_messages"] = self.request_messages.map { |m| m.message.name }
-    	fullInfo["request_tasks"] = self.request_tasks.map { |t|
-    		t_attrs = t.attributes
-    		t_attrs["name"] = t.task.name
-    		t_attrs
-    	}
+        fullInfo["registrar_name"] = self.registrar.name
+        fullInfo["machine_name"] = self.machine.name
+        fullInfo["request_type_name"] = Request.request_types[self.request_type]
+        fullInfo["request_messages"] = self.request_messages.map { |rm|
+            {"request_tasks" => rm.request_tasks.map { |rt| rt.task.name },
+             "request_attributes" => rm.request_attributes.map { |ra| { 
+                "id" => ra.id, 
+                "name" => ra.attribute.name, 
+                "value" => ra.value } 
+             },
+             "name" => rm.message.name}
+        }
     	return fullInfo
+    end
+
+    def attrs
+        self.attributes.merge({
+            "registrar_name" => self.registrar.name,
+            "machine_name" => self.machine.name,
+            "request_type_name" => Request.request_types[self.request_type]
+        })
     end
 
 	private

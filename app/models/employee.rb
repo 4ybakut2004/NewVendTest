@@ -1,5 +1,6 @@
 class Employee < ActiveRecord::Base
 	has_many :users
+	has_many :messages
 
 	validates :name, presence: true
 
@@ -10,10 +11,6 @@ end
 
 class Registrar < Employee
 	has_many :requests 
-end
-
-class Solver < Employee
-	has_many :requests
 end
 
 class Assigner < Employee

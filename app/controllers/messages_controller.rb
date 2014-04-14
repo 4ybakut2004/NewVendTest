@@ -2,26 +2,39 @@ class MessagesController < ApplicationController
 	before_action :set_message, only: [:show, :edit, :update, :destroy]
 	before_action :signed_in_user
 
+	respond_to :html, :json
+
 	def index
 		@messages = Message.all
 		@message = Message.new
+
+		respond_with @messages.collect { |m| m.attrs }
 	end
 
 	def edit
-
 	end
 
 	def create
 	    @message  = Message.new(message_params)
 	    tasks = params[:tasks]
+	    attributes = params[:attributes]
 	    new_tasks = params[:new_tasks]
+	    new_attributes = params[:new_attributes]
 
 	    if !tasks
 	    	tasks = []
 		end
 
+		if !attributes
+	    	attributes = []
+		end
+
 		if !new_tasks
 			new_tasks = []
+		end
+
+		if !new_attributes
+			new_attributes = []
 		end
 
 	    respond_to do |format|
@@ -31,10 +44,21 @@ class MessagesController < ApplicationController
 					:task_id => t)
 			end
 
+			attributes.each do |a|
+				message_attribute = MessageAttribute.create(:message_id => @message.id,
+					:attribute_id => a)
+			end
+
 			new_tasks.each do |t|
 				new_task = Task.create(:name => t)
 				message_task = MessageTask.create(:message_id => @message.id,
 					:task_id => new_task.id)
+			end
+
+			new_attributes.each do |a|
+				new_attribute = Attribute.create(:name => a, :attribute_type => Attribute.attribute_types.keys.first)
+				message_attribute = MessageAttribute.create(:message_id => @message.id,
+					:attribute_id => new_attribute.id)
 			end
 
 	        format.html { redirect_to @message, notice: 'Message was successfully created.' }
@@ -94,6 +118,6 @@ class MessagesController < ApplicationController
 
 	    # Never trust parameters from the scary internet, only allow the white list through.
 	    def message_params
-	      params.require(:message).permit(:name, :request_type)
+	      params.require(:message).permit(:name, :request_type, :employee_id)
 	    end
 end
