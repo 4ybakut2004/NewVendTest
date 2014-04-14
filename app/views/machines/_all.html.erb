@@ -18,7 +18,7 @@
   </thead>
 
   <tbody id ="machines">
-    <% @machines.order('name ASC').each do |machine| %>
+    <% @machines.each do |machine| %>
       <tr id="<%= machine.id %>">
         <td><%= link_to machine.id, machine_path(machine) %></td>
         <td><%= link_to machine.uid, machine_path(machine) %></td>

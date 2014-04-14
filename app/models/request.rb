@@ -34,9 +34,24 @@ class Request < ActiveRecord::Base
         fullInfo["registrar_name"] = self.registrar.name
         fullInfo["machine_name"] = self.machine.name
         fullInfo["request_type_name"] = Request.request_types[self.request_type]
-    	fullInfo["request_messages"] = self.request_messages.map { |m| m.message.name }
-    	fullInfo["request_tasks"] = self.request_tasks.map { |t| t.task.name }
+        fullInfo["request_messages"] = self.request_messages.map { |rm|
+            {"request_tasks" => rm.request_tasks.map { |rt| rt.task.name },
+             "request_attributes" => rm.request_attributes.map { |ra| { 
+                "id" => ra.id, 
+                "name" => ra.attribute.name, 
+                "value" => ra.value } 
+             },
+             "name" => rm.message.name}
+        }
     	return fullInfo
+    end
+
+    def attrs
+        self.attributes.merge({
+            "registrar_name" => self.registrar.name,
+            "machine_name" => self.machine.name,
+            "request_type_name" => Request.request_types[self.request_type]
+        })
     end
 
 	private

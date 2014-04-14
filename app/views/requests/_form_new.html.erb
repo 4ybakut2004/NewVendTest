@@ -9,8 +9,7 @@
     <label class="col-sm-3 control-label" for="machine_id">Автомат</label>
     <div class="col-sm-9">
       <select ng-model="newMachineId" 
-        ng-init="newMachineId = <%= Machine.order('name ASC').first.id %>"
-        ng-options="machine.id as machine.name for machine in <%= Machine.order('name ASC').all.collect { |m| {:id => m.id, :name => m.name} }.to_json %>"
+        ng-options="machine.id as machine.name for machine in machines"
         class="form-control">
       </select>
     </div>
@@ -24,8 +23,43 @@
   </div>
 
   <div class="text-center" ng-show="inputs.requestType">
-    <button style="margin: 5px;" ng-repeat="message in messages | filter:{request_type: newRequestType}" type="button" class="btn btn-default">{{message.name}}</button>
+    <button style="margin: 5px;" ng-repeat="message in messages | filter:{request_type: newRequestType}" type="button" class="btn btn-default" ng-click="addMessage(message)">{{message.name}}</button>
     <button style="margin: 5px;" type="button" class="btn btn-default">Другое</button>
+  </div>
+
+  <div class="row" ng-show="newMessages.length">
+    <div class="col-md-12"><h4>Создадутся сигналы:</h4></div>
+  </div>
+
+  <div class="panel panel-default" ng-repeat="message in newMessages track by $index">
+    <div class="panel-heading">
+      <span>{{message.name}}</span>
+      <button type="button" class="close" ng-click="deleteMessage($index)">&times;</button>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-6">
+          <small>
+          <ul class="non-point">
+            <li ng-repeat="attribute in message.attributes">
+              <label for="{{attribute.id}}">{{attribute.name}}</label>
+              <input type="{{inputType(attribute.attribute_type)}}" class="form-control input-sm" id="{{attribute.id}}" ng-model="attribute.value">
+            </li>
+          </ul>
+          </small>
+        </div>
+        <div class="col-md-6">
+          <small>
+          <ul class="non-point">
+            <li><label>Поручения</label></li>
+            <li ng-repeat="task in message.tasks">
+              {{task.name}}
+            </li>
+          </ul>
+          </small>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="row form-footer" ng-show="inputs.requestType">

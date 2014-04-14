@@ -23,9 +23,10 @@ class RequestsController < ApplicationController
       end
     end
 
-    @requests = Request.order('created_at DESC').where(filter)
-
-    respond_with @requests.collect { |r| r.getFullInfo }
+    respond_to do |format|
+      format.html { }
+      format.json { render json: Request.order('created_at DESC').where(filter).collect { |r| r.attrs } }
+    end
   end
 
   # GET /requests/1/edit
@@ -47,10 +48,10 @@ class RequestsController < ApplicationController
 
     if @request.save
       if messages
-        messages.each { |message_id|
+        messages.each { |m|
           request_message = RequestMessage.create(:request_id => @request.id,
-                                                  :message_id => message_id)
-          message = Message.find(message_id)
+                                                  :message_id => m[:id])
+          message = Message.find(m[:id])
           assigner_id = message.employee_id ? message.employee_id : @request.registrar_id
           message.tasks.each { |task|
             request_task = RequestTask.create(:assigner_id => assigner_id,
@@ -60,9 +61,17 @@ class RequestsController < ApplicationController
                                               :creation_date => Time.now,
                                               :deadline_date => task.deadline.days.from_now)
           }
+
+          if m[:attributes]
+            m[:attributes].each { |a|
+              request_attribute = RequestAttribute.create(:request_message_id => request_message.id,
+                                                          :attribute_id => a[:id],
+                                                          :value => a[:value])
+            }
+          end
         }
       end
-      respond_with(@request.getFullInfo, :status => :created, :location => @request)
+      respond_with(@request.attrs, :status => :created, :location => @request)
     else
       respond_with(@request.errors, :status => :unprocessable_entity)
     end
@@ -74,7 +83,7 @@ class RequestsController < ApplicationController
     respond_to do |format|
       if @request.update(request_params)
         format.html { redirect_to @request, notice: 'Request was successfully updated.' }
-        format.json { render json: @request.getFullInfo, status: :created }
+        format.json { render json: @request.attrs, status: :created }
       else
         format.html { render action: 'edit' }
         format.json { render json: @request.errors, status: :unprocessable_entity }
@@ -88,7 +97,7 @@ class RequestsController < ApplicationController
     @request.destroy
     respond_to do |format|
       format.html { redirect_to requests_url }
-      format.json { render json: @request.getFullInfo }
+      format.json { render json: @request.attrs }
     end
   end
 

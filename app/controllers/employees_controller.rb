@@ -5,10 +5,12 @@ class EmployeesController < ApplicationController
   respond_to :html, :json
 
   def index
-  	@employees = Employee.all
     @ng_controller = "Employees"
 
-    respond_with @employees
+    respond_to do |format|
+      format.html { }
+      format.json { render json: Employee.all }
+    end
   end
 
   def create

@@ -5,11 +5,12 @@ class AttributesController < ApplicationController
 	respond_to :html, :json
 
 	def index
-		@attributes = Attribute.order("created_at DESC").all
-
 		@ng_controller = "Attributes"
 
-    	respond_with @attributes.collect { |a| a.attrs }
+    	respond_to do |format|
+	      format.html { }
+	      format.json { render json: Attribute.order("created_at DESC").all.collect { |a| a.attrs } }
+	    end
 	end
 
 	def create

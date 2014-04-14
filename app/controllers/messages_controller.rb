@@ -8,7 +8,7 @@ class MessagesController < ApplicationController
 		@messages = Message.all
 		@message = Message.new
 
-		respond_with @messages
+		respond_with @messages.collect { |m| m.attrs }
 	end
 
 	def edit

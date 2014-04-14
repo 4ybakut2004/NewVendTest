@@ -10,4 +10,14 @@ class RequestTask < ActiveRecord::Base
     	fullInfo = self.attributes
     	return fullInfo
     end
+
+    def attrs
+    	fullInfo = self.attributes
+        fullInfo["request_id"] = self.request_message.request_id
+    	fullInfo["task_name"] = self.task.name
+    	fullInfo["assigner_name"] = self.assigner ? self.assigner.name : nil
+    	fullInfo["executor_name"] = self.executor ? self.executor.name : nil
+    	fullInfo["auditor_name"] = self.auditor ? self.auditor.name : nil
+    	return fullInfo
+    end
 end

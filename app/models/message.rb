@@ -9,4 +9,8 @@ class Message < ActiveRecord::Base
 
   	validates :name, presence: true
   	validates :request_type, presence: true
+
+  	def attrs
+  		self.attributes.merge({ :tasks => self.tasks, :attributes => self.message_attributes.collect { |a| a.attribute } }) 
+  	end
 end

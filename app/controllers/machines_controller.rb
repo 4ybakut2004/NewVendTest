@@ -2,10 +2,14 @@ class MachinesController < ApplicationController
   before_action :set_machine, only: [:show]
   before_action :signed_in_user
 
+  respond_to :html, :json
+
   # GET /machines
   # GET /machines.json 
   def index
-    @machines = Machine.all
+    @machines = Machine.order("name ASC").all
+
+    respond_with @machines
   end
 
   def new

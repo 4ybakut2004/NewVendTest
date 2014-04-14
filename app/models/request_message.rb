@@ -4,4 +4,5 @@ class RequestMessage < ActiveRecord::Base
 
   	has_many :request_tasks, dependent: :destroy
   	has_many :tasks, through: :request_tasks
+  	has_many :request_attributes, dependent: :destroy
 end

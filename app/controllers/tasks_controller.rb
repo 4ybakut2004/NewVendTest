@@ -5,12 +5,12 @@ class TasksController < ApplicationController
 	respond_to :html, :json
 
 	def index
-		@tasks = Task.order("created_at DESC").all
-		@task  = Task.new
-
 		@ng_controller = "Tasks"
 
-    	respond_with @tasks.collect { |t| t.attrs }
+    	respond_to do |format|
+	      format.html { }
+	      format.json { render json: @tasks = Task.order("created_at DESC").all.collect { |t| t.attrs } }
+	    end
 	end
 
 	def create

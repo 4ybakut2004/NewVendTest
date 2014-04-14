@@ -2,12 +2,10 @@ class RequestTasksController < ApplicationController
 	before_action :set_request_task, only: [:show, :edit, :update, :destroy]
 	before_action :signed_in_user
 
-	def edit
-	end
-
 	def index
 		filter = { }
 		date_filter = []
+		@ng_controller = "RequestTasks"
 		@request_id  = params[:request_id]
 		@who_am_i = params[:who_am_i]
 		@overdued = params[:overdued]
@@ -41,17 +39,20 @@ class RequestTasksController < ApplicationController
 		end
 
 		@request_tasks = RequestTask.joins(:request_message).order("created_at DESC").where(filter).where(date_filter.join(' OR '))
+	
+		respond_to do |format|
+	      format.html { }
+	      format.json { render json: @request_tasks.collect { |rt| rt.attrs } }
+	    end
 	end
 
 	def update
 		respond_to do |format|
 	      if @request_task.update(request_task_params)
 	        format.html { redirect_to @request_task, notice: 'Request_task was successfully updated.' }
-	        format.js   {}
-	        format.json { render json: @request_task, status: :created, location: @request_task }
+	        format.json { render json: @request_task.attrs, status: :created, location: @request_task }
 	      else
 	        format.html { render action: 'edit' }
-	        format.js   {}
 	        format.json { render json: @request_task.errors, status: :unprocessable_entity }
 	      end
 	    end

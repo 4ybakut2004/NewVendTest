@@ -7,6 +7,7 @@
   });
 </script>
 
+
 <h1 style="display: inline-block;">Заявки, где я:
 <%= form_tag(requests_path, method: "get", :style => "display: inline-block;", :id => "filter-form") do %>
 <div class="btn-group" data-toggle="buttons">
@@ -18,7 +19,7 @@
 <br>
 
 <div class="btn-group" style="margin-bottom: 15px;">
-  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newRequest">Создать</button>
+  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newRequest" ng-click="resetNewRequest()">Создать</button>
   <button type="button" class="btn btn-default" ng-click="deleteRequests()">Удалить</button>
 </div>
 
