@@ -33,10 +33,53 @@ function RequestTasksCtrl($scope, RequestTask, Employee) {
 	});
 
 	$scope.$watch('deadlineDateFilter', function() {
-		var date = [];
-		var sign = [];
+		var date;
 		if($scope.deadlineDateFilter) {
-			date = $scope.deadlineDateFilter.match(/\b(0[1-9]|[12][0-9]|3[01])[- //.](0[1-9]|1[012])[- //.](19|20\d\d)/);
+			date = $scope.deadlineDateFilter.match(/([<>=])\s*(0[1-9]|[12][0-9]|3[01])[- //.](0[1-9]|1[012])[- //.](19|20\d\d)/);
+			if(date) {
+				var filterDate = new Date(date[4], date[3] - 1, date[2]);
+				angular.forEach($scope.requestTasks, function(requestTask) {
+					var deadlineDate = new Date(requestTask.deadline_date);
+					console.log(deadlineDate);
+					switch(date[1]) {
+						case '<':
+							if(deadlineDate < filterDate) {
+								requestTask.checked = false;
+							}
+							else {
+								requestTask.checked = true;
+							}
+							break;
+
+						case '>':
+							if(deadlineDate > filterDate) {
+								requestTask.checked = false;
+							}
+							else {
+								requestTask.checked = true;
+							}
+							break;
+
+						case '=':
+							if(deadlineDate.getFullYear() == filterDate.getFullYear() &&
+							deadlineDate.getMonth() == filterDate.getMonth() &&
+							deadlineDate.getDate() == filterDate.getDate()) {
+								requestTask.checked = false;
+							}
+							else {
+								requestTask.checked = true;
+							}
+							break;
+					}
+				});
+			}
+			else {
+				angular.forEach($scope.requestTasks, function(requestTask) {
+					requestTask.checked = false;
+				});	
+			}
+
+			/*date = $scope.deadlineDateFilter.match(/\b(0[1-9]|[12][0-9]|3[01])[- //.](0[1-9]|1[012])[- //.](19|20\d\d)/);
 			sign = $scope.deadlineDateFilter.match(/(>|<|=)/g);
 
 			angular.forEach($scope.requestTasks, function(requestTask) {
@@ -63,7 +106,7 @@ function RequestTasksCtrl($scope, RequestTask, Employee) {
 				else {
 					requestTask.checked = false;
 				}
-			});
+			});*/
 		}
 	});
 

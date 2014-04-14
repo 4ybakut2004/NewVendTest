@@ -5,8 +5,8 @@ newVending.factory('Request', ['$resource', function($resource) {
                              {update: { method: 'PUT' }});
   }
 
-  Request.prototype.all = function() {
-    return this.service.query();
+  Request.prototype.all = function(attr) {
+    return this.service.query(attr);
   };
 
   Request.prototype.get = function(id) {

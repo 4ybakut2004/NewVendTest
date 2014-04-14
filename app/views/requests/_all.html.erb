@@ -9,13 +9,10 @@
 
 
 <h1 style="display: inline-block;">Заявки, где я:
-<%= form_tag(requests_path, method: "get", :style => "display: inline-block;", :id => "filter-form") do %>
-<div class="btn-group" data-toggle="buttons">
-  <label class="btn btn-link btn-lg <%= @who_am_i.include?("registrar") ? "active" : "" %>">
-    <%= check_box_tag 'who_am_i[]', "registrar", @who_am_i.include?("registrar"), :class => "display-none" %> Регистратор
-  </label>
+<div class="btn-group">
+  <button class="btn btn-link btn-lg" type="button" ng-click="whoAmIFilter('registrar')" ng-class="{active: whoAmI.registrar}">Регистратор</button>
 </div>
-<% end %></h1>
+</h1>
 <br>
 
 <div class="btn-group" style="margin-bottom: 15px;">

@@ -8,7 +8,8 @@ function RequestsCtrl($scope, Request, Message, Machine) {
 	$scope.inputs = {
 		machine_id: false,
 		requestType: false,
-		phone: false
+		phone: false,
+		description: false
 	};
 
 	$scope.editingInputs = {
@@ -16,10 +17,22 @@ function RequestsCtrl($scope, Request, Message, Machine) {
 		machineId: false
 	};
 
+	$scope.whoAmI = {
+		registrar: false
+	};
+
 	$scope.$watch('newRequestType', function() {
 		$scope.inputs.requestType = ($scope.newRequestType != "" && $scope.newRequestType != null);
 		$scope.newPhone = "";
 		$scope.newMessages = [];
+		$scope.newDescription = "";
+		$scope.showOther = false;
+	});
+
+	$scope.$watch('showOther', function() {
+		if(!$scope.showOther) {
+			$scope.newDescription = "";
+		}
 	});
 
 	$scope.$watch('newMachineId', function() {
@@ -28,6 +41,10 @@ function RequestsCtrl($scope, Request, Message, Machine) {
 
 	$scope.$watch('newPhone', function() {
 		$scope.inputs.phone = ($scope.newPhone != "" && $scope.newPhone != null);
+	});
+
+	$scope.$watch('newDescription', function() {
+		$scope.inputs.description = ($scope.newDescription != "" && $scope.newDescription != null);
 	});
 
 	$scope.$watch('editingDescription', function() {
@@ -43,12 +60,15 @@ function RequestsCtrl($scope, Request, Message, Machine) {
 		$scope.newMachineId = $scope.machines[0].id;
 		$scope.newPhone = "";
 		$scope.newMessages = [];
+		$scope.newDescription = "";
+		$scope.showOther = false;
 	};
 
 	$scope.createRequest = function() {
 		var attr = {};
 		attr.request_type = $scope.newRequestType;
 		attr.machine_id = $scope.newMachineId;
+		attr.description = $scope.newDescription;
 		if(attr.request_type == "phone") {
 			attr.phone = $scope.newPhone;
 		}
@@ -147,6 +167,29 @@ function RequestsCtrl($scope, Request, Message, Machine) {
 			case "string":
 				return "text";
 		}
+	};
+
+	$scope.otherInput = function() {
+		$scope.showOther = !$scope.showOther;
+	};
+
+	function requestsFilter() {
+		var attr = {
+			'who_am_i[]': []
+		};
+
+		for(var key in $scope.whoAmI) {
+			if($scope.whoAmI[key]) {
+				attr['who_am_i[]'].push(key);
+			}
+		}
+
+		$scope.requests = Request.all(attr);
+	}
+
+	$scope.whoAmIFilter = function(str) {
+		$scope.whoAmI[str] = !$scope.whoAmI[str];
+		requestsFilter();
 	};
 }
 
