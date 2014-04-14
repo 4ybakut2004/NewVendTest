@@ -21,6 +21,7 @@ class RequestTask < ActiveRecord::Base
         fullInfo["deadline_date"] = self.deadline_date ? self.deadline_date.to_s(:db) : nil
         fullInfo["audition_date"] = self.audition_date ? self.audition_date.to_s(:db) : nil
         fullInfo["execution_date"] = self.execution_date ? self.execution_date.to_s(:db) : nil
+        fullInfo["checked"] = false;
 
         fullInfo["attributes"] = self.request_message.request_attributes.collect { |ra| { :name => ra.attribute.name, :value => ra.value } }
 

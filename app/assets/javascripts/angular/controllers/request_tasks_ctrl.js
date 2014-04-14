@@ -6,6 +6,7 @@ function RequestTasksCtrl($scope, RequestTask, Employee) {
 	$scope.requestTasks = RequestTask.all({ request_id: getURLParameter('request_id') });
 	$scope.employees = Employee.all();
 	$scope.editing = false;
+	$scope.search = { checked: false };
 
 	$scope.editingInputs = {
 		executorId: false,
@@ -29,6 +30,41 @@ function RequestTasksCtrl($scope, RequestTask, Employee) {
 
 	$scope.$watch('editingExecutorId', function() {
 		$scope.editingInputs.executorId = ($scope.editingExecutorId != "" && $scope.editingExecutorId != null);
+	});
+
+	$scope.$watch('deadlineDateFilter', function() {
+		var date = [];
+		var sign = [];
+		if($scope.deadlineDateFilter) {
+			date = $scope.deadlineDateFilter.match(/\b(0[1-9]|[12][0-9]|3[01])[- //.](0[1-9]|1[012])[- //.](19|20\d\d)/);
+			sign = $scope.deadlineDateFilter.match(/(>|<|=)/g);
+
+			angular.forEach($scope.requestTasks, function(requestTask) {
+				if(date && sign) {
+					switch(sign[0]) {
+						case '>':
+							if(new Date(requestTask.deadline_date) > new Date(date[3], date[2] - 1, date[1])) {
+								requestTask.checked = false;
+							}
+							else {
+								requestTask.checked = true;
+							}
+							break;
+						case '<':
+							if(new Date(requestTask.deadline_date) < new Date(date[3], date[2] - 1, date[1])) {
+								requestTask.checked = false;
+							}
+							else {
+								requestTask.checked = true;
+							}
+							break;
+					}
+				}
+				else {
+					requestTask.checked = false;
+				}
+			});
+		}
 	});
 
 	$scope.$watch('editingAuditorId', function() {
