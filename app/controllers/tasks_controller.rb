@@ -9,7 +9,7 @@ class TasksController < ApplicationController
 
     	respond_to do |format|
 	      format.html { }
-	      format.json { render json: @tasks = Task.order("created_at DESC").all.collect { |t| t.attrs } }
+	      format.json { render json: Task.order("created_at DESC").all.collect { |t| t.attrs } }
 	    end
 	end
 

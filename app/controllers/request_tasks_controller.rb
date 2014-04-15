@@ -37,12 +37,10 @@ class RequestTasksController < ApplicationController
 				end
 			end
 		end
-
-		@request_tasks = RequestTask.joins(:request_message).order("created_at DESC").where(filter).where(date_filter.join(' OR '))
 	
 		respond_to do |format|
 	      format.html { }
-	      format.json { render json: @request_tasks.collect { |rt| rt.attrs } }
+	      format.json { render json: RequestTask.joins(:request_message).order("created_at DESC").where(filter).where(date_filter.join(' OR ')).collect { |rt| rt.attrs } }
 	    end
 	end
 
