@@ -26,13 +26,6 @@ function RequestsCtrl($scope, Request, Message, Machine) {
 		$scope.newPhone = "";
 		$scope.newMessages = [];
 		$scope.newDescription = "";
-		$scope.showOther = false;
-	});
-
-	$scope.$watch('showOther', function() {
-		if(!$scope.showOther) {
-			$scope.newDescription = "";
-		}
 	});
 
 	$scope.$watch('newMachineId', function() {
@@ -61,7 +54,6 @@ function RequestsCtrl($scope, Request, Message, Machine) {
 		$scope.newPhone = "";
 		$scope.newMessages = [];
 		$scope.newDescription = "";
-		$scope.showOther = false;
 	};
 
 	$scope.createRequest = function() {
@@ -167,10 +159,6 @@ function RequestsCtrl($scope, Request, Message, Machine) {
 			case "string":
 				return "text";
 		}
-	};
-
-	$scope.otherInput = function() {
-		$scope.showOther = !$scope.showOther;
 	};
 
 	function requestsFilter() {

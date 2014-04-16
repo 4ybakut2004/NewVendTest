@@ -23,6 +23,12 @@ function RequestTasksCtrl($scope, RequestTask, Employee) {
 		auditor: false
 	};
 
+	$scope.indicators = {
+		assign: false,
+		execute: false,
+		audit: false
+	};
+
 	$scope.overdued = {
 		done: false,
 		not_done: false
@@ -78,35 +84,6 @@ function RequestTasksCtrl($scope, RequestTask, Employee) {
 					requestTask.checked = false;
 				});	
 			}
-
-			/*date = $scope.deadlineDateFilter.match(/\b(0[1-9]|[12][0-9]|3[01])[- //.](0[1-9]|1[012])[- //.](19|20\d\d)/);
-			sign = $scope.deadlineDateFilter.match(/(>|<|=)/g);
-
-			angular.forEach($scope.requestTasks, function(requestTask) {
-				if(date && sign) {
-					switch(sign[0]) {
-						case '>':
-							if(new Date(requestTask.deadline_date) > new Date(date[3], date[2] - 1, date[1])) {
-								requestTask.checked = false;
-							}
-							else {
-								requestTask.checked = true;
-							}
-							break;
-						case '<':
-							if(new Date(requestTask.deadline_date) < new Date(date[3], date[2] - 1, date[1])) {
-								requestTask.checked = false;
-							}
-							else {
-								requestTask.checked = true;
-							}
-							break;
-					}
-				}
-				else {
-					requestTask.checked = false;
-				}
-			});*/
 		}
 	});
 
@@ -204,7 +181,8 @@ function RequestTasksCtrl($scope, RequestTask, Employee) {
 	function requestTasksFilter() {
 		var attr = {
 			'who_am_i[]': [],
-			'overdued[]': []
+			'overdued[]': [],
+			'indicators[]': []
 		};
 
 		for(var key in $scope.overdued) {
@@ -219,16 +197,42 @@ function RequestTasksCtrl($scope, RequestTask, Employee) {
 			}
 		}
 
+		for(var key in $scope.indicators) {
+			if($scope.indicators[key]) {
+				attr['indicators[]'].push(key);
+			}
+		}
+
 		$scope.requestTasks = RequestTask.all(attr);
 	}
 
 	$scope.whoAmIFilter = function(str) {
 		$scope.whoAmI[str] = !$scope.whoAmI[str];
+
+		switch(str) {
+			case 'assigner':
+				$scope.indicators.assign = false;
+				break;
+
+			case 'executor':
+				$scope.indicators.execute = false;
+				break;
+
+			case 'auditor':
+				$scope.indicators.audit = false;
+				break;
+		}
+
 		requestTasksFilter();
 	};
 
 	$scope.overduedFilter = function(str) {
 		$scope.overdued[str] = !$scope.overdued[str];
+		requestTasksFilter();
+	};
+
+	$scope.indicatorsFilter = function(str) {
+		$scope.indicators[str] = !$scope.indicators[str];
 		requestTasksFilter();
 	};
 }

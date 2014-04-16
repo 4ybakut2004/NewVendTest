@@ -15,6 +15,13 @@
     </div>
   </div>
 
+  <div class="form-group" ng-class='{"has-success": inputs.description}' ng-show="inputs.requestType">
+    <label class="col-sm-3 control-label" for="description">Описание</label>
+    <div class="col-sm-9">
+      <input id="description" type="text" ng-model='newDescription' placeholder="Введите описание" class="form-control">
+    </div>
+  </div>
+
   <div class="form-group" ng-class='{"has-success": inputs.phone}' ng-show='newRequestType=="phone"'>
     <label class="col-sm-3 control-label" for="phone">Телефон</label>
     <div class="col-sm-9">
@@ -24,14 +31,6 @@
 
   <div class="text-center" ng-show="inputs.requestType">
     <button style="margin: 5px;" ng-repeat="message in messages | filter:{request_type: newRequestType}" type="button" class="btn btn-default" ng-click="addMessage(message)">{{message.name}}</button>
-    <button style="margin: 5px;" type="button" class="btn btn-default" ng-click="otherInput()" ng-class="{active: showOther}">Другое</button>
-  </div>
-
-  <div class="form-group" ng-class='{"has-success": inputs.phone}' ng-show='showOther'>
-    <label class="col-sm-3 control-label" for="description">Описание</label>
-    <div class="col-sm-9">
-      <input id="description" type="text" ng-model='newDescription' placeholder="Введите описание" class="form-control">
-    </div>
   </div>
 
   <div class="row" ng-show="newMessages.length">

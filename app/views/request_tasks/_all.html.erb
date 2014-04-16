@@ -1,17 +1,71 @@
-<h1 style="display: inline-block;">Поручения, где я:
-<div class="btn-group">
-  <button type="button" class="btn btn-link btn-lg" ng-class="{active: whoAmI.assigner}" ng-click="whoAmIFilter('assigner')">Назначатель,</button>
-  <button type="button" class="btn btn-link btn-lg" ng-class="{active: whoAmI.executor}" ng-click="whoAmIFilter('executor')">Исполнитель,</button>
-  <button type="button" class="btn btn-link btn-lg" ng-class="{active: whoAmI.auditor}" ng-click="whoAmIFilter('auditor')">Контролер</button>
-</div>
+<h1>Поручения, где я:
+  <div class="btn-group">
+    <button type="button"
+            class="btn btn-link btn-lg"
+            ng-class="{active: whoAmI.assigner}"
+            ng-click="whoAmIFilter('assigner')">
+            Назначатель,
+    </button>
+    <button type="button"
+            class="btn btn-link btn-lg"
+            ng-class="{active: whoAmI.executor}"
+            ng-click="whoAmIFilter('executor')">
+            Исполнитель,
+    </button>
+    <button type="button"
+            class="btn btn-link btn-lg"
+            ng-class="{active: whoAmI.auditor}"
+            ng-click="whoAmIFilter('auditor')">
+            Контролер
+    </button>
+  </div>
 </h1>
 
-<h3 style="display: inline-block;">Которые:
-<div class="btn-group">
-  <button type="button" class="btn btn-link btn-lg" ng-class="{active: overdued.done}" ng-click="overduedFilter('done')">Просрочены и сделаны,</button>
-  <button type="button" class="btn btn-link btn-lg" ng-class="{active: overdued.not_done}" ng-click="overduedFilter('not_done')">Просрочены и не сделаны</button>
-</div>
-</h3>
+<h4 style="margin: 0px;">Которые:
+  <div class="btn-group">
+    <button type="button"
+            class="btn btn-link"
+            ng-class="{active: overdued.done}"
+            ng-click="overduedFilter('done')">
+            Просрочены и сделаны,
+    </button>
+    <button type="button"
+            class="btn btn-link"
+            ng-class="{active: overdued.not_done}"
+            ng-click="overduedFilter('not_done')">
+            Просрочены и не сделаны
+    </button>
+  </div>
+</h4>
+
+<h4 style="margin: 0px;" ng-show="whoAmI.assigner || whoAmI.executor || whoAmI.auditor">
+  Которые необходимо:
+  <div class="btn-group">
+    <button type="button"
+            class="btn btn-link"
+            ng-show="whoAmI.assigner"
+            ng-class="{active: indicators.assign}"
+            ng-click="indicatorsFilter('assign')">
+            Назначить
+            <span ng-show="whoAmI.executor || whoAmI.auditor">,</span>
+    </button>
+    <button type="button"
+            class="btn btn-link"
+            ng-show="whoAmI.executor"
+            ng-class="{active: indicators.execute}"
+            ng-click="indicatorsFilter('execute')">
+            Выполнить
+            <span ng-show="whoAmI.auditor">,</span>
+    </button>
+    <button type="button"
+            class="btn btn-link"
+            ng-show="whoAmI.auditor"
+            ng-class="{active: indicators.audit}"
+            ng-click="indicatorsFilter('audit')">
+            Проконтроллировать
+    </button>
+  </div>
+</h4>
 
 <div class="table-responsive standart-table-container" ng-show="!editing">
 <table class="table table-striped table-hover table-condensed table-bordered">
@@ -29,14 +83,14 @@
       <th>Дата проверки</th>
     </tr>
     <tr>
-      <td><input ng-model="search.id" class="form-control" placeholder="Поиск по номеру"></td>
-      <td><input ng-model="search.task_name" class="form-control" placeholder="Поиск по типу"></td>
-      <td><input ng-model="search.assigner_name" class="form-control" placeholder="Поиск по назначателю"></td>
-      <td><input ng-model="search.executor_name" class="form-control" placeholder="Поиск по иполнителю"></td>
-      <td><input ng-model="search.auditor_name" class="form-control" placeholder="Поиск по контролеру"></td>
-      <td><input ng-model="search.description" class="form-control" placeholder="Поиск по описанию"></td>
-      <td><input ng-model="search.creation_date" class="form-control" placeholder="Поиск по дате создания"></td>
-      <td><input ng-model="deadlineDateFilter" class="form-control" placeholder="Поиск по плановой дате"></td>
+      <td><input ng-model="search.id"             class="form-control" placeholder="Поиск по номеру"></td>
+      <td><input ng-model="search.task_name"      class="form-control" placeholder="Поиск по типу"></td>
+      <td><input ng-model="search.assigner_name"  class="form-control" placeholder="Поиск по назначателю"></td>
+      <td><input ng-model="search.executor_name"  class="form-control" placeholder="Поиск по иполнителю"></td>
+      <td><input ng-model="search.auditor_name"   class="form-control" placeholder="Поиск по контролеру"></td>
+      <td><input ng-model="search.description"    class="form-control" placeholder="Поиск по описанию"></td>
+      <td><input ng-model="search.creation_date"  class="form-control" placeholder="Поиск по дате создания"></td>
+      <td><input ng-model="deadlineDateFilter"    class="form-control" placeholder="Поиск по плановой дате"></td>
       <td><input ng-model="search.execution_date" class="form-control" placeholder="Поиск по дате выполнения"></td>
       <td><input ng-model="search.audition_date" class="form-control" placeholder="Поиск по дате проверки"></td>
     </tr>
