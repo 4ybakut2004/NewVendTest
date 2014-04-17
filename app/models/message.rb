@@ -1,5 +1,5 @@
 class Message < ActiveRecord::Base
-	has_many :request_messages, dependent: :destroy
+	  has_many :request_messages, dependent: :destroy
   	has_many :requests, through: :request_messages
   	has_many :message_tasks, dependent: :destroy
   	has_many :tasks, through: :message_tasks
@@ -11,6 +11,10 @@ class Message < ActiveRecord::Base
   	validates :request_type, presence: true
 
   	def attrs
-  		self.attributes.merge({ :tasks => self.tasks, :attributes => self.message_attributes.collect { |a| a.attribute } }) 
+  		self.attributes.merge({ :tasks => self.tasks, 
+                              :attributes => self.message_attributes.collect { |a| a.attribute } ,
+                              :request_type_name => Request.request_types[self.request_type.to_sym],
+                              :solver_name => self.employee ? self.employee.name : nil
+                            }) 
   	end
 end

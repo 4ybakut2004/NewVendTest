@@ -1,65 +1,37 @@
-<script type="text/javascript"> 
-  var messagesTemplate;
+<h1>Типы сигналов</h1>
 
-  $(document).ready(function() {
-    messagesTemplate = new MessagesTemplate();
-
-    messagesTemplate.init(<%= raw (@messages.map{ |r| r.attributes }).to_json %>);
-    messagesTemplate.parmDeleteActionSelector("a[data-remote].delete");
-    messagesTemplate.parmTableSelector("#messages-table-container");
-    messagesTemplate.parmEditFormSelector("#message_edit");
-    messagesTemplate.parmExtractingSelector("#message");
-
-    messagesTemplate.setEditAction();
-  });
-</script>
-
-<%= form_tag('message_group_destroy', :remote => true, :method => :post) do %>
 <div class="btn-group" style="margin-bottom: 15px;">
-  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newModal">Создать</button>
-  <%= submit_tag "Удалить", :class => "btn btn-default" %>
+  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newMessage" ng-click="resetNewMessage()">Создать</button>
+  <button type="button" class="btn btn-default" ng-click="deleteMessages()">Удалить</button>
 </div>
 
-<div id="messages-table-container" class="table-responsive standart-table-container">
-<table id="messages-table" class="table table-striped table-hover table-condensed table-bordered table-autosort">
+<div class="table-responsive standart-table-container" ng-show="!editing">
+<table class="table table-striped table-hover table-condensed table-bordered">
   <thead>
     <tr>
       <th></th>
-      <th class="table-sortable:numeric table-sortable">Номер</th>
-      <th class="table-sortable:default table-sortable">Наименование</th>
-      <th class="table-sortable:default table-sortable">Тип заявки</th>
-      <th class="table-sortable:default table-sortable">Решатель</th>
+      <th>Номер</th>
+      <th>Наименование</th>
+      <th>Тип заявки</th>
+      <th>Решатель</th>
     </tr>
     <tr>
-      <th></th>
-      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
-      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
-      <th>
-        <select class="form-control" onchange="Table.filter(this,this)">
-        <option value>Все</option>
-        <%= options_for_select(Request.request_types.map { |k, v| [ v, v ] }) %>
-        </select>
-      </th>
-      <th><input class="form-control" type="text" onkeyup="Table.filter(this,this)"></th>
+      <td></td>
+      <td><input ng-model="search.id" class="form-control" placeholder="Поиск по номеру"></td>
+      <td><input ng-model="search.name" class="form-control" placeholder="Поиск по наименованию"></td>
+      <td><input ng-model="search.request_type_name" class="form-control" placeholder="Поиск по типу заявки"></td>
+      <td><input ng-model="search.solver_name" class="form-control" placeholder="Поиск по решателю"></td>
     </tr>
   </thead>
 
-  <tbody id ="messages">
-    <% @messages.each do |message| %>
-      <tr id="<%= message.id %>" data-link="<%= edit_message_path(message) %>">
-        <td class="actions">
-          <%= check_box_tag 'for_destroy[]', message.id, false %>
-        </td>
-        <td><%= message.id %></td>
-        <td><%= message.name %></td>
-        <td><%= Request.request_types[message.request_type.to_sym] %></td>
-        <td><%= message.employee ? message.employee.name : nil %></td>
-      </tr>
-    <% end %>
+  <tbody>
+    <tr ng-repeat="message in messages | filter:search">
+      <td><input type="checkbox" ng-model="message.checked"></td>
+      <td ng-click="clickMessage($index)">{{message.id}}</td>
+      <td ng-click="clickMessage($index)">{{message.name}}</td>
+      <td ng-click="clickMessage($index)">{{message.request_type_name}}</td>
+      <td ng-click="clickMessage($index)">{{message.solver_name}}</td>
+    </tr>
   </tbody>
 </table>
-  
 </div>
-<% end %>
-
-<div id="message_edit" class="displacer"></div> 

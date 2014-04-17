@@ -1,111 +1,74 @@
-<div id="request">
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $("#new_message").on("ajax:success", function(e, data, status, xhr){
-      }).bind("ajax:error", function(e, xhr, status, error){
-        console.log(xhr.responseText);
-      });
-
-      function newElement(inputName, self) {
-        var liElem = $('<li><div class="row"><div class="col-md-8"></div><div class="col-md-2 text-left"></div></div></li>');
-        var inputElem = $('<input type="text" class="form-control" placeholder="Введите новый тип">');
-        var createButton = $('<button type="button" class="btn btn-default">Создать</button>');
-
-        createButton.click(function(event) {
-            var checkBoxElem = $('<%= check_box_tag "name", nil, true %> ').val(inputElem.val()).attr("name", inputName);
-            var checkBoxLiElem = $('<li class="new-type">' +
-            '<div class="btn-group" data-toggle="buttons">' +
-              '<label id="newCheck" class="btn btn-default active"></label>' +
-            '</div>' +
-            '</li>');
-
-            checkBoxElem.bind('change', function(){
-              checkBoxLiElem.remove();
-            });
-
-            checkBoxLiElem.find("#newCheck").append(checkBoxElem);
-            checkBoxLiElem.find("#newCheck").append(inputElem.val());
-
-            checkBoxLiElem.insertBefore(liElem);
-            liElem.remove();
-            event.preventDefault();
-        });
-
-        liElem.find(".col-md-8").first().append(inputElem);
-        liElem.find(".col-md-2").first().append(createButton);
-        liElem.insertBefore($(self));
-        inputElem.focus();
-      }
-
-      $('#new-type-button').find('button').click(function(event) {
-        newElement("new_tasks[]", this);
-      });
-
-      $('#new-attribute-button').find('button').click(function(event) {
-        newElement("new_attributes[]", this);
-      });
-
-      $('#newModal').on('hidden.bs.modal', function (e) {
-        $('li.new-type').remove();
-      });
-    });
-  </script>
-  
-  <%= form_for(@message, remote: true, :html => {:class => "form-horizontal", :style => "margin-top: 15px;"}) do |f| %>
-    <div id="request_type" class="form-group">
-      <%= f.label :request_type, "Тип заявки", :class => "col-sm-4 control-label" %>
-      <div class="col-sm-8">
-        <%= f.select :request_type, options_for_select(Request.request_types.map { |k, v| [ v, k ] }), {}, { :class => "form-control" } %>
-      </div>
+<form ng-submit="createMessage()" class="form-horizontal">
+  <div class="form-group" ng-class='{"has-warning": !inputs.requestType, "has-success": inputs.requestType}'>
+    <label class="col-sm-3 control-label" for="request_type">Тип заявки</label>
+    <div class="col-sm-9">
+      <%= select_tag :request_type, options_for_select(Request.request_types.map { |k, v| [ v, k ] }), :class => "form-control", "ng-required" => "true", "ng-model" => 'newRequestType'%>
     </div>
-    <div id="name" class="form-group">
-      <%= f.label :name, "Наименование", :class => "col-sm-4 control-label" %>
-      <div class="col-sm-8">
-        <%= f.text_field :name, :class => "form-control" %>
-      </div>
-    </div>
-    <div class="form-group">
-      <%= f.label :employee_id, "Решатель", :class => "col-sm-4 control-label" %>
-      <div class="col-sm-8">
-        <%= f.select :employee_id, options_for_select([["", nil]] + Employee.all.collect { |e| [ e.name, e.id ] }, :selected => @message.employee_id), {}, { :class => "form-control" } %>
-      </div>
-    </div>
+  </div>
 
-    <div class="row">
-      <div class="col-md-6">
-        <h3 class="text-center">Типы поручений</h3>
-        <ul class="non-point">
-          <% Task.all.each do |task| %>
-            <li>
-            <div class="btn-group" data-toggle="buttons">
-              <label class="btn btn-default">
-                <%= check_box_tag "tasks[]", task.id, false %> <%= task.name %>
-              </label>
-            </div>
-            </li>
-          <% end %>
-          <li id="new-type-button"><button type="button" class="btn btn-default">Новый тип поручения</button></li>
-        </ul>
-      </div>
-      <div class="col-md-6">
-        <h3 class="text-center">Типы атрибутов</h3>
-        <ul class="non-point">
-          <% Attribute.all.each do |attribute| %>
-            <li>
-            <div class="btn-group" data-toggle="buttons">
-              <label class="btn btn-default">
-                <%= check_box_tag "attributes[]", attribute.id, false %> <%= attribute.name %>
-              </label>
-            </div>
-            </li>
-          <% end %>
-          <li id="new-attribute-button"><button type="button" class="btn btn-default">Новый тип атрибута</button></li>
-        </ul>
-      </div>
+  <div class="form-group" ng-class='{"has-warning": !inputs.name, "has-success": inputs.name}'>
+    <label class="col-sm-3 control-label" for="name">Наименование</label>
+    <div class="col-sm-9">
+      <input id="name" type="text" ng-model='newName' placeholder="Введите наименование" class="form-control" ng-required="true">
     </div>
-    <div class="form-footer text-right">
-      <%= f.submit "Подтвердить", class: "btn btn-primary" %>
-    </div>
-  <% end %>  
-</div>
+  </div>
 
+  <div class="form-group" ng-class='{"has-warning": !inputs.solverId, "has-success": inputs.solverId}'>
+    <label class="col-sm-3 control-label" for="solver_id">Решатель</label>
+    <div class="col-sm-9">
+      <select ng-model="newSolverId" 
+        ng-options="employee.id as employee.name for employee in employees"
+        class="form-control">
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="text-center">Типы поручений</h3>
+      <ul class="non-point">
+        <li ng-repeat="task in tasks">
+          <button ng-class="{active: task.checked}" type="button" class="btn btn-default" ng-click="check(task)">{{task.name}}</button>
+        </li>
+        <li ng-repeat="task in newTasks">
+          <button type="button" class="btn btn-default active" ng-click="deleteNewTask($index)">{{task}}</button>
+        </li>
+        <li ng-show="!showNewTask">
+          <button type="button" class="btn btn-default" ng-click="showNewTask=true">Новый тип поручения</button>
+        </li>
+        <li ng-show="showNewTask">
+          <input type="text" placeholder="Введите новый тип" class="form-control" ng-model="newTask">
+        </li>
+        <li ng-show="showNewTask">
+          <button type="button" class="btn btn-default" ng-click="createTask()">Создать</button>
+          <button type="button" class="btn btn-default" ng-click="showNewTask=false">Отмена</button>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <h3 class="text-center">Типы атрибутов</h3>
+      <ul class="non-point">
+        <li ng-repeat="attribute in attributes">
+          <button ng-class="{active: attribute.checked}" type="button" class="btn btn-default" ng-click="check(attribute)">{{attribute.name}}</button>
+        </li>
+        <li ng-repeat="attribute in newAttributes">
+          <button type="button" class="btn btn-default active" ng-click="deleteNewAttribute($index)">{{attribute}}</button>
+        </li>
+        <li ng-show="!showNewAttribute">
+          <button type="button" class="btn btn-default" ng-click="showNewAttribute=true">Новый тип атрибута</button>
+        </li>
+        <li ng-show="showNewAttribute">
+          <input type="text" placeholder="Введите новый тип" class="form-control" ng-model="newAttribute">
+        </li>
+        <li ng-show="showNewAttribute">
+          <button type="button" class="btn btn-default" ng-click="createAttribute()">Создать</button>
+          <button type="button" class="btn btn-default" ng-click="showNewAttribute=false">Отмена</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 text-right form-footer"><input type="submit" value="Создать" class="btn btn-primary"></div>
+  </div>
+</form>
