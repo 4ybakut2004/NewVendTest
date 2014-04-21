@@ -184,12 +184,8 @@ function RequestsCtrl($scope, Request, Message, Machine) {
 		return (str.toString().length == 1) ? ('0' + str) : str;
 	}
 
-	$scope.formattedDate = function(dateStr) {
-		if(dateStr == '' || dateStr == null) return '';
-		var d = new Date(dateStr);
-		return addZero(d.getDate()) + '.' + addZero(d.getMonth() + 1) + '.' + d.getFullYear() + ' ' + 
-		addZero(d.getHours()) + ':' + addZero(d.getMinutes()) + ':' + addZero(d.getSeconds());
-	};
+	$scope.formattedDate = formattedDate;
+	$scope.dateForInput = dateForInput;
 }
 
 newVending.controller("RequestsCtrl",['$scope', 'Request', 'Message', 'Machine', RequestsCtrl]);

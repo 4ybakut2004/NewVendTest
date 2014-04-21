@@ -71,7 +71,7 @@ class RequestTasksController < ApplicationController
 		respond_to do |format|
 	      if @request_task.update(request_task_params)
 	        format.html { redirect_to @request_task, notice: 'Request_task was successfully updated.' }
-	        format.json { render json: @request_task.attrs, status: :created, location: @request_task }
+	        format.json { render json: @request_task.attrs, status: :created }
 	      else
 	        format.html { render action: 'edit' }
 	        format.json { render json: @request_task.errors, status: :unprocessable_entity }

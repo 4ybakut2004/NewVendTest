@@ -34,6 +34,22 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		not_done: false
 	};
 
+	$scope.$watch('editing', function() {
+		$timeout(function(){$scope.setWidth();}, 300);
+	});
+
+	$scope.$watch('whoAmI', function() {
+		$timeout(function(){$scope.setWidth();}, 300);
+	});
+
+	$scope.$watch('indicators', function() {
+		$timeout(function(){$scope.setWidth();}, 300);
+	});
+
+	$scope.$watch('overdued', function() {
+		$timeout(function(){$scope.setWidth();}, 300);
+	});
+
 	$scope.$watch('editingExecutorId', function() {
 		$scope.editingInputs.executorId = ($scope.editingExecutorId != "" && $scope.editingExecutorId != null);
 	});
@@ -50,7 +66,6 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 				var filterDate = new Date(date[4], date[3] - 1, date[2]);
 				angular.forEach($scope.requestTasks, function(requestTask) {
 					var deadlineDate = new Date(requestTask.deadline_date);
-					console.log(deadlineDate);
 					switch(date[1]) {
 						case '<':
 							if(deadlineDate < filterDate) {
@@ -129,10 +144,9 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		$scope.editingDeadlineDate = "";
 		$scope.editingExecutionDate = "";
 		$scope.editingAuditionDate = "";
+		$scope.editingIdx = null;
 
 		$scope.editing = false;
-
-		$timeout(function(){$scope.setWidth();}, 300);
 	};
 
 	$scope.clickRequestTask = function(idx) {
@@ -154,35 +168,8 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		});
 	};
 
-	function addZero(str) {
-		return (str.toString().length == 1) ? ('0' + str) : str;
-	}
-
-	$scope.formattedDate = function(dateStr) {
-		if(dateStr == '' || dateStr == null) return '';
-		var d = new Date(dateStr);
-		return addZero(d.getDate()) + '.' + addZero(d.getMonth() + 1) + '.' + d.getFullYear() + ' ' + 
-		addZero(d.getHours()) + ':' + addZero(d.getMinutes()) + ':' + addZero(d.getSeconds());
-	};
-
-	$scope.dateForInput = function(dateStr) {
-		if(dateStr == '' || dateStr == null) return '';
-		var d = new Date(dateStr);
-		return d.getFullYear() + "-" + 
-			addZero((d.getMonth() + 1)) + "-" +
-			addZero(d.getDate()) + "T" +
-			addZero(d.getHours()) + ":" +
-			addZero(d.getMinutes()) + ":" +
-			addZero(d.getSeconds());
-	};
-
-	$scope.setMinDate = function($event) {
-		if(!$scope.clicked) {
-			var str = $scope.dateForInput(new Date());
-			$($event.target).attr('min', str);
-			$scope.clicked = true;
-		}
-	};
+	$scope.formattedDate = formattedDate;
+	$scope.dateForInput = dateForInput;
 
 	$scope.canEditDeadlineDate = function(employee_id) {
 		return ($scope.editingIdx != null) ? 

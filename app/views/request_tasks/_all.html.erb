@@ -1,64 +1,66 @@
 <div style="display: inline-block; vertical-align:top">
     <h1>Поручения, где я:</h1>
 </div>
-<div style="display: inline-block; vertical-align:top">
-    <h1>
-        <button type="button"
-                class="btn btn-link btn-lg"
-                ng-class="{active: whoAmI.assigner}"
-                ng-click="whoAmIFilter('assigner')">
-                Назначатель,
-        </button>
-    </h1>
-    <h4>
-        <button type="button"
-                class="btn btn-link"
-                ng-show="whoAmI.assigner"
-                ng-class="{active: indicators.assign}"
-                ng-click="indicatorsFilter('assign')">
-                Назначить
-        </button>
-    </h4>
-</div>
+<div style="display: inline-block;">
+    <div style="display: inline-block; vertical-align:top">
+        <h1>
+            <button type="button"
+                    class="btn btn-link btn-lg"
+                    ng-class="{active: whoAmI.assigner}"
+                    ng-click="whoAmIFilter('assigner')">
+                    Назначатель,
+            </button>
+        </h1>
+        <h4>
+            <button type="button"
+                    class="btn btn-link"
+                    ng-show="whoAmI.assigner"
+                    ng-class="{active: indicators.assign}"
+                    ng-click="indicatorsFilter('assign')">
+                    Назначить
+            </button>
+        </h4>
+    </div>
 
-<div style="display: inline-block; vertical-align:top">
-    <h1>
-        <button type="button"
-                class="btn btn-link btn-lg"
-                ng-class="{active: whoAmI.executor}"
-                ng-click="whoAmIFilter('executor')">
-                Исполнитель,
-        </button>
-    </h1>
-    <h4>
-        <button type="button"
-                class="btn btn-link"
-                ng-show="whoAmI.executor"
-                ng-class="{active: indicators.execute}"
-                ng-click="indicatorsFilter('execute')">
-                Выполнить
-        </button>
-    </h4>
-</div>
+    <div style="display: inline-block; vertical-align:top">
+        <h1>
+            <button type="button"
+                    class="btn btn-link btn-lg"
+                    ng-class="{active: whoAmI.executor}"
+                    ng-click="whoAmIFilter('executor')">
+                    Исполнитель,
+            </button>
+        </h1>
+        <h4>
+            <button type="button"
+                    class="btn btn-link"
+                    ng-show="whoAmI.executor"
+                    ng-class="{active: indicators.execute}"
+                    ng-click="indicatorsFilter('execute')">
+                    Выполнить
+            </button>
+        </h4>
+    </div>
 
-<div style="display: inline-block; vertical-align:top">
-    <h1>
-        <button type="button"
-                class="btn btn-link btn-lg"
-                ng-class="{active: whoAmI.auditor}"
-                ng-click="whoAmIFilter('auditor')">
-                Контролер
-        </button>
-    </h1>
-    <h4>
-        <button type="button"
-                class="btn btn-link"
-                ng-show="whoAmI.auditor"
-                ng-class="{active: indicators.audit}"
-                ng-click="indicatorsFilter('audit')">
-                Проконтроллировать
-        </button>
-    </h4>
+    <div style="display: inline-block; vertical-align:top">
+        <h1>
+            <button type="button"
+                    class="btn btn-link btn-lg"
+                    ng-class="{active: whoAmI.auditor}"
+                    ng-click="whoAmIFilter('auditor')">
+                    Контролер
+            </button>
+        </h1>
+        <h4>
+            <button type="button"
+                    class="btn btn-link"
+                    ng-show="whoAmI.auditor"
+                    ng-class="{active: indicators.audit}"
+                    ng-click="indicatorsFilter('audit')">
+                    Проконтроллировать
+            </button>
+        </h4>
+    </div>
 </div>
 
 <h4 style="margin: 0px;">Которые:
