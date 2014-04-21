@@ -10,7 +10,7 @@ newVending.factory('RequestTask', ['$resource', function($resource) {
   };
 
   RequestTask.prototype.get = function(id) {
-    this.service.get({requestTaskId: id});
+    return this.service.get({requestTaskId: id});
   };
 
   RequestTask.prototype.delete = function(id) {

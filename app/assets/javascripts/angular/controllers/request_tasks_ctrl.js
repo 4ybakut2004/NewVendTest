@@ -1,4 +1,4 @@
-function RequestTasksCtrl($scope, RequestTask, Employee) {
+function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 	function getURLParameter(name) {
 		return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
 	}
@@ -36,6 +36,10 @@ function RequestTasksCtrl($scope, RequestTask, Employee) {
 
 	$scope.$watch('editingExecutorId', function() {
 		$scope.editingInputs.executorId = ($scope.editingExecutorId != "" && $scope.editingExecutorId != null);
+	});
+
+	$scope.$watch('search', function(){
+		$scope.setWidth();
 	});
 
 	$scope.$watch('deadlineDateFilter', function() {
@@ -125,21 +129,29 @@ function RequestTasksCtrl($scope, RequestTask, Employee) {
 		$scope.editingDeadlineDate = "";
 		$scope.editingExecutionDate = "";
 		$scope.editingAuditionDate = "";
+
 		$scope.editing = false;
+
+		$timeout(function(){$scope.setWidth();}, 300);
 	};
 
 	$scope.clickRequestTask = function(idx) {
-		$scope.editingId = $scope.requestTasks[idx].id;
-		$scope.editingIdx = idx;
+		var r = RequestTask.get($scope.requestTasks[idx].id);
+		r.$promise.then(function() {
+			$scope.editingRequestTask = r;
+			$scope.editingRequest = r.request;
+			$scope.editingId = r.id;
+			$scope.editingIdx = idx;
 
-		$scope.editingExecutorId = $scope.requestTasks[idx].executor_id;
-		$scope.editingAuditorId = $scope.requestTasks[idx].auditor_id;
-		$scope.editingDescription = $scope.requestTasks[idx].description;
-		$scope.editingDeadlineDate = $scope.dateForInput($scope.requestTasks[idx].deadline_date);
-		$scope.editingExecutionDate = $scope.dateForInput($scope.requestTasks[idx].execution_date);
-		$scope.editingAuditionDate = $scope.dateForInput($scope.requestTasks[idx].audition_date);
+			$scope.editingExecutorId = r.executor_id;
+			$scope.editingAuditorId = r.auditor_id;
+			$scope.editingDescription = r.description;
+			$scope.editingDeadlineDate = $scope.dateForInput(r.deadline_date);
+			$scope.editingExecutionDate = $scope.dateForInput(r.execution_date);
+			$scope.editingAuditionDate = $scope.dateForInput(r.audition_date);
 
-		$scope.editing = true;
+			$scope.editing = true;
+		});
 	};
 
 	function addZero(str) {
@@ -237,4 +249,4 @@ function RequestTasksCtrl($scope, RequestTask, Employee) {
 	};
 }
 
-newVending.controller("RequestTasksCtrl",['$scope', 'RequestTask', 'Employee', RequestTasksCtrl]);
+newVending.controller("RequestTasksCtrl",['$scope', '$timeout', 'RequestTask', 'Employee', RequestTasksCtrl]);

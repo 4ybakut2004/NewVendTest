@@ -2,6 +2,8 @@ class RequestTasksController < ApplicationController
 	before_action :set_request_task, only: [:show, :edit, :update, :destroy]
 	before_action :signed_in_user
 
+	respond_to :html, :json
+
 	def index
 		filter = { }
 		date_filter = []
@@ -59,6 +61,10 @@ class RequestTasksController < ApplicationController
 	      format.html { }
 	      format.json { render json: RequestTask.joins(:request_message).order("created_at DESC").where(filter).where(date_filter.join(' OR ')).where(indicators_filter.join(' OR ')).collect { |rt| rt.attrs } }
 	    end
+	end
+
+	def show
+		respond_with @request_task.getFullInfo
 	end
 
 	def update

@@ -50,3 +50,63 @@ function DoubleScroll($compile, $window)
 }
 
 newVending.directive('doublescroll', DoubleScroll);
+
+function FixedHeader($compile, $window) 
+{       
+    return {
+	    link: function($scope, element, attrs) {
+			var fixedHeader;
+			var table = element.find('table').first();
+			var h;
+
+			var setWidth = function() {
+				if(fixedHeader) {
+					fixedHeader.css({
+						width: table.width()
+					});
+					h.find('tr').first().find('th').each(function(index) {
+						$(this).css({
+							width: $(table.find('tr').first().find('th')[index]).innerWidth()
+						});
+					});
+				}
+			};
+
+			$scope.setWidth = setWidth;
+
+			var cloneHeader = function() {
+				if(fixedHeader) {
+					fixedHeader.remove();
+					fixedHeader = undefined;
+				}
+
+				h = element.find('thead').first().clone();
+
+				fh = $('<table></table>');
+				fh.addClass('standart-table-header table table-striped table-hover table-condensed');
+				fh.append(h);
+				fixedHeader = $compile(fh)($scope);
+
+				setWidth();
+
+				element.prepend(fixedHeader);
+			};
+
+			element.bind('scroll', function() {
+				if(!fixedHeader) {
+					cloneHeader();
+				}
+				fixedHeader.css({
+					top: -table.position().top
+				});
+				setWidth();
+			});
+
+			$(window).resize(function() {
+				setWidth();
+			});
+        }
+    };
+}
+
+newVending.directive('fixedheader', FixedHeader);

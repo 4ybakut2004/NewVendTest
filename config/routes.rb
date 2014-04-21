@@ -5,7 +5,7 @@ NewVend::Application.routes.draw do
   resources :sessions, only: [:new, :create, :destroy]
   resources :requests, only: [:index, :destroy, :create, :update, :edit, :show]
   resources :messages, only: [:index, :destroy, :create, :update, :edit]
-  resources :request_tasks, only: [:index, :edit, :update]
+  resources :request_tasks, only: [:index, :edit, :update, :show]
   resources :tasks, only: [:index, :create, :destroy, :update]
   resources :employees, only: [:index, :create, :destroy, :edit, :update]
   resources :message_tasks, only: [:index]

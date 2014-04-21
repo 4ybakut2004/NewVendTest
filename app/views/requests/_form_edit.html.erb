@@ -9,6 +9,11 @@
           <label class="col-sm-4 text-right" for="registrar_name">Регистратор</label>
           <div class="col-sm-8 text-left" id="registrar_name">{{editingRegistrarName}}</div>
         </div>
+
+        <div class="form-group">
+          <label class="col-sm-4 text-right" for="created_at">Дата регистрации</label>
+          <div class="col-sm-8 text-left" id="created_at">{{formattedDate(requests[editingIdx].created_at)}}</div>
+        </div>
       </div>
 
       <div class="col-md-6">
