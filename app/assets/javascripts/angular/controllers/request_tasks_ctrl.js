@@ -1,8 +1,4 @@
 function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
-	function getURLParameter(name) {
-		return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
-	}
-
 	$scope.requestTasks = RequestTask.all({ request_id: getURLParameter('request_id') });
 	$scope.employees = Employee.all();
 	$scope.editing = false;
@@ -35,7 +31,9 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 	};
 
 	$scope.$watch('editing', function() {
-		$timeout(function(){$scope.setWidth();}, 300);
+		if($scope.editing == false) {
+			$timeout(function(){$scope.setWidth();}, 300);
+		}
 	});
 
 	$scope.$watch('whoAmI', function() {

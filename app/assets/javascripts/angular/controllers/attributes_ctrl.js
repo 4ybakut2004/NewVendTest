@@ -1,4 +1,4 @@
-function AttributesCtrl($scope, Attribute, Message) {
+function AttributesCtrl($scope, $timeout, Attribute, Message) {
 	$scope.attributes = Attribute.all();
 	$scope.messages = Message.all();
 	$scope.newAttributeType = "number";
@@ -14,6 +14,16 @@ function AttributesCtrl($scope, Attribute, Message) {
 		name: false,
 		attributeType: false
 	};
+
+	$scope.$watch('editing', function() {
+		if($scope.editing == false) {
+			$timeout(function(){$scope.setWidth();}, 300);
+		}
+	});
+
+	$scope.$watch('search', function() {
+		$scope.setWidth();
+	});
 
 	$scope.$watch('newName', function() {
 		$scope.inputs.name = ($scope.newName != "" && $scope.newName != null);
@@ -96,4 +106,4 @@ function AttributesCtrl($scope, Attribute, Message) {
 	};
 }
 
-newVending.controller("AttributesCtrl",['$scope', 'Attribute', 'Message', AttributesCtrl]);
+newVending.controller("AttributesCtrl",['$scope', '$timeout', 'Attribute', 'Message', AttributesCtrl]);

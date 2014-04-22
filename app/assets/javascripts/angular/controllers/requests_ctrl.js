@@ -1,4 +1,4 @@
-function RequestsCtrl($scope, Request, Message, Machine) {
+function RequestsCtrl($scope, $timeout, Request, Message, Machine) {
 	$scope.requests = Request.all();
 	$scope.messages = Message.all();
 	$scope.machines = Machine.all();
@@ -20,6 +20,20 @@ function RequestsCtrl($scope, Request, Message, Machine) {
 	$scope.whoAmI = {
 		registrar: false
 	};
+
+	$scope.$watch('editing', function() {
+		if($scope.editing == false) {
+			$timeout(function(){$scope.setWidth();}, 300);
+		}
+	});
+
+	$scope.$watch('whoAmI', function() {
+		$timeout(function(){$scope.setWidth();}, 300);
+	});
+
+	$scope.$watch('search', function(){
+		$scope.setWidth();
+	});
 
 	$scope.$watch('newRequestType', function() {
 		$scope.inputs.requestType = ($scope.newRequestType != "" && $scope.newRequestType != null);
@@ -188,4 +202,4 @@ function RequestsCtrl($scope, Request, Message, Machine) {
 	$scope.dateForInput = dateForInput;
 }
 
-newVending.controller("RequestsCtrl",['$scope', 'Request', 'Message', 'Machine', RequestsCtrl]);
+newVending.controller("RequestsCtrl",['$scope', '$timeout', 'Request', 'Message', 'Machine', RequestsCtrl]);

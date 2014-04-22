@@ -1,4 +1,4 @@
-function MessagesCtrl($scope, Message, Task, Attribute, Employee) {
+function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee) {
 	$scope.messages = Message.all();
 	$scope.tasks = Task.all();
 	$scope.attributes = Attribute.all();
@@ -27,6 +27,16 @@ function MessagesCtrl($scope, Message, Task, Attribute, Employee) {
 		name: false,
 		solverId: false
 	};
+
+	$scope.$watch('editing', function() {
+		if($scope.editing == false) {
+			$timeout(function(){$scope.setWidth();}, 300);
+		}
+	});
+
+	$scope.$watch('search', function() {
+		$scope.setWidth();
+	});
 
 	$scope.$watch('newName', function() {
 		$scope.inputs.name = ($scope.newName != "" && $scope.newName != null);
@@ -222,4 +232,4 @@ function MessagesCtrl($scope, Message, Task, Attribute, Employee) {
 	};
 }
 
-newVending.controller("MessagesCtrl",['$scope', 'Message', 'Task', 'Attribute', 'Employee', MessagesCtrl]);
+newVending.controller("MessagesCtrl",['$scope', '$timeout', 'Message', 'Task', 'Attribute', 'Employee', MessagesCtrl]);

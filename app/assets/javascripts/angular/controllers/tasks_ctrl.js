@@ -1,4 +1,4 @@
-function TasksCtrl($scope, Task, Message) {
+function TasksCtrl($scope, $timeout, Task, Message) {
 	$scope.tasks = Task.all();
 	$scope.messages = Message.all();
 
@@ -13,6 +13,16 @@ function TasksCtrl($scope, Task, Message) {
 		name: false,
 		deadline: false
 	};
+
+	$scope.$watch('editing', function() {
+		if($scope.editing == false) {
+			$timeout(function(){$scope.setWidth();}, 300);
+		}
+	});
+
+	$scope.$watch('search', function() {
+		$scope.setWidth();
+	});
 
 	$scope.$watch('newName', function() {
 		$scope.inputs.name = ($scope.newName != "" && $scope.newName != null);
@@ -95,4 +105,4 @@ function TasksCtrl($scope, Task, Message) {
 	};
 }
 
-newVending.controller("TasksCtrl",['$scope', 'Task', 'Message', TasksCtrl]);
+newVending.controller("TasksCtrl",['$scope', '$timeout', 'Task', 'Message', TasksCtrl]);

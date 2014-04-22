@@ -36,7 +36,7 @@ function FixedHeader($compile)
 				h = element.find('thead').first().clone();
 
 				fh = $('<table></table>');
-				fh.addClass('standart-table-header table table-striped table-hover table-condensed');
+				fh.addClass('standart-table-header table table-hover table-condensed');
 				fh.append(h);
 				fixedHeader = $compile(fh)($scope);
 

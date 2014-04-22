@@ -1,4 +1,4 @@
-function EmployeesCtrl($scope, Employee) {
+function EmployeesCtrl($scope, $timeout, Employee) {
 	$scope.employees = Employee.all();
 	$scope.editing = false;
 
@@ -9,6 +9,16 @@ function EmployeesCtrl($scope, Employee) {
 	$scope.editingInputs = {
 		name: false
 	};
+
+	$scope.$watch('editing', function() {
+		if($scope.editing == false) {
+			$timeout(function(){$scope.setWidth();}, 300);
+		}
+	});
+
+	$scope.$watch('search', function() {
+		$scope.setWidth();
+	});
 
 	$scope.$watch('newName', function() {
 		$scope.inputs.name = ($scope.newName != "" && $scope.newName != null);
@@ -65,4 +75,4 @@ function EmployeesCtrl($scope, Employee) {
 	};
 }
 
-newVending.controller("EmployeesCtrl",['$scope', 'Employee', EmployeesCtrl]);
+newVending.controller("EmployeesCtrl",['$scope', '$timeout', 'Employee', EmployeesCtrl]);

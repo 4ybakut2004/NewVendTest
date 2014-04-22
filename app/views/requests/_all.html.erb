@@ -19,40 +19,39 @@
   <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newRequest" ng-click="resetNewRequest()">Создать</button>
   <button type="button" class="btn btn-default" ng-click="deleteRequests()">Удалить</button>
 </div>
+<div fixedheader class="standart-table-container" ng-show="!editing">
+  <table class="table table-hover table-condensed">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Номер</th>
+        <th>Регистратор</th>
+        <th>Автомат</th>
+        <th>Описание</th>
+        <th>Тип</th>
+        <th>Дата регистрации</th>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input ng-model="search.id" class="form-control input-sm"></td>
+        <td><input ng-model="search.registrar_name" class="form-control input-sm"></td>
+        <td><input ng-model="search.machine_name" class="form-control input-sm"></td>
+        <td><input ng-model="search.description" class="form-control input-sm"></td>
+        <td><input ng-model="search.request_type_name" class="form-control input-sm"></td>
+        <td><input ng-model="search.created_at" class="form-control input-sm"></td>
+      </tr>
+    </thead>
 
-<div class="table-responsive standart-table-container" ng-show="!editing">
-<table class="table table-striped table-hover table-condensed table-bordered">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Номер</th>
-      <th>Регистратор</th>
-      <th>Автомат</th>
-      <th>Описание</th>
-      <th>Тип</th>
-      <th>Дата регистрации</th>
-    </tr>
-    <tr>
-      <td></td>
-      <td><input ng-model="search.id" class="form-control" placeholder="Поиск по номеру"></td>
-      <td><input ng-model="search.registrar_name" class="form-control" placeholder="Поиск по регистратору"></td>
-      <td><input ng-model="search.machine_name" class="form-control" placeholder="Поиск по автомату"></td>
-      <td><input ng-model="search.description" class="form-control" placeholder="Поиск по описанию"></td>
-      <td><input ng-model="search.request_type_name" class="form-control" placeholder="Поиск по типу"></td>
-      <td><input ng-model="search.created_at" class="form-control" placeholder="Поиск по дате регистрации"></td>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr ng-repeat="request in requests | filter:search">
-      <td><input type="checkbox" ng-model="request.checked"></td>
-      <td ng-click="clickRequest($index)">{{request.id}}</td>
-      <td ng-click="clickRequest($index)">{{request.registrar_name}}</td>
-      <td ng-click="clickRequest($index)">{{request.machine_name}}</td>
-      <td ng-click="clickRequest($index)">{{request.description}}</td>
-      <td ng-click="clickRequest($index)">{{request.request_type_name}}</td>
-      <td ng-click="clickRequest($index)">{{formattedDate(request.created_at)}}</td>
-    </tr>
-  </tbody>
-</table>
+    <tbody>
+      <tr ng-repeat="request in requests | filter:search">
+        <td><input type="checkbox" ng-model="request.checked"></td>
+        <td ng-click="clickRequest($index)">{{request.id}}</td>
+        <td ng-click="clickRequest($index)">{{request.registrar_name}}</td>
+        <td ng-click="clickRequest($index)">{{request.machine_name}}</td>
+        <td ng-click="clickRequest($index)">{{request.description}}</td>
+        <td ng-click="clickRequest($index)">{{request.request_type_name}}</td>
+        <td ng-click="clickRequest($index)">{{formattedDate(request.created_at)}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
