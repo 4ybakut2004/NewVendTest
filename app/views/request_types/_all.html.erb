@@ -1,0 +1,31 @@
+<h1>Типы заявок</h1>
+
+<div class="btn-group" style="margin-bottom: 15px;">
+  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newRequestType">Создать</button>
+  <button type="button" class="btn btn-default" ng-click="deleteRequestTypes()">Удалить</button>
+</div>
+
+<div fixedheader class="standart-table-container" ng-show="!editing">
+  <table class="table table-hover table-condensed">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Номер</th>
+        <th>Наименование</th>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input ng-model="search.id" class="form-control input-sm"></td>
+        <td><input ng-model="search.name" class="form-control input-sm"></td>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr ng-repeat="requestType in requestTypes | filter:search">
+        <td><input type="checkbox" ng-model="requestType.checked"></td>
+        <td ng-click="clickRequestType($index)">{{requestType.id}}</td>
+        <td ng-click="clickRequestType($index)">{{requestType.name}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

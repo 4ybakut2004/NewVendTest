@@ -192,10 +192,6 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine) {
 		requestsFilter();
 	};
 
-	function addZero(str) {
-		return (str.toString().length == 1) ? ('0' + str) : str;
-	}
-
 	$scope.formattedDate = formattedDate;
 	$scope.dateForInput = dateForInput;
 }

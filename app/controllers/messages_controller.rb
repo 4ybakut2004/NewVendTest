@@ -14,6 +14,7 @@ class MessagesController < ApplicationController
 	    @message  = Message.new(message_params)
 	    tasks = params[:tasks] || []
 	    attributes = params[:attributes] || []
+	    request_types = params[:requestTypes] || []
 	    new_tasks = params[:new_tasks] || []
 	    new_attributes = params[:new_attributes] || []
 
@@ -27,6 +28,11 @@ class MessagesController < ApplicationController
 			attributes.each do |a|
 				message_attribute = MessageAttribute.create(:message_id => @message.id,
 					:attribute_id => a)
+			end
+
+			request_types.each do |rt|
+				request_type_message = RequestTypeMessage.create(:message_id => @message.id,
+					:request_type_id => rt)
 			end
 
 			new_tasks.each do |t|
@@ -53,6 +59,7 @@ class MessagesController < ApplicationController
 	def update
 		tasks = params[:tasks] || []
 	    attributes = params[:attributes] || []
+	    request_types = params[:requestTypes] || []
 
 		respond_to do |format|
 		  if @message.update(message_params)
@@ -69,6 +76,14 @@ class MessagesController < ApplicationController
 		  	  attributes.each { |attribute|
 		  	  	MessageAttribute.create(:message_id => @message.id,
 					:attribute_id => attribute)
+		  	  }
+		  	end
+
+		  	if params[:messageRequestTypesChanged]
+		  	  @message.request_type_messages.each { |rtm| rtm.destroy }
+		  	  request_types.each { |rt|
+		  	  	RequestTypeMessage.create(:message_id => @message.id,
+					:request_type_id => rt)
 		  	  }
 		  	end
 
@@ -103,6 +118,6 @@ class MessagesController < ApplicationController
 
 	    # Never trust parameters from the scary internet, only allow the white list through.
 	    def message_params
-	      params.require(:message).permit(:name, :request_type, :employee_id)
+	      params.require(:message).permit(:name, :employee_id)
 	    end
 end

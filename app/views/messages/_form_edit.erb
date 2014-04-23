@@ -3,13 +3,6 @@
   <h1 class="text-center">Тип сигнала {{editingId}}</h1>
   <form ng-submit="updateMessage()" class="form-horizontal">
 
-    <div class="form-group" ng-class='{"has-warning": !editingInputs.requestType, "has-success": editingInputs.requestType}'>
-      <label class="col-sm-2 control-label" for="request_type">Тип заявки</label>
-      <div class="col-sm-8">
-        <%= select_tag :request_type, options_for_select(Request.request_types.map { |k, v| [ v, k ] }), :class => "form-control", "ng-required" => "true", "ng-model" => 'editingRequestType'%>
-      </div>
-    </div>
-
     <div class="form-group" ng-class='{"has-warning": !editingInputs.name, "has-success": editingInputs.name}'>
       <label class="col-sm-2 control-label" for="name">Наименование</label>
       <div class="col-sm-8">
@@ -53,6 +46,18 @@
           </li>
           <li ng-repeat="attribute in messageAttributes | filter:notExistsFilter">
             <button type="button" class="btn btn-default" ng-click="changeMessageAttribute(attribute)">{{attribute.name}}</button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-md-4">
+        <h4 style="margin-top: 0px;">Типы заявок</h4>
+        <ul class="non-point">
+          <li ng-repeat="requestType in messageRequestTypes | filter:existsFilter">
+            <button type="button" class="btn btn-default active" ng-click="changeMessageRequestType(requestType)">{{requestType.name}}</button>
+          </li>
+          <li ng-repeat="requestType in messageRequestTypes | filter:notExistsFilter">
+            <button type="button" class="btn btn-default" ng-click="changeMessageRequestType(requestType)">{{requestType.name}}</button>
           </li>
         </ul>
       </div>

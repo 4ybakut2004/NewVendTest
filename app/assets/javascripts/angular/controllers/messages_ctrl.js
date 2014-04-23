@@ -1,11 +1,11 @@
-function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee) {
+function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, RequestType) {
 	$scope.messages = Message.all();
 	$scope.tasks = Task.all();
 	$scope.attributes = Attribute.all();
 	$scope.employees = Employee.all();
+	$scope.requestTypes = RequestType.all();
 	$scope.newAttributes = [];
 	$scope.newTasks = [];
-	$scope.newRequestType = "phone";
 	$scope.editing = false;
 
 	$scope.existsFilter = {
@@ -65,13 +65,11 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee) {
 	$scope.resetNewMessage = function() {
 		$scope.newName = "";
 		$scope.newSolverId = $scope.employees[0].id;
-		$scope.newRequestType = "phone";
 	};
 
 	$scope.createMessage = function() {
 		var attr = {};
 		attr.name = $scope.newName;
-		attr.request_type = $scope.newRequestType;
 		attr.employee_id = $scope.newSolverId;
 		attr.new_tasks = $scope.newTasks;
 		attr.new_attributes = $scope.newAttributes;
@@ -80,6 +78,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee) {
 		angular.forEach($scope.tasks, function(task){
 			if(task.checked) {
 				attr.tasks.push(task.id);
+				task.checked = false;
 			}
 		});
 
@@ -87,6 +86,15 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee) {
 		angular.forEach($scope.attributes, function(attribute){
 			if(attribute.checked) {
 				attr.attributes.push(attribute.id);
+				attribute.checked = false;
+			}
+		});
+
+		attr.requestTypes = [];
+		angular.forEach($scope.requestTypes, function(requestType){
+			if(requestType.checked) {
+				attr.requestTypes.push(requestType.id);
+				requestType.checked = false;
 			}
 		});
 
@@ -100,7 +108,6 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee) {
 	$scope.updateMessage = function() {
 		var attr = {};
 		attr.name = $scope.editingName;
-		attr.request_type = $scope.editingRequestType;
 		attr.employee_id = $scope.editingSolverId;
 
 		if($scope.messageTaskChanged) {
@@ -123,11 +130,20 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee) {
 			attr.messageAttributeChanged = true;
 		}
 
+		if($scope.messageRequestTypesChanged) {
+			attr.requestTypes = [];
+			angular.forEach($scope.messageRequestTypes, function(messageRequestType) {
+				if(messageRequestType.exists) {
+					attr.requestTypes.push(messageRequestType.id);
+				}
+			});
+			attr.messageRequestTypesChanged = true;
+		}
+
 		var updatedMessage = Message.update($scope.editingId, attr);
 		$scope.messages[$scope.editingIdx] = updatedMessage;
 
 		$scope.editingName = "";
-		$scope.editingRequestType = "";
 		$scope.editingSolverId = "";
 		$scope.editing = false;
 		$scope.messageTaskChanged = false;
@@ -138,7 +154,6 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee) {
 		$scope.editingId = $scope.messages[idx].id;
 		$scope.editingIdx = idx;
 		$scope.editingName = $scope.messages[idx].name;
-		$scope.editingRequestType = $scope.messages[idx].request_type;
 		$scope.editingSolverId = $scope.messages[idx].employee_id;
 
 		$scope.messageTasks = [];
@@ -168,6 +183,21 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee) {
 			}
 			else {
 				messageAttribute.exists = false;
+			}
+		});
+
+		$scope.messageRequestTypes = [];
+		var messageRequestTypesIndexes = [];
+		angular.forEach($scope.messages[idx].request_types, function(messageRequestType) {
+			messageRequestTypesIndexes.push(messageRequestType.id);
+		});
+		angular.copy($scope.requestTypes, $scope.messageRequestTypes);
+		angular.forEach($scope.messageRequestTypes, function(messageRequestType) {
+			if(messageRequestTypesIndexes.indexOf(messageRequestType.id) != -1) {
+				messageRequestType.exists = true;
+			}
+			else {
+				messageRequestType.exists = false;
 			}
 		});
 
@@ -230,6 +260,11 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee) {
 		item.exists = !item.exists;
 		$scope.messageAttributeChanged = true;
 	};
+
+	$scope.changeMessageRequestType = function(item) {
+		item.exists = !item.exists;
+		$scope.messageRequestTypesChanged = true;
+	};
 }
 
-newVending.controller("MessagesCtrl",['$scope', '$timeout', 'Message', 'Task', 'Attribute', 'Employee', MessagesCtrl]);
+newVending.controller("MessagesCtrl",['$scope', '$timeout', 'Message', 'Task', 'Attribute', 'Employee', 'RequestType', MessagesCtrl]);

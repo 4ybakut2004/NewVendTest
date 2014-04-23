@@ -10,6 +10,7 @@ NewVend::Application.routes.draw do
   resources :employees, only: [:index, :create, :destroy, :edit, :update]
   resources :message_tasks, only: [:index]
   resources :attributes, only: [:index, :create, :destroy, :update]
+  resources :request_types, only: [:index, :create, :destroy, :update, :show]
 
   root  'static_pages#home'
   match '/help',  to: 'static_pages#help',       via: 'get'

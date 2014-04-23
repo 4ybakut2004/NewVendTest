@@ -159,6 +159,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		r.$promise.then(function() {
 			$scope.editingRequestTask = r;
 			$scope.editingRequest = r.request;
+			$scope.editingAttributes = r.attributes;
 			$scope.editingId = r.id;
 			$scope.editingIdx = idx;
 

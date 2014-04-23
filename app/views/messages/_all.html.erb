@@ -12,14 +12,12 @@
         <th></th>
         <th>Номер</th>
         <th>Наименование</th>
-        <th>Тип заявки</th>
         <th>Решатель</th>
       </tr>
       <tr>
         <td></td>
         <td><input ng-model="search.id" class="form-control input-sm"></td>
         <td><input ng-model="search.name" class="form-control input-sm"></td>
-        <td><input ng-model="search.request_type_name" class="form-control input-sm"></td>
         <td><input ng-model="search.solver_name" class="form-control input-sm"></td>
       </tr>
     </thead>
@@ -29,7 +27,6 @@
         <td><input type="checkbox" ng-model="message.checked"></td>
         <td ng-click="clickMessage($index)">{{message.id}}</td>
         <td ng-click="clickMessage($index)">{{message.name}}</td>
-        <td ng-click="clickMessage($index)">{{message.request_type_name}}</td>
         <td ng-click="clickMessage($index)">{{message.solver_name}}</td>
       </tr>
     </tbody>

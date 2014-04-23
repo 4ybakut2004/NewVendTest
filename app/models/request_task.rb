@@ -10,9 +10,9 @@ class RequestTask < ActiveRecord::Base
     	fullInfo = self.attributes
         fullInfo["request_id"] = self.request_message.request_id
         fullInfo["task_name"] = self.task.name
-        fullInfo["assigner_name"] = self.assigner ? self.assigner.name : nil
-        fullInfo["executor_name"] = self.executor ? self.executor.name : nil
-        fullInfo["auditor_name"] = self.auditor ? self.auditor.name : nil
+        fullInfo["assigner_name"] = self.assigner_id ? self.assigner.name : nil
+        fullInfo["executor_name"] = self.executor_id ? self.executor.name : nil
+        fullInfo["auditor_name"] = self.auditor_id ? self.auditor.name : nil
         fullInfo["deadline_date"] = self.deadline_date ? self.deadline_date : nil
         fullInfo["audition_date"] = self.audition_date ? self.audition_date : nil
         fullInfo["execution_date"] = self.execution_date ? self.execution_date : nil
@@ -28,15 +28,13 @@ class RequestTask < ActiveRecord::Base
     	fullInfo = self.attributes
         fullInfo["request_id"] = self.request_message.request_id
     	fullInfo["task_name"] = self.task.name
-    	fullInfo["assigner_name"] = self.assigner ? self.assigner.name : nil
-    	fullInfo["executor_name"] = self.executor ? self.executor.name : nil
-    	fullInfo["auditor_name"] = self.auditor ? self.auditor.name : nil
+    	fullInfo["assigner_name"] = self.assigner_id ? self.assigner.name : nil
+    	fullInfo["executor_name"] = self.executor_id ? self.executor.name : nil
+    	fullInfo["auditor_name"] = self.auditor_id ? self.auditor.name : nil
         fullInfo["deadline_date"] = self.deadline_date ? self.deadline_date : nil
         fullInfo["audition_date"] = self.audition_date ? self.audition_date : nil
         fullInfo["execution_date"] = self.execution_date ? self.execution_date : nil
         fullInfo["checked"] = false;
-
-        fullInfo["attributes"] = self.request_message.request_attributes.collect { |ra| { :name => ra.attribute.name, :value => ra.value } }
 
     	return fullInfo
     end
