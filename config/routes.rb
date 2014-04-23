@@ -17,10 +17,9 @@ NewVend::Application.routes.draw do
   match '/signin',  to: 'sessions#new',         via: 'get'
   match '/signout', to: 'sessions#destroy',     via: 'delete'
 
-  post 'messages_for_request' => 'requests#messages_for_request', :as => :messages_for_request
-  post 'request_group_destroy' => 'requests#request_group_destroy', :as => :request_group_destroy
-  post 'employee_group_destroy' => 'employees#employee_group_destroy', :as => :employee_group_destroy
-  post 'message_group_destroy' => 'messages#message_group_destroy', :as => :message_group_destroy
+  get 'to_assign_count' => 'request_tasks#to_assign_count', :as => :to_assign_count
+  get 'to_audit_count' => 'request_tasks#to_audit_count', :as => :to_audit_count
+  get 'to_execute_count' => 'request_tasks#to_execute_count', :as => :to_execute_count
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

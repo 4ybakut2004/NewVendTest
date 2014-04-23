@@ -27,10 +27,6 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine) {
 		}
 	});
 
-	$scope.$watch('whoAmI', function() {
-		$timeout(function(){$scope.setWidth();}, 300);
-	});
-
 	$scope.$watch('search', function(){
 		$scope.setWidth();
 	});
@@ -187,6 +183,8 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine) {
 		}
 
 		$scope.requests = Request.all(attr);
+
+		$timeout(function(){$scope.setWidth();}, 300);
 	}
 
 	$scope.whoAmIFilter = function(str) {

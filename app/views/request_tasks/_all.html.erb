@@ -1,9 +1,9 @@
-<div style="display: inline-block; vertical-align:top">
-    <h1>Поручения, где я:</h1>
+<div class="inline-block">
+    <h1 style="margin-bottom: 0px;">Поручения, где я:</h1>
 </div>
-<div style="display: inline-block;">
-    <div style="display: inline-block; vertical-align:top">
-        <h1>
+<div class="inline-block">
+    <div class="inline-block">
+        <h1 style="margin-bottom: 0px;">
             <button type="button"
                     class="btn btn-link btn-lg"
                     ng-class="{active: whoAmI.assigner}"
@@ -11,19 +11,18 @@
                     Назначатель,
             </button>
         </h1>
-        <h4>
+        <h4 style="margin: 0px;">
             <button type="button"
                     class="btn btn-link"
-                    ng-show="whoAmI.assigner"
                     ng-class="{active: indicators.assign}"
                     ng-click="indicatorsFilter('assign')">
-                    Назначить
+                    Назначить <span ng-show="toAssignCount" class="count-label">{{toAssignCount}}</span>
             </button>
         </h4>
     </div>
 
-    <div style="display: inline-block; vertical-align:top">
-        <h1>
+    <div class="inline-block">
+        <h1 style="margin-bottom: 0px;">
             <button type="button"
                     class="btn btn-link btn-lg"
                     ng-class="{active: whoAmI.executor}"
@@ -31,19 +30,18 @@
                     Исполнитель,
             </button>
         </h1>
-        <h4>
+        <h4 style="margin: 0px;">
             <button type="button"
                     class="btn btn-link"
-                    ng-show="whoAmI.executor"
                     ng-class="{active: indicators.execute}"
                     ng-click="indicatorsFilter('execute')">
-                    Выполнить
+                    Выполнить <span ng-show="toExecuteCount" class="count-label">{{toExecuteCount}}</span>
             </button>
         </h4>
     </div>
 
-    <div style="display: inline-block; vertical-align:top">
-        <h1>
+    <div class="inline-block">
+        <h1 style="margin-bottom: 0px;">
             <button type="button"
                     class="btn btn-link btn-lg"
                     ng-class="{active: whoAmI.auditor}"
@@ -51,13 +49,12 @@
                     Контролер
             </button>
         </h1>
-        <h4>
+        <h4 style="margin: 0px;">
             <button type="button"
                     class="btn btn-link"
-                    ng-show="whoAmI.auditor"
                     ng-class="{active: indicators.audit}"
                     ng-click="indicatorsFilter('audit')">
-                    Проконтроллировать
+                    Проконтроллировать <span ng-show="toAuditCount" class="count-label">{{toAuditCount}}</span>
             </button>
         </h4>
     </div>

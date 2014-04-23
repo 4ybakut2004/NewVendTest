@@ -58,8 +58,8 @@ class RequestsController < ApplicationController
                                               :auditor_id  => assigner_id,
                                               :task_id => task.id,
                                               :request_message_id => request_message.id,
-                                              :creation_date => Time.now,
-                                              :deadline_date => task.deadline.days.from_now)
+                                              :creation_date => DateTime.now,
+                                              :deadline_date => DateTime.now + task.deadline.days)
           }
 
           if m[:attributes]

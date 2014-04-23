@@ -13,6 +13,9 @@ function FixedHeader($compile)
 			var h;
 
 			var setWidth = function() {
+				element.css({
+					height: $( window ).height() - element.offset().top
+				});
 				if(fixedHeader) {
 					fixedHeader.css({
 						width: table.width()

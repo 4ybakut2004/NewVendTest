@@ -1,4 +1,4 @@
-newVending.factory('RequestTask', ['$resource', function($resource) {
+newVending.factory('RequestTask', ['$resource', '$http', function($resource, $http) {
   function RequestTask() {
     this.service = $resource('/request_tasks/:requestTaskId.json', 
                              {requestTaskId: '@id'}, 
@@ -23,6 +23,30 @@ newVending.factory('RequestTask', ['$resource', function($resource) {
 
   RequestTask.prototype.update = function(id, attr) {
     return this.service.update({requestTaskId: id}, attr);
+  };
+
+  RequestTask.prototype.to_assign_count = function() {
+      var promise = $http.get('/to_assign_count.json').then(function (response) {
+        return response.data;
+      });
+
+      return promise;
+  };
+
+  RequestTask.prototype.to_execute_count = function() {
+      var promise = $http.get('/to_execute_count.json').then(function (response) {
+        return response.data;
+      });
+
+      return promise;
+  };
+
+  RequestTask.prototype.to_audit_count = function() {
+      var promise = $http.get('/to_audit_count.json').then(function (response) {
+        return response.data;
+      });
+
+      return promise;
   };
 
   return new RequestTask();

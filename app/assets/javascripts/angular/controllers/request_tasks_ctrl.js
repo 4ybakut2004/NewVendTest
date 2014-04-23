@@ -1,6 +1,23 @@
 function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 	$scope.requestTasks = RequestTask.all({ request_id: getURLParameter('request_id') });
 	$scope.employees = Employee.all();
+
+	$scope.setIndicatorsCounts = function() {
+		RequestTask.to_assign_count().then(function(d) {
+			$scope.toAssignCount = d;
+		});
+
+		RequestTask.to_execute_count().then(function(d) {
+			$scope.toExecuteCount = d;
+		});
+
+		RequestTask.to_audit_count().then(function(d) {
+			$scope.toAuditCount = d;
+		});
+	};
+
+	$scope.setIndicatorsCounts();
+
 	$scope.editing = false;
 	$scope.search = { checked: false };
 
@@ -34,18 +51,6 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		if($scope.editing == false) {
 			$timeout(function(){$scope.setWidth();}, 300);
 		}
-	});
-
-	$scope.$watch('whoAmI', function() {
-		$timeout(function(){$scope.setWidth();}, 300);
-	});
-
-	$scope.$watch('indicators', function() {
-		$timeout(function(){$scope.setWidth();}, 300);
-	});
-
-	$scope.$watch('overdued', function() {
-		$timeout(function(){$scope.setWidth();}, 300);
 	});
 
 	$scope.$watch('editingExecutorId', function() {
@@ -129,12 +134,14 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		attr.executor_id = $scope.editingExecutorId;
 		attr.auditor_id = $scope.editingAuditorId;
 		attr.description = $scope.editingDescription;
-		attr.deadline_date = $scope.editingDeadlineDate;
-		attr.execution_date = $scope.editingExecutionDate;
-		attr.audition_date = $scope.editingAuditionDate;
+		attr.deadline_date = strDateToUTC($scope.editingDeadlineDate);
+		attr.execution_date = strDateToUTC($scope.editingExecutionDate);
+		attr.audition_date = strDateToUTC($scope.editingAuditionDate);
 
 		var updatedRequestTask = RequestTask.update($scope.editingId, attr);
 		$scope.requestTasks[$scope.editingIdx] = updatedRequestTask;
+
+		$scope.setIndicatorsCounts();
 
 		$scope.editingExecutorId = "";
 		$scope.editingAuditorId = "";
@@ -201,23 +208,27 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		}
 
 		$scope.requestTasks = RequestTask.all(attr);
+
+		$timeout(function(){$scope.setWidth();}, 300);
 	}
 
 	$scope.whoAmIFilter = function(str) {
 		$scope.whoAmI[str] = !$scope.whoAmI[str];
 
-		switch(str) {
-			case 'assigner':
-				$scope.indicators.assign = false;
-				break;
+		if(!$scope.whoAmI[str]) {
+			switch(str) {
+				case 'assigner':
+					$scope.indicators.assign = false;
+					break;
 
-			case 'executor':
-				$scope.indicators.execute = false;
-				break;
+				case 'executor':
+					$scope.indicators.execute = false;
+					break;
 
-			case 'auditor':
-				$scope.indicators.audit = false;
-				break;
+				case 'auditor':
+					$scope.indicators.audit = false;
+					break;
+			}
 		}
 
 		requestTasksFilter();
@@ -230,6 +241,23 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 
 	$scope.indicatorsFilter = function(str) {
 		$scope.indicators[str] = !$scope.indicators[str];
+
+		if($scope.indicators[str]) {
+			switch(str) {
+				case 'assign':
+					$scope.whoAmI.assigner = true;
+					break;
+
+				case 'execute':
+					$scope.whoAmI.executor = true;
+					break;
+
+				case 'audit':
+					$scope.whoAmI.auditor = true;
+					break;
+			}
+		}
+
 		requestTasksFilter();
 	};
 }
