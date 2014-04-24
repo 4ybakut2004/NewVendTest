@@ -17,15 +17,15 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 	};
 
 	$scope.inputs = {
-		requestType: false,
 		name: false,
-		solverId: false
+		solverId: false,
+		description: false
 	};
 
 	$scope.editingInputs = {
-		requestType: false,
 		name: false,
-		solverId: false
+		solverId: false,
+		description: false
 	};
 
 	$scope.$watch('editing', function() {
@@ -42,28 +42,29 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 		$scope.inputs.name = ($scope.newName != "" && $scope.newName != null);
 	});
 
-	$scope.$watch('newRequestType', function() {
-		$scope.inputs.requestType = ($scope.newRequestType != "" && $scope.newRequestType != null);
-	});
-
 	$scope.$watch('newSolverId', function() {
 		$scope.inputs.solverId = ($scope.newSolverId != "" && $scope.newSolverId != null);
+	});
+
+	$scope.$watch('newDescription', function() {
+		$scope.inputs.description = ($scope.newDescription != "" && $scope.newDescription != null);
 	});
 
 	$scope.$watch('editingName', function() {
 		$scope.editingInputs.name = ($scope.editingName != "" && $scope.editingName != null);
 	});
 
-	$scope.$watch('editingRequestType', function() {
-		$scope.editingInputs.requestType = ($scope.editingRequestType != "" && $scope.editingRequestType != null);
-	});
-
 	$scope.$watch('editingSolverId', function() {
 		$scope.editingInputs.solverId = ($scope.editingSolverId != "" && $scope.editingSolverId != null);
 	});
 
+	$scope.$watch('editingDescription', function() {
+		$scope.editingInputs.description = ($scope.editingDescription != "" && $scope.editingDescription != null);
+	});
+
 	$scope.resetNewMessage = function() {
 		$scope.newName = "";
+		$scope.newDescription = "";
 		$scope.newSolverId = $scope.employees[0].id;
 	};
 
@@ -71,6 +72,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 		var attr = {};
 		attr.name = $scope.newName;
 		attr.employee_id = $scope.newSolverId;
+		attr.description = $scope.newDescription;
 		attr.new_tasks = $scope.newTasks;
 		attr.new_attributes = $scope.newAttributes;
 
@@ -109,6 +111,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 		var attr = {};
 		attr.name = $scope.editingName;
 		attr.employee_id = $scope.editingSolverId;
+		attr.description = $scope.editingDescription;
 
 		if($scope.messageTaskChanged) {
 			attr.tasks = [];
@@ -145,6 +148,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 
 		$scope.editingName = "";
 		$scope.editingSolverId = "";
+		$scope.editingDescription = "";
 		$scope.editing = false;
 		$scope.messageTaskChanged = false;
 		$scope.messageAttributeChanged = false;
@@ -155,6 +159,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 		$scope.editingIdx = idx;
 		$scope.editingName = $scope.messages[idx].name;
 		$scope.editingSolverId = $scope.messages[idx].employee_id;
+		$scope.editingDescription = $scope.messages[idx].description;
 
 		$scope.messageTasks = [];
 		var messageTasksIndexes = [];

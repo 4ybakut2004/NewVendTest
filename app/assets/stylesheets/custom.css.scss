@@ -3,6 +3,19 @@ body {
 	background-color: #e9ebec;
 }
 
+@media (max-width: 991px) {
+    .navbar-fixed-top {
+        position: relative;
+        top: auto;
+    }
+    .navbar-collapse {
+        max-height: none;
+    }
+    body {
+        margin: 0;
+    }
+}
+
 .border-top {
 	border-top: 1px solid #c5c5c5;
 }
@@ -46,6 +59,7 @@ ul.non-point {
 	overflow-x: auto;
 	overflow-y: scroll;
 	position: relative;
+	min-height: 300px;
 }
 
 /*.standart-table-container table {

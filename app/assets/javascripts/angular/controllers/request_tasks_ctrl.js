@@ -27,7 +27,11 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		description: false,
 		deadlineDate: false,
 		executionDate: false,
-		auditionDate: false
+		auditionDate: false,
+		registrarDescription: false,
+		assignerDescription: false,
+		executorDescription: false,
+		auditorDescription: false
 	};
 
 	$scope.whoAmI = {
@@ -51,10 +55,6 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		if($scope.editing == false) {
 			$timeout(function(){$scope.setWidth();}, 300);
 		}
-	});
-
-	$scope.$watch('editingExecutorId', function() {
-		$scope.editingInputs.executorId = ($scope.editingExecutorId != "" && $scope.editingExecutorId != null);
 	});
 
 	$scope.$watch('search', function(){
@@ -109,6 +109,10 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		}
 	});
 
+	$scope.$watch('editingExecutorId', function() {
+		$scope.editingInputs.executorId = ($scope.editingExecutorId != "" && $scope.editingExecutorId != null);
+	});
+
 	$scope.$watch('editingAuditorId', function() {
 		$scope.editingInputs.auditorId = ($scope.editingAuditorId != "" && $scope.editingAuditorId != null);
 	});
@@ -118,15 +122,31 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 	});
 
 	$scope.$watch('editingDeadlineDate', function() {
-		$scope.editingInputs.deadlineDate = ($scope.editingDeadlineDate != "" && $scope.editingDeadlineDate != null);
+		$scope.editingInputs.deadlineDate = ($scope.editingDeadlineDate != "" && $scope.editingDeadlineDate != null && $scope.editingDeadlineDate != DATE_MASK);
 	});
 
 	$scope.$watch('editingExecutionDate', function() {
-		$scope.editingInputs.executionDate = ($scope.editingExecutionDate != "" && $scope.editingExecutionDate != null);
+		$scope.editingInputs.executionDate = ($scope.editingExecutionDate != "" && $scope.editingExecutionDate != null && $scope.editingExecutionDate != DATE_MASK);
 	});
 
 	$scope.$watch('editingAuditionDate', function() {
-		$scope.editingInputs.auditionDate = ($scope.editingAuditionDate != "" && $scope.editingAuditionDate != null);
+		$scope.editingInputs.auditionDate = ($scope.editingAuditionDate != "" && $scope.editingAuditionDate != null && $scope.editingAuditionDate != DATE_MASK);
+	});
+
+	$scope.$watch('editingRegistrarDescription', function() {
+		$scope.editingInputs.registrarDescription = ($scope.editingRegistrarDescription != "" && $scope.editingRegistrarDescription != null);
+	});
+
+	$scope.$watch('editingAssignerDescription', function() {
+		$scope.editingInputs.assignerDescription = ($scope.editingAssignerDescription != "" && $scope.editingAssignerDescription != null);
+	});
+
+	$scope.$watch('editingExecutorDescription', function() {
+		$scope.editingInputs.executorDescription = ($scope.editingExecutorDescription != "" && $scope.editingExecutorDescription != null);
+	});
+
+	$scope.$watch('editingAuditorDescription', function() {
+		$scope.editingInputs.auditorDescription = ($scope.editingAuditorDescription != "" && $scope.editingAuditorDescription != null);
 	});
 
 	$scope.updateRequestTask = function() {
@@ -134,6 +154,10 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		attr.executor_id = $scope.editingExecutorId;
 		attr.auditor_id = $scope.editingAuditorId;
 		attr.description = $scope.editingDescription;
+		attr.registrar_description = $scope.editingRegistrarDescription;
+		attr.assigner_description = $scope.editingAssignerDescription;
+		attr.executor_description = $scope.editingExecutorDescription;
+		attr.auditor_description = $scope.editingAuditorDescription;
 		attr.deadline_date = strDateToUTC($scope.editingDeadlineDate);
 		attr.execution_date = strDateToUTC($scope.editingExecutionDate);
 		attr.audition_date = strDateToUTC($scope.editingAuditionDate);
@@ -149,6 +173,10 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		$scope.editingDeadlineDate = "";
 		$scope.editingExecutionDate = "";
 		$scope.editingAuditionDate = "";
+		$scope.editingRegistrarDescription = "";
+		$scope.editingAssignerDescription = "";
+		$scope.editingExecutorDescription = "";
+		$scope.editingAuditorDescription = "";
 		$scope.editingIdx = null;
 
 		$scope.editing = false;
@@ -166,6 +194,10 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 			$scope.editingExecutorId = r.executor_id;
 			$scope.editingAuditorId = r.auditor_id;
 			$scope.editingDescription = r.description;
+			$scope.editingRegistrarDescription = r.registrar_description;
+			$scope.editingAssignerDescription = r.assigner_description;
+			$scope.editingExecutorDescription = r.executor_description;
+			$scope.editingAuditorDescription = r.auditor_description;
 			$scope.editingDeadlineDate = $scope.dateForInput(r.deadline_date);
 			$scope.editingExecutionDate = $scope.dateForInput(r.execution_date);
 			$scope.editingAuditionDate = $scope.dateForInput(r.audition_date);

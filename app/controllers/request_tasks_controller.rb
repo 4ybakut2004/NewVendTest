@@ -126,6 +126,15 @@ class RequestTasksController < ApplicationController
 		end
 
 		def request_task_params
-			params.require(:request_task).permit(:executor_id, :auditor_id, :description, :execution_date, :audition_date, :deadline_date)
+			params.require(:request_task).permit(:executor_id, 
+												 :auditor_id, 
+												 :description,
+												 :registrar_description,
+												 :assigner_description,
+												 :executor_description,
+												 :auditor_description,
+												 :execution_date, 
+												 :audition_date, 
+												 :deadline_date)
 		end
 end

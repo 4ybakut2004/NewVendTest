@@ -1,13 +1,14 @@
-function RequestsCtrl($scope, $timeout, Request, Message, Machine) {
+function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) {
 	$scope.requests = Request.all();
 	$scope.messages = Message.all();
 	$scope.machines = Machine.all();
+	$scope.requestTypes = RequestType.all();
 	$scope.editing = false;
 	$scope.newMessages = [];
 
 	$scope.inputs = {
 		machine_id: false,
-		requestType: false,
+		requestTypeId: false,
 		phone: false,
 		description: false
 	};
@@ -31,8 +32,8 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine) {
 		$scope.setWidth();
 	});
 
-	$scope.$watch('newRequestType', function() {
-		$scope.inputs.requestType = ($scope.newRequestType != "" && $scope.newRequestType != null);
+	$scope.$watch('newRequestTypeId', function() {
+		$scope.inputs.requestTypeId = ($scope.newRequestTypeId != "" && $scope.newRequestTypeId != null);
 		$scope.newPhone = "";
 		$scope.newMessages = [];
 		$scope.newDescription = "";
@@ -59,7 +60,7 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine) {
 	});
 
 	$scope.resetNewRequest = function() {
-		$scope.newRequestType = "";
+		$scope.newRequestTypeId = "";
 		$scope.newMachineId = $scope.machines[0].id;
 		$scope.newPhone = "";
 		$scope.newMessages = [];
@@ -68,12 +69,10 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine) {
 
 	$scope.createRequest = function() {
 		var attr = {};
-		attr.request_type = $scope.newRequestType;
+		attr.request_type_id = $scope.newRequestTypeId;
 		attr.machine_id = $scope.newMachineId;
 		attr.description = $scope.newDescription;
-		if(attr.request_type == "phone") {
-			attr.phone = $scope.newPhone;
-		}
+		attr.phone = $scope.newPhone;
 		attr.messages = [];
 
 		angular.forEach($scope.newMessages, function(message){
@@ -142,7 +141,7 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine) {
 			$scope.editingMachineId = r.machine_id;
 			$scope.editingRegistrarName = r.registrar_name;
 			$scope.editingRequestTypeName = r.request_type_name;
-			$scope.editingRequestType = r.request_type;
+			$scope.editingRequestTypeId = r.request_type_id;
 			$scope.editingPhone = r.phone;
 
 			$scope.requestMessages = r.request_messages;
@@ -150,8 +149,13 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine) {
 		});
 	};
 
-	$scope.setNewRequestType = function(request_type) {
-		$scope.newRequestType = request_type;
+	$scope.setNewRequestTypeId = function(request_type_id) {
+		$scope.newRequestTypeId = request_type_id;
+
+		var rt = RequestType.get(request_type_id);
+		rt.$promise.then(function() {
+			$scope.requestTypeMessages = rt.messages;
+		}); 
 	};
 
 	$scope.addMessage = function(message) {
@@ -196,4 +200,4 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine) {
 	$scope.dateForInput = dateForInput;
 }
 
-newVending.controller("RequestsCtrl",['$scope', '$timeout', 'Request', 'Message', 'Machine', RequestsCtrl]);
+newVending.controller("RequestsCtrl",['$scope', '$timeout', 'Request', 'Message', 'Machine', 'RequestType', RequestsCtrl]);

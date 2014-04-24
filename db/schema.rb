@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140423043152) do
+ActiveRecord::Schema.define(version: 20140423100501) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,8 +59,8 @@ ActiveRecord::Schema.define(version: 20140423043152) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "request_type"
     t.integer  "employee_id"
+    t.string   "description"
   end
 
   create_table "request_attributes", force: true do |t|
@@ -91,6 +91,10 @@ ActiveRecord::Schema.define(version: 20140423043152) do
     t.datetime "execution_date"
     t.datetime "audition_date"
     t.datetime "deadline_date"
+    t.string   "registrar_description"
+    t.string   "assigner_description"
+    t.string   "executor_description"
+    t.string   "auditor_description"
   end
 
   create_table "request_type_messages", force: true do |t|
@@ -111,9 +115,9 @@ ActiveRecord::Schema.define(version: 20140423043152) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "machine_id"
-    t.string   "request_type", default: "phone"
     t.string   "phone"
     t.integer  "registrar_id"
+    t.integer  "request_type_id", default: 4
   end
 
   create_table "tasks", force: true do |t|

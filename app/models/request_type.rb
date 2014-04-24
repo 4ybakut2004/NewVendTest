@@ -10,7 +10,10 @@ class RequestType < ActiveRecord::Base
 
 	def getFullInfo
 		attributes = self.attributes
-		attributes["messages"] = self.messages
+		attributes["messages"] = self.messages.collect { |m|
+			m.attributes.merge!({:attributes => m.message_attributes.collect { |a| a.attribute },
+								 :tasks => m.tasks})
+		}
 
 		return attributes
 	end

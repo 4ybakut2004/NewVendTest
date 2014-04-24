@@ -65,4 +65,44 @@ function FixedHeader($compile)
     };
 }
 
+function DateTimePicker($compile) 
+{       
+    return {
+	    link: function($scope, element, attrs) {
+			element.datetimepicker({
+		      lang: 'ru',
+		      mask: DATE_MASK,
+		      format: 'd.m.Y H:i:s',
+		      dayOfWeekStart: 1,
+		      allowBlank: true
+		    });
+        }
+    };
+}
+
+function DateTimePickerFromNow($compile) 
+{       
+    return {
+	    link: function($scope, element, attrs) {
+			element.datetimepicker({
+		      lang: 'ru',
+		      mask: DATE_MASK,
+		      format: 'd.m.Y H:i:s',
+		      dayOfWeekStart: 1,
+		      allowBlank: true,
+		      minDate: 0,
+		      onChangeDateTime:function(dp,$input){
+		        var now = new Date();
+		        var val = new Date($input.val().replace(/(\d+).(\d+).(\d+)/, '$2/$1/$3'));
+		        if(val < now) {
+		          $input.val(formattedDate(now));
+		        }
+		      }
+		    });
+        }
+    };
+}
+
 newVending.directive('fixedheader', ['$compile', FixedHeader]);
+newVending.directive('datetimepicker', ['$compile', DateTimePicker]);
+newVending.directive('datetimepickerfromnow', ['$compile', DateTimePickerFromNow]);

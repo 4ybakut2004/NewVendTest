@@ -13,12 +13,14 @@
         <th>Номер</th>
         <th>Наименование</th>
         <th>Решатель</th>
+        <th>Описание</th>
       </tr>
       <tr>
         <td></td>
         <td><input ng-model="search.id" class="form-control input-sm"></td>
         <td><input ng-model="search.name" class="form-control input-sm"></td>
         <td><input ng-model="search.solver_name" class="form-control input-sm"></td>
+        <td><input ng-model="search.description" class="form-control input-sm"></td>
       </tr>
     </thead>
 
@@ -28,6 +30,7 @@
         <td ng-click="clickMessage($index)">{{message.id}}</td>
         <td ng-click="clickMessage($index)">{{message.name}}</td>
         <td ng-click="clickMessage($index)">{{message.solver_name}}</td>
+        <td ng-click="clickMessage($index)">{{message.description}}</td>
       </tr>
     </tbody>
   </table>

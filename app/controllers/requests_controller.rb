@@ -59,7 +59,8 @@ class RequestsController < ApplicationController
                                               :task_id => task.id,
                                               :request_message_id => request_message.id,
                                               :creation_date => DateTime.now,
-                                              :deadline_date => DateTime.now + task.deadline.days)
+                                              :deadline_date => DateTime.now + task.deadline.days,
+                                              :registrar_description => message.description)
           }
 
           if m[:attributes]
@@ -113,6 +114,6 @@ class RequestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def request_params
-      params.require(:request).permit(:machine_id, :description, :request_type, :phone)
+      params.require(:request).permit(:machine_id, :description, :request_type_id, :phone)
     end
 end

@@ -1,37 +1,15 @@
-<script type="text/javascript">
-  $(document).ready(function() {
-    $('.datetime').datetimepicker({
-      lang: 'ru',
-      mask: true,
-      format: 'd.m.Y H:i:s',
-      dayOfWeekStart: 1,
-      allowBlank: true
-    });
-
-    $('.datetimeminnow').datetimepicker({
-      lang: 'ru',
-      mask: true,
-      format: 'd.m.Y H:i:s',
-      dayOfWeekStart: 1,
-      allowBlank: true,
-      minDate: 0,
-      onChangeDateTime:function(dp,$input){
-        var now = new Date();
-        var val = new Date($input.val().replace(/(\d+).(\d+).(\d+)/, '$2/$1/$3'));
-        if(val < now) {
-          $input.val(formattedDate(now));
-        }
-      }
-    });
-  });
-</script>
-
 <div ng-show="editing" class="border-top">
 <button type="button" class="close" ng-click="editing=false">&times;</button>
   <h1 class="text-center">Поручение {{editingId}}</h1>
   <form ng-submit="updateRequestTask()" class="form-horizontal">
     <div class="row">
       <div class="col-md-8">
+
+        <div class="row">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-9"><h3>Основное</h3></div>
+        </div>
+
         <div class="form-group" ng-class='{"has-success": editingInputs.executorId}'>
           <label class="col-sm-3 control-label" for="executor_id">Исполнитель</label>
           <div class="col-sm-9">
@@ -52,18 +30,11 @@
           </div>
         </div>
 
-        <div class="form-group" ng-class='{"has-success": editingInputs.description}'>
-          <label class="col-sm-3 control-label" for="description">Описание</label>
-          <div class="col-sm-9">
-            <input type="text" id="description" ng-model="editingDescription" class="form-control">
-          </div>
-        </div>
-
         <div class="form-group" ng-class='{"has-success": editingInputs.deadlineDate}' 
              ng-show="canEditDeadlineDate(<%= current_user.employee_id %>)">
           <label class="col-sm-3 control-label" for="deadline_date">Плановая дата</label>
           <div class="col-sm-9">
-            <input type="text" id="deadline_date" step="1" ng-model="editingDeadlineDate" class="form-control datetimeminnow">
+            <input datetimepickerfromnow type="text" id="deadline_date" ng-model="editingDeadlineDate" class="form-control">
           </div>
         </div>
 
@@ -75,14 +46,54 @@
         <div class="form-group" ng-class='{"has-success": editingInputs.executionDate}'>
           <label class="col-sm-3 control-label" for="execution_date">Дата выполнения</label>
           <div class="col-sm-9">
-            <input type="text" id="execution_date" step="1" ng-model="editingExecutionDate" class="form-control datetime">
+            <input datetimepicker type="text" id="execution_date" ng-model="editingExecutionDate" class="form-control">
           </div>
         </div>
 
         <div class="form-group" ng-class='{"has-success": editingInputs.auditionDate}'>
           <label class="col-sm-3 control-label" for="audition_date">Дата проверки</label>
           <div class="col-sm-9">
-            <input type="text" id="audition_date" step="1" ng-model="editingAuditionDate" class="form-control datetime">
+            <input datetimepicker type="text" id="audition_date" ng-model="editingAuditionDate" class="form-control">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-9"><h3>Описания</h3></div>
+        </div>
+
+        <div class="form-group" ng-class='{"has-success": editingInputs.description}'>
+          <label class="col-sm-3 control-label" for="description">Описание</label>
+          <div class="col-sm-9">
+            <textarea type="text" id="description" ng-model="editingDescription" class="form-control"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class='{"has-success": editingInputs.registrarDescription}'>
+          <label class="col-sm-3 control-label" for="registrarDescription">Описание регистратора</label>
+          <div class="col-sm-9">
+            <textarea type="text" id="registrarDescription" ng-model="editingRegistrarDescription" class="form-control"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class='{"has-success": editingInputs.assignerDescription}'>
+          <label class="col-sm-3 control-label" for="assignerDescription">Описание назначателя</label>
+          <div class="col-sm-9">
+            <textarea type="text" id="assignerDescription" ng-model="editingAssignerDescription" class="form-control"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class='{"has-success": editingInputs.executorDescription}'>
+          <label class="col-sm-3 control-label" for="executorDescription">Описание исполнителя</label>
+          <div class="col-sm-9">
+            <textarea type="text" id="executorDescription" ng-model="editingExecutorDescription" class="form-control"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class='{"has-success": editingInputs.auditorDescription}'>
+          <label class="col-sm-3 control-label" for="auditorDescription">Описание контролера</label>
+          <div class="col-sm-9">
+            <textarea type="text" id="auditorDescription" ng-model="editingAuditorDescription" class="form-control"></textarea>
           </div>
         </div>
 
@@ -118,7 +129,7 @@
             <strong>Тип заявки:</strong>
             {{editingRequest.request_type_name}}
           </li>
-          <li ng-show="editingRequest.request_type == 'phone'">
+          <li>
             <strong>Телефон:</strong>
             {{editingRequest.phone}}
           </li>

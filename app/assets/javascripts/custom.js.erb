@@ -1,3 +1,5 @@
+DATE_MASK = "__.__.____ __:__:__";
+
 function addZero(str) {
 	return (str.toString().length == 1) ? ('0' + str) : str;
 }
@@ -14,7 +16,7 @@ function formattedDate(dateStr) {
 };
 
 function dateForInput(dateStr) {
-	if(dateStr == '' || dateStr == null) return '';
+	if(dateStr == '' || dateStr == null) return DATE_MASK;
 	var d = new Date(dateStr);
 	return addZero(d.getDate()) + "." +
 		addZero((d.getMonth() + 1)) + "." +
@@ -25,7 +27,7 @@ function dateForInput(dateStr) {
 };
 
 function strDateToUTC(string) {
-	if(!string) return "";
+	if(!string || string == DATE_MASK) return "";
 	var numbers = string.match(/(\d+).(\d+).(\d+) (\d+):(\d+):(\d+)/);
 	var year = parseInt(numbers[3]);
 	var month = parseInt(numbers[2]);

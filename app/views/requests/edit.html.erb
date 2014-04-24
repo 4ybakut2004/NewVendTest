@@ -18,12 +18,10 @@
           <%= f.label :request_type, "Тип заявки", :class => "col-sm-4 text-right" %>
           <div class="col-sm-8 text-left" id="request_type"><%= Request.request_types[@request.request_type.to_sym] %></div>
         </div>
-        <% if @request.request_type == :phone %>
         <div class="form-group">
           <%= f.label :phone, "Телефон", :class => "col-sm-4 text-right" %>
           <div class="col-sm-8 text-left" id="phone"><%= @request.phone %></div>
         </div>
-        <% end %>
       </div>
     </div>
     
