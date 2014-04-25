@@ -1,20 +1,19 @@
+/***********************************************************
+ ** messages_ctrl.js ***************************************
+ ***********************************************************
+ * Контроллер страницы Типы Сигналов.
+ **********************************************************/
+
 function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, RequestType) {
+//- Инициализация моделей ----------------------------------
 	$scope.messages = Message.all();
 	$scope.tasks = Task.all();
 	$scope.attributes = Attribute.all();
 	$scope.employees = Employee.all();
 	$scope.requestTypes = RequestType.all();
-	$scope.newAttributes = [];
-	$scope.newTasks = [];
+	$scope.newAttributes = []; // Массив для новых типов атрибутов при создании нового типа сигнала
+	$scope.newTasks = [];      // Массив для новых типов поручений при создании нового типа сигнала
 	$scope.editing = false;
-
-	$scope.existsFilter = {
-		exists: true
-	};
-
-	$scope.notExistsFilter = {
-		exists: false
-	};
 
 	$scope.inputs = {
 		name: false,
@@ -28,6 +27,16 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 		description: false
 	};
 
+	// Фильтры для элементов, которые связаны с типом сигнала и не связаны соответственно
+	$scope.existsFilter = {
+		exists: true
+	};
+
+	$scope.notExistsFilter = {
+		exists: false
+	};
+
+//- Мониторинг изменения моделей ---------------------------
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
 			$timeout(function(){$scope.setWidth();}, 300);
@@ -62,6 +71,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 		$scope.editingInputs.description = ($scope.editingDescription != "" && $scope.editingDescription != null);
 	});
 
+//- Изменение моделей --------------------------------------
 	$scope.resetNewMessage = function() {
 		$scope.newName = "";
 		$scope.newDescription = "";
@@ -113,6 +123,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 		attr.employee_id = $scope.editingSolverId;
 		attr.description = $scope.editingDescription;
 
+		// Если были изменения типов поручений, говорим серверу сменить их
 		if($scope.messageTaskChanged) {
 			attr.tasks = [];
 			angular.forEach($scope.messageTasks, function(messageTask) {
@@ -123,6 +134,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 			attr.messageTasksChanged = true;
 		}
 
+		// Если были изменения типов атрибутов, говорим серверу сменить их
 		if($scope.messageAttributeChanged) {
 			attr.attributes = [];
 			angular.forEach($scope.messageAttributes, function(messageAttribute) {
@@ -133,6 +145,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 			attr.messageAttributeChanged = true;
 		}
 
+		// Если были изменения типов заявок, говорим серверу сменить их
 		if($scope.messageRequestTypesChanged) {
 			attr.requestTypes = [];
 			angular.forEach($scope.messageRequestTypes, function(messageRequestType) {
@@ -161,6 +174,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 		$scope.editingSolverId = $scope.messages[idx].employee_id;
 		$scope.editingDescription = $scope.messages[idx].description;
 
+		// Отмечаем поручения, которые связаны с сигналом
 		$scope.messageTasks = [];
 		var messageTasksIndexes = [];
 		angular.forEach($scope.messages[idx].tasks, function(messageTask) {
@@ -176,6 +190,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 			}
 		});
 
+		// Отмечаем атрибуты, которые связаны с сигналом
 		$scope.messageAttributes = [];
 		var messageAttributesIndexes = [];
 		angular.forEach($scope.messages[idx].attributes, function(messageAttribute) {
@@ -191,6 +206,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 			}
 		});
 
+		// Отмечаем типы заявок, которые связаны с сигналом
 		$scope.messageRequestTypes = [];
 		var messageRequestTypesIndexes = [];
 		angular.forEach($scope.messages[idx].request_types, function(messageRequestType) {

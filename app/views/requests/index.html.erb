@@ -6,19 +6,35 @@
   });
 </script>
 
-<div class="modal fade" id="newRequest" tabindex="-1" role="dialog" aria-labelledby="newRequestLabel" aria-hidden="true" data-backdrop="static">
+<div class="modal fade"
+  id="newRequest"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="newRequestLabel"
+  aria-hidden="true"
+  data-backdrop="static">
+
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button id="close-button" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="newRequestLabel">Новая заявка</h4>
-      </div>
+        <button id="close-button"
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title" id="newRequestLabel">
+          Новая заявка
+          <span ng-show="requestTaskId">(Поручение {{requestTaskId}})</span>
+        </h4>
+      </div> <!-- end of modal-header -->
       <div class="modal-body">
         <%= render 'form_new' %>
       </div>
-    </div>
-  </div>
-</div>
+    </div> <!-- end of modal-content -->
+  </div> <!-- end of modal-dialog -->
+</div> <!-- end of newRequest -->
 
 <div class="content">
   <%= render 'all' %>

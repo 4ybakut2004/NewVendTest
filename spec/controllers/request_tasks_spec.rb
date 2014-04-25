@@ -9,8 +9,6 @@ describe "Request Tasks pages" do
 
     it { should have_content('Поручения') }
     it { should have_title('Request Tasks') }
-
-    it { should have_css('table#request-tasks-table') }
   end
 
 

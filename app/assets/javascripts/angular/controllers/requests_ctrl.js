@@ -1,7 +1,32 @@
+/***********************************************************
+ ** requests_ctrl.js ***************************************
+ ***********************************************************
+ * Контроллер страницы Заявки.
+ **********************************************************/
+
 function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) {
-	$scope.requests = Request.all();
+//- Инициализация моделей ----------------------------------
+	$scope.requestTaskId = getURLParameter("request_task_id");
+
+	// Присутствие id поручения в параметрах означает,
+	// что пользователь нажал кнопку создания заявки из поручения.
+	// При этом неободимо открыть окно создания заявки.
+	if(!$scope.requestTaskId) {
+		$scope.requests = Request.all();
+	}
+	else {
+		$scope.requests = [];
+		$('#newRequest').modal('show');
+	}
+
 	$scope.messages = Message.all();
 	$scope.machines = Machine.all();
+
+	// Настраиваем начальное значение селект бокса с автоматами
+	$scope.machines.$promise.then(function() {
+		$scope.newMachineId = $scope.machines[0].id;
+	});
+
 	$scope.requestTypes = RequestType.all();
 	$scope.editing = false;
 	$scope.newMessages = [];
@@ -22,6 +47,7 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 		registrar: false
 	};
 
+//- Мониторинг изменения моделей ---------------------------
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
 			$timeout(function(){$scope.setWidth();}, 300);
@@ -33,6 +59,8 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 	});
 
 	$scope.$watch('newRequestTypeId', function() {
+		// В создании новой заявки при изменении ее типа следует 
+		// обнулить модели, в которые сохраняются данные о новой заявке
 		$scope.inputs.requestTypeId = ($scope.newRequestTypeId != "" && $scope.newRequestTypeId != null);
 		$scope.newPhone = "";
 		$scope.newMessages = [];
@@ -59,6 +87,7 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 		$scope.editingInputs.machineId = ($scope.editingMachineId != "" && $scope.editingMachineId != null);
 	});
 
+//- Изменение моделей --------------------------------------
 	$scope.resetNewRequest = function() {
 		$scope.newRequestTypeId = "";
 		$scope.newMachineId = $scope.machines[0].id;
@@ -73,6 +102,12 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 		attr.machine_id = $scope.newMachineId;
 		attr.description = $scope.newDescription;
 		attr.phone = $scope.newPhone;
+
+		if($scope.requestTaskId) {
+			attr.request_task_id = $scope.requestTaskId;
+		}
+
+		// Создаем массив сигналов, которые необходимо создать
 		attr.messages = [];
 
 		angular.forEach($scope.newMessages, function(message){
@@ -86,6 +121,8 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 				}
 			});
 
+			// При создании сигнала так же нужно создать атрибуты для него,
+			// по-этому привязываем к сигналу массив атрибутов
 			attr.messages.push({
 				id: message.id,
 				attributes: attributes
@@ -143,6 +180,7 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 			$scope.editingRequestTypeName = r.request_type_name;
 			$scope.editingRequestTypeId = r.request_type_id;
 			$scope.editingPhone = r.phone;
+			$scope.editingRequestTaskId = r.request_task_id;
 
 			$scope.requestMessages = r.request_messages;
 			$scope.editing = true;

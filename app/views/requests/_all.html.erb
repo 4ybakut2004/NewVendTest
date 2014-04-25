@@ -1,24 +1,30 @@
-<script type="text/javascript"> 
-  $(document).ready(function() {
-    var filterForm = $('#filter-form');
-    filterForm.find('input[type="checkbox"]').bind('change', function(){
-      filterForm.submit();
-    });
-  });
-</script>
-
-
 <h1 style="display: inline-block;">Заявки, где я:
-<div class="btn-group">
-  <button class="btn btn-link btn-lg" type="button" ng-click="whoAmIFilter('registrar')" ng-class="{active: whoAmI.registrar}">Регистратор</button>
-</div>
+  <div class="btn-group">
+    <button class="btn btn-link btn-lg"
+      type="button"
+      ng-click="whoAmIFilter('registrar')"
+      ng-class="{active: whoAmI.registrar}">
+      Регистратор
+    </button>
+  </div>
 </h1>
 <br>
 
 <div class="btn-group" style="margin-bottom: 15px;">
-  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newRequest" ng-click="resetNewRequest()">Создать</button>
-  <button type="button" class="btn btn-default" ng-click="deleteRequests()">Удалить</button>
+  <button type="button"
+    class="btn btn-default"
+    data-toggle="modal"
+    data-target="#newRequest"
+    ng-click="resetNewRequest()">
+    Создать
+  </button>
+  <button type="button"
+    class="btn btn-default"
+    ng-click="deleteRequests()">
+    Удалить
+  </button>
 </div>
+
 <div fixedheader class="standart-table-container" ng-show="!editing">
   <table class="table table-hover table-condensed">
     <thead>

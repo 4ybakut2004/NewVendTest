@@ -6,19 +6,32 @@
 	});
 </script>
 
-<div class="modal fade" id="newEmployee" tabindex="-1" role="dialog" aria-labelledby="newEmployeeLabel" aria-hidden="true" data-backdrop="static">
+<div class="modal fade" 
+  id="newEmployee"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="newEmployeeLabel"
+  aria-hidden="true"
+  data-backdrop="static">
+
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button id="close-button" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button id="close-button" 
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true">
+          &times;
+        </button>
         <h4 class="modal-title" id="newEmployeeLabel">Новый сотрудник</h4>
-      </div>
+      </div> <!-- end of modal-header -->
       <div class="modal-body">
         <%= render 'form_new' %>
       </div>
-    </div>
-  </div>
-</div>
+    </div> <!-- end of modal-content -->
+  </div> <!-- end of modal-dialog -->
+</div> <!-- end of newEmployee -->
 
 <div class="content">
   <%= render 'all' %>

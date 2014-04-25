@@ -1,4 +1,11 @@
+/***********************************************************
+ ** employees_ctrl.js **************************************
+ ***********************************************************
+ * Контроллер страницы Сотрудники.
+ **********************************************************/
+
 function EmployeesCtrl($scope, $timeout, Employee) {
+//- Инициализация моделей ----------------------------------
 	$scope.employees = Employee.all();
 	$scope.editing = false;
 
@@ -10,6 +17,7 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 		name: false
 	};
 
+//- Мониторинг изменения моделей ---------------------------
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
 			$timeout(function(){$scope.setWidth();}, 300);
@@ -28,6 +36,7 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 		$scope.editingInputs.name = ($scope.editingName != "" && $scope.editingName != null);
 	});
 
+//- Изменение моделей --------------------------------------
 	$scope.createEmployee = function() {
 		var attr = {};
 		attr.name = $scope.newName;

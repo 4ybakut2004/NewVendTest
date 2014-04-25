@@ -1,7 +1,15 @@
+/***********************************************************
+ ** request_tasks_ctrl.js **********************************
+ ***********************************************************
+ * Контроллер страницы Поручения.
+ **********************************************************/
+
 function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
+//- Инициализация моделей ----------------------------------
 	$scope.requestTasks = RequestTask.all({ request_id: getURLParameter('request_id') });
 	$scope.employees = Employee.all();
 
+	// Получение количества поручений, с которыми необходимо совершить действия
 	$scope.setIndicatorsCounts = function() {
 		RequestTask.to_assign_count().then(function(d) {
 			$scope.toAssignCount = d;
@@ -34,23 +42,27 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		auditorDescription: false
 	};
 
+	// Фильтры по принадлежности поручений
 	$scope.whoAmI = {
 		assigner: false,
 		executor: false,
 		auditor: false
 	};
 
+	// Фильтры сигнальных индикаторов
 	$scope.indicators = {
 		assign: false,
 		execute: false,
 		audit: false
 	};
 
+	// Фильтры просроченности
 	$scope.overdued = {
 		done: false,
 		not_done: false
 	};
 
+//- Мониторинг изменения моделей ---------------------------
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
 			$timeout(function(){$scope.setWidth();}, 300);
@@ -61,6 +73,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		$scope.setWidth();
 	});
 
+	// Умный поиск по плановому сроку
 	$scope.$watch('deadlineDateFilter', function() {
 		var date;
 		if($scope.deadlineDateFilter) {
@@ -149,6 +162,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		$scope.editingInputs.auditorDescription = ($scope.editingAuditorDescription != "" && $scope.editingAuditorDescription != null);
 	});
 
+//- Изменение моделей --------------------------------------
 	$scope.updateRequestTask = function() {
 		var attr = {};
 		attr.executor_id = $scope.editingExecutorId;
@@ -215,6 +229,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 			false;
 	};
 
+	// Обновляет массив поручений в зависимости от настроенных фильтров
 	function requestTasksFilter() {
 		var attr = {
 			'who_am_i[]': [],

@@ -1,4 +1,11 @@
+/***********************************************************
+ ** users_ctrl.js ******************************************
+ ***********************************************************
+ * Контроллер страницы Пользователи.
+ **********************************************************/
+
 function UsersCtrl($scope, $timeout, User, Employee) {
+//- Инициализация моделей ----------------------------------
 	$scope.users = User.all();
 	$scope.editing = false;
 
@@ -12,6 +19,7 @@ function UsersCtrl($scope, $timeout, User, Employee) {
 		}
 	});
 
+//- Мониторинг изменения моделей ---------------------------
 	$scope.$watch('search', function() {
 		$scope.setWidth();
 	});
@@ -20,6 +28,7 @@ function UsersCtrl($scope, $timeout, User, Employee) {
 		$scope.editingInputs.employee_id = ($scope.editingEmployeeId != "" && $scope.editingEmployeeId != null);
 	});
 
+//- Изменение моделей --------------------------------------
 	$scope.updateUser = function() {
 		var attr = {};
 		attr.employee_id = $scope.editingEmployeeId;

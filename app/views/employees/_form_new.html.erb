@@ -2,15 +2,18 @@
   <div class="form-group" ng-class='{"has-warning": !inputs.name, "has-success": inputs.name}'>
     <label class="col-sm-2 control-label" for="name">Имя</label>
     <div class="col-sm-10">
-      <input id="name" type="text" ng-model='newName' placeholder="Введите имя" class="form-control" ng-required="true">
+      <input id="name"
+        type="text"
+        ng-model='newName'
+        placeholder="Введите имя"
+        class="form-control"
+        ng-required="true">
     </div>
   </div>
   <div class="row">
     <div class="col-sm-2"></div>
-    <div class="col-sm-10"><input type="submit" value="Создать" class="btn btn-primary"></div>
+    <div class="col-sm-10">
+      <input type="submit" value="Создать" class="btn btn-primary">
+    </div>
   </div>
-</form><br>
-
-<div ng-show="loading" class="alert alert-info">
-  <strong>Загрузка...</strong>
-</div>
+</form>

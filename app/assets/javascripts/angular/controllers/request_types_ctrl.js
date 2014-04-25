@@ -1,4 +1,11 @@
+/***********************************************************
+ ** request_types_ctrl.js **********************************
+ ***********************************************************
+ * Контроллер страницы Типы Заявок.
+ **********************************************************/
+
 function RequestTypesCtrl($scope, $timeout, RequestType, Message) {
+//- Инициализация моделей ----------------------------------
 	$scope.requestTypes = RequestType.all();
 	$scope.messages = Message.all();
 	$scope.editing = false;
@@ -19,6 +26,7 @@ function RequestTypesCtrl($scope, $timeout, RequestType, Message) {
 		name: false
 	};
 
+//- Мониторинг изменения моделей ---------------------------
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
 			$timeout(function(){$scope.setWidth();}, 300);
@@ -37,10 +45,12 @@ function RequestTypesCtrl($scope, $timeout, RequestType, Message) {
 		$scope.editingInputs.name = ($scope.editingName != "" && $scope.editingName != null);
 	});
 
+//- Изменение моделей --------------------------------------
 	$scope.createRequestType = function() {
 		var attr = {};
 		attr.name = $scope.newName;
 
+		// Создаем массив типов сигналов, которе нужно связать с созданным типом заявки
 		attr.messages = [];
 		angular.forEach($scope.messages, function(message){
 			if(message.checked) {
@@ -60,6 +70,7 @@ function RequestTypesCtrl($scope, $timeout, RequestType, Message) {
 		var attr = {};
 		attr.name = $scope.editingName;
 
+		// Если был изменен список типов сигналов для типа заявки, говорим об этом серверу
 		if($scope.requestTypeMessagesChanged) {
 			attr.messages = [];
 			angular.forEach($scope.requestTypeMessages, function(message) {
@@ -98,6 +109,7 @@ function RequestTypesCtrl($scope, $timeout, RequestType, Message) {
 	};
 
 	$scope.clickRequestType = function(idx) {
+		// Получаем полную информацию о типе заявки спомощью get запроса по id
 		var rt = RequestType.get($scope.requestTypes[idx].id);
 		rt.$promise.then(function() {
 			$scope.editingRequestType = rt;
@@ -106,6 +118,7 @@ function RequestTypesCtrl($scope, $timeout, RequestType, Message) {
 
 			$scope.editingName = rt.name;
 
+			// Отмечаем типы сигналов, которые связаны с типом заявки
 			$scope.requestTypeMessages = [];
 			var requestTypeMessagesIndexes = [];
 			angular.forEach(rt.messages, function(message) {

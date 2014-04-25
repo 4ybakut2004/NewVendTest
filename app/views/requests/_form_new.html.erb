@@ -1,16 +1,18 @@
 <form ng-submit="createRequest()" class="form-horizontal">
   <div class="text-center">
     <button ng-repeat="requestType in requestTypes"
-            type="button"
-            class="btn btn-default" 
-            ng-class='{active: newRequestTypeId == requestType.id}' 
-            ng-click='setNewRequestTypeId(requestType.id)'
-            style="margin: 5px;">
-            {{requestType.name}}
+      type="button"
+      class="btn btn-default" 
+      ng-class='{active: newRequestTypeId == requestType.id}' 
+      ng-click='setNewRequestTypeId(requestType.id)'
+      style="margin: 5px;">
+      {{requestType.name}}
     </button>
   </div><br>
 
-  <div class="form-group" ng-class='{"has-warning": !inputs.machineId, "has-success": inputs.machineId}' ng-show="inputs.requestTypeId">
+  <div class="form-group" 
+    ng-class='{"has-warning": !inputs.machineId, "has-success": inputs.machineId}'
+    ng-show="inputs.requestTypeId">
     <label class="col-sm-3 control-label" for="machine_id">Автомат</label>
     <div class="col-sm-9">
       <select ng-model="newMachineId" 
@@ -20,32 +22,58 @@
     </div>
   </div>
 
-  <div class="form-group" ng-class='{"has-success": inputs.description}' ng-show="inputs.requestTypeId">
+  <div class="form-group" 
+    ng-class='{"has-success": inputs.description}'
+    ng-show="inputs.requestTypeId">
     <label class="col-sm-3 control-label" for="description">Описание</label>
     <div class="col-sm-9">
-      <input id="description" type="text" ng-model='newDescription' placeholder="Введите описание" class="form-control">
+      <input id="description"
+        type="text"
+        ng-model='newDescription'
+        placeholder="Введите описание"
+        class="form-control">
     </div>
   </div>
 
-  <div class="form-group" ng-class='{"has-success": inputs.phone}' ng-show="inputs.requestTypeId">
+  <div class="form-group" 
+    ng-class='{"has-success": inputs.phone}'
+    ng-show="inputs.requestTypeId">
     <label class="col-sm-3 control-label" for="phone">Телефон</label>
     <div class="col-sm-9">
-      <input id="phone" type="text" ng-model='newPhone' placeholder="Введите номер телефона" class="form-control">
+      <input id="phone"
+        type="text"
+        ng-model='newPhone'
+        placeholder="Введите номер телефона"
+        class="form-control">
     </div>
   </div>
 
   <div class="text-center" ng-show="inputs.requestTypeId">
-    <button style="margin: 5px;" ng-repeat="message in requestTypeMessages" type="button" class="btn btn-default" ng-click="addMessage(message)">{{message.name}}</button>
+    <button style="margin: 5px;"
+      ng-repeat="message in requestTypeMessages"
+      type="button"
+      class="btn btn-default"
+      ng-click="addMessage(message)">
+      {{message.name}}
+    </button>
   </div>
 
   <div class="row" ng-show="newMessages.length">
-    <div class="col-md-12"><h4>Создадутся сигналы:</h4></div>
+    <div class="col-md-12">
+      <h4>
+        Создадутся сигналы:
+      </h4>
+    </div>
   </div>
 
   <div class="panel panel-default" ng-repeat="message in newMessages track by $index">
     <div class="panel-heading">
       <span>{{message.name}}</span>
-      <button type="button" class="close" ng-click="deleteMessage($index)">&times;</button>
+      <button type="button"
+        class="close"
+        ng-click="deleteMessage($index)">
+        &times;
+      </button>
     </div>
     <div class="panel-body">
       <div class="row">
@@ -54,11 +82,14 @@
           <ul class="non-point">
             <li ng-repeat="attribute in message.attributes">
               <label for="{{attribute.id}}">{{attribute.name}}</label>
-              <input type="{{inputType(attribute.attribute_type)}}" class="form-control input-sm" id="{{attribute.id}}" ng-model="attribute.value">
+              <input type="{{inputType(attribute.attribute_type)}}"
+                class="form-control input-sm"
+                id="{{attribute.id}}"
+                ng-model="attribute.value">
             </li>
           </ul>
           </small>
-        </div>
+        </div> <!-- end of col -->
         <div class="col-md-6">
           <small>
           <ul class="non-point">
@@ -68,10 +99,10 @@
             </li>
           </ul>
           </small>
-        </div>
-      </div>
-    </div>
-  </div>
+        </div> <!-- end of col -->
+      </div>  <!-- end of row -->
+    </div> <!-- end of panel-body -->
+  </div> <!-- end of panel -->
 
   <div class="row form-footer" ng-show="inputs.requestTypeId">
     <div class="col-sm-12 text-right"><input type="submit" value="Создать" class="btn btn-primary"></div>

@@ -1,50 +1,61 @@
 <div ng-show="editing" class="border-top">
   <button type="button" class="close" ng-click="editing=false">&times;</button>
   <h1 class="text-center">Заявка {{editingId}}</h1>
+
   <form ng-submit="updateRequest()" class="form-horizontal">
 
     <div class="row">
-      <div class="col-md-6">
-        <div class="form-group">
-          <label class="col-sm-4 text-right" for="registrar_name">Регистратор</label>
-          <div class="col-sm-8 text-left" id="registrar_name">{{editingRegistrarName}}</div>
+      <div class="col-md-8">
+        <div class="form-group"
+          ng-class='{"has-warning": !editingInputs.machineId, "has-success": editingInputs.machineId}'>
+          <%= label_tag :machine_id, "Автомат", :class => "col-sm-3 control-label" %>
+          <div class="col-sm-9">
+            <%= select_tag :machine_id, options_for_select(Machine.all.collect {|m| [ m.name, m.id ] }), :class => "form-control", "ng-model" => "editingMachineId", "ng-required" => true %>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label class="col-sm-4 text-right" for="created_at">Дата регистрации</label>
-          <div class="col-sm-8 text-left" id="created_at">{{formattedDate(requests[editingIdx].created_at)}}</div>
+        <div class="form-group" ng-class='{"has-success": editingInputs.description}'>
+          <label class="col-sm-3 control-label" for="description">Описание</label>
+          <div class="col-sm-9">
+            <input id="description"
+              type="text"
+              ng-model='editingDescription'
+              placeholder="Введите описание"
+              class="form-control">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-9">
+            <input type="submit" value="Сохранить" class="btn btn-primary">
+          </div>
         </div>
       </div>
-
-      <div class="col-md-6">
-        <div class="form-group">
-          <label class="col-sm-4 text-right" for="request_type_name">Тип заявки</label>
-          <div class="col-sm-8 text-left" id="request_type_name">{{editingRequestTypeName}}</div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-4 text-right" for="phone">Телефон</label>
-          <div class="col-sm-8 text-left" id="phone">{{editingPhone}}</div>
-        </div>
+      <div class="col-md-4">
+        <ul class="non-point">
+          <li>
+            <strong>Регистратор:</strong>
+            {{editingRegistrarName}}
+          </li>
+          <li>
+            <strong>Дата регистрации:</strong>
+            {{formattedDate(requests[editingIdx].created_at)}}
+          </li>
+          <li>
+            <strong>Тип заявки:</strong>
+            {{editingRequestTypeName}}
+          </li>
+          <li>
+            <strong>Телефон:</strong>
+            {{editingPhone}}
+          </li>
+          <li ng-show="editingRequestTaskId">
+            <strong>Родительское поручение:</strong>
+            {{editingRequestTaskId}}
+          </li>
+        </ul>
       </div>
-    </div>
-
-    <div class="form-group" ng-class='{"has-warning": !editingInputs.machineId, "has-success": editingInputs.machineId}'>
-      <%= label_tag :machine_id, "Автомат", :class => "col-sm-2 control-label" %>
-      <div class="col-sm-8">
-        <%= select_tag :machine_id, options_for_select(Machine.all.collect {|m| [ m.name, m.id ] }), :class => "form-control", "ng-model" => "editingMachineId", "ng-required" => true %>
-      </div>
-    </div>
-
-    <div class="form-group" ng-class='{"has-success": editingInputs.description}'>
-      <label class="col-sm-2 control-label" for="description">Описание</label>
-      <div class="col-sm-8">
-        <input id="description" type="text" ng-model='editingDescription' placeholder="Введите описание" class="form-control">
-      </div>
-    </div>
-    
-    <div class="row">
-      <div class="col-sm-2"></div>
-      <div class="col-sm-8"><input type="submit" value="Сохранить" class="btn btn-primary"></div>
     </div>
 
     <h3>Сигналы и <a href="/request_tasks?request_id={{editingId}}">поручения</a> заявки</h3>
@@ -68,7 +79,7 @@
                   </li>
                 </ul>
                 </small>
-              </div>
+              </div> <!-- end of col -->
               <div class="col-md-6">
                 <small>
                 <ul class="non-point">
@@ -78,10 +89,10 @@
                   </li>
                 </ul>
                 </small>
-              </div>
-            </div>
-          </div>
-        </div>
+              </div> <!-- end of col -->
+            </div> <!-- end of row -->
+          </div> <!-- end of panel-body -->
+        </div> <!-- end of panel -->
 
       </div>
     </div>

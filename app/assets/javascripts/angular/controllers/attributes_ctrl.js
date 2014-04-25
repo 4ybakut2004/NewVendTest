@@ -1,4 +1,11 @@
+/***********************************************************
+ ** attributes_ctrl.js *************************************
+ ***********************************************************
+ * Контроллер страницы Типы Атрибутов.
+ **********************************************************/
+
 function AttributesCtrl($scope, $timeout, Attribute, Message) {
+//- Инициализация моделей ----------------------------------
 	$scope.attributes = Attribute.all();
 	$scope.messages = Message.all();
 	$scope.newAttributeType = "number";
@@ -15,6 +22,7 @@ function AttributesCtrl($scope, $timeout, Attribute, Message) {
 		attributeType: false
 	};
 
+//- Мониторинг изменения моделей ---------------------------
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
 			$timeout(function(){$scope.setWidth();}, 300);
@@ -41,16 +49,20 @@ function AttributesCtrl($scope, $timeout, Attribute, Message) {
 		$scope.editingInputs.attributeType = ($scope.editingAttributeType != "" && $scope.editingAttributeType != null);
 	});
 
+//- Изменение моделей --------------------------------------
 	$scope.createAttribute = function() {
 		var attr = {};
 		attr.name = $scope.newName;
 		attr.attribute_type = $scope.newAttributeType;
 		attr.messages = [];
+
+		// Заполняем массив типов сигналов, которые нужно связать с созданным типом атрибута
 		angular.forEach($scope.messages, function(message){
 			if(message.checked) {
 				attr.messages.push(message.id);
 			}
 		});
+
 		var newAttribute = Attribute.create(attr);
 
 		$scope.attributes.unshift(newAttribute);

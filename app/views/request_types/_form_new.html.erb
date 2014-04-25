@@ -1,8 +1,14 @@
 <form ng-submit="createRequestType()" class="form-horizontal">
-  <div class="form-group" ng-class='{"has-warning": !inputs.name, "has-success": inputs.name}'>
+  <div class="form-group" 
+    ng-class='{"has-warning": !inputs.name, "has-success": inputs.name}'>
     <label class="col-sm-3 control-label" for="name">Наименование</label>
     <div class="col-sm-9">
-      <input id="name" type="text" ng-model='newName' placeholder="Введите наименование" class="form-control" ng-required="true">
+      <input id="name"
+        type="text"
+        ng-model='newName'
+        placeholder="Введите наименование"
+        class="form-control"
+        ng-required="true">
     </div>
   </div>
 
@@ -11,13 +17,20 @@
       <h3 class="text-center">Типы сигналов</h3>
       <ul class="non-point">
         <li ng-repeat="message in messages">
-          <button ng-class="{active: message.checked}" type="button" class="btn btn-default" ng-click="check(message)">{{message.name}}</button>
+          <button ng-class="{active: message.checked}" 
+            type="button"
+            class="btn btn-default"
+            ng-click="check(message)">
+            {{message.name}}
+          </button>
         </li>
       </ul>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-sm-12 text-right form-footer"><input type="submit" value="Создать" class="btn btn-primary"></div>
+    <div class="col-sm-12 text-right form-footer">
+      <input type="submit" value="Создать" class="btn btn-primary">
+    </div>
   </div>
 </form>

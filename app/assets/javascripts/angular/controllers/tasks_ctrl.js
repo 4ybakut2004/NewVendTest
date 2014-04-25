@@ -1,4 +1,11 @@
+/***********************************************************
+ ** tasks_ctrl.js ******************************************
+ ***********************************************************
+ * Контроллер страницы Типы Поручений.
+ **********************************************************/
+
 function TasksCtrl($scope, $timeout, Task, Message) {
+//- Инициализация моделей ----------------------------------
 	$scope.tasks = Task.all();
 	$scope.messages = Message.all();
 
@@ -14,6 +21,7 @@ function TasksCtrl($scope, $timeout, Task, Message) {
 		deadline: false
 	};
 
+//- Мониторинг изменения моделей ---------------------------
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
 			$timeout(function(){$scope.setWidth();}, 300);
@@ -40,6 +48,7 @@ function TasksCtrl($scope, $timeout, Task, Message) {
 		$scope.editingInputs.deadline = ($scope.editingDeadline != "" && $scope.editingDeadline != null);
 	});
 
+//- Изменение моделей --------------------------------------
 	$scope.createTask = function() {
 		var attr = {};
 		attr.name = $scope.newName;
