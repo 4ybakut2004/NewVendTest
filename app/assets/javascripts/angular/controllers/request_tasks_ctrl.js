@@ -67,6 +67,10 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		$timeout(function(){$scope.setWidth();}, 300);
 	};
 
+	$scope.changeScroll = function() {
+		$timeout(function(){$scope.restoreScroll();}, 100);
+	};
+
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
 			$scope.changeWidth();
@@ -177,9 +181,12 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		attr.audition_date = strDateToUTC($scope.editingAuditionDate);
 
 		var updatedRequestTask = RequestTask.update($scope.editingId, attr);
-		$scope.requestTasks[$scope.editingIdx] = updatedRequestTask;
 
-		$scope.setIndicatorsCounts();
+		updatedRequestTask.$promise.then(function() {
+			$scope.setIndicatorsCounts();
+		});
+
+		$scope.requestTasks[$scope.editingIdx] = updatedRequestTask;
 
 		$scope.editingExecutorId = "";
 		$scope.editingAuditorId = "";
@@ -194,6 +201,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		$scope.editingIdx = null;
 
 		$scope.editing = false;
+		$scope.changeScroll();
 	};
 
 	$scope.clickRequestTask = function(idx) {
@@ -216,8 +224,15 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 			$scope.editingExecutionDate = $scope.dateForInput(r.execution_date);
 			$scope.editingAuditionDate = $scope.dateForInput(r.audition_date);
 
+			$scope.rememberScroll();
+
 			$scope.editing = true;
 		});
+	};
+
+	$scope.closeEditing = function() {
+		$scope.editing = false;
+		$scope.changeScroll();
 	};
 
 	$scope.formattedDate = formattedDate;

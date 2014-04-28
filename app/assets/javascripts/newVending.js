@@ -54,7 +54,17 @@ function FixedHeader($compile)
 				}
 			};
 
+			$scope.scrollY = 0;
 			$scope.setWidth = setWidth;
+
+			$scope.rememberScroll = function() {
+				$scope.scrollY = $(document).scrollTop();
+				$(document).scrollTop(0);
+			};
+
+			$scope.restoreScroll = function() {
+				$(document).scrollTop($scope.scrollY);
+			};
 
 			var cloneHeader = function() {
 				if(fixedHeader) {
