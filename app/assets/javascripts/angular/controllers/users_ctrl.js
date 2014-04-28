@@ -13,15 +13,15 @@ function UsersCtrl($scope, $timeout, User, Employee) {
 		employee_id: false
 	};
 
+//- Мониторинг изменения моделей ---------------------------
+	$scope.changeWidth = function() {
+		$timeout(function(){$scope.setWidth();}, 300);
+	};
+
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
-			$timeout(function(){$scope.setWidth();}, 300);
+			$scope.changeWidth();
 		}
-	});
-
-//- Мониторинг изменения моделей ---------------------------
-	$scope.$watch('search', function() {
-		$scope.setWidth();
 	});
 
 	$scope.$watch('editingEmployeeId', function() {

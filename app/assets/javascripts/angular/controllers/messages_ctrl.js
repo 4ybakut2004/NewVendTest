@@ -37,14 +37,14 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 	};
 
 //- Мониторинг изменения моделей ---------------------------
+	$scope.changeWidth = function() {
+		$timeout(function(){$scope.setWidth();}, 300);
+	};
+	
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
 			$timeout(function(){$scope.setWidth();}, 300);
 		}
-	});
-
-	$scope.$watch('search', function() {
-		$scope.setWidth();
 	});
 
 	$scope.$watch('newName', function() {

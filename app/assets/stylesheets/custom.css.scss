@@ -3,7 +3,7 @@ body {
 	background-color: #e9ebec;
 }
 
-@media (max-width: 991px) {
+/*@media (max-width: 991px) {
     .navbar-fixed-top {
         position: relative;
         top: auto;
@@ -14,7 +14,7 @@ body {
     body {
         margin: 0;
     }
-}
+}*/
 
 .border-top {
 	border-top: 1px solid #c5c5c5;
@@ -57,9 +57,8 @@ ul.non-point {
 
 .standart-table-container {
 	overflow-x: auto;
-	overflow-y: scroll;
+	overflow-y: auto;
 	position: relative;
-	min-height: 300px;
 }
 
 /*.standart-table-container table {
@@ -75,6 +74,18 @@ ul.non-point {
 	top: 0;
 	background-color: #FFFFFF;
 	table-layout: fixed !important;
+}
+
+.scrollX {
+	overflow-x: auto;
+	overflow-y: hidden;
+	position: fixed;
+	bottom: 0px;
+	height: 15px;
+}
+
+.scrollInner {
+	height: 1px;
 }
 
 .inline-block {

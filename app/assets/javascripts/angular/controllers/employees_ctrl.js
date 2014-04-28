@@ -18,14 +18,14 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 	};
 
 //- Мониторинг изменения моделей ---------------------------
+	$scope.changeWidth = function() {
+		$timeout(function(){$scope.setWidth();}, 300);
+	};
+	
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
 			$timeout(function(){$scope.setWidth();}, 300);
 		}
-	});
-
-	$scope.$watch('search', function() {
-		$scope.setWidth();
 	});
 
 	$scope.$watch('newName', function() {

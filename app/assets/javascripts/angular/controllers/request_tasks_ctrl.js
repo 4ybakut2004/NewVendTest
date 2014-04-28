@@ -63,14 +63,14 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 	};
 
 //- Мониторинг изменения моделей ---------------------------
+	$scope.changeWidth = function() {
+		$timeout(function(){$scope.setWidth();}, 300);
+	};
+
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
-			$timeout(function(){$scope.setWidth();}, 300);
+			$scope.changeWidth();
 		}
-	});
-
-	$scope.$watch('search', function(){
-		$scope.setWidth();
 	});
 
 	// Умный поиск по плановому сроку
@@ -257,7 +257,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 
 		$scope.requestTasks = RequestTask.all(attr);
 
-		$timeout(function(){$scope.setWidth();}, 300);
+		$scope.changeWidth();
 	}
 
 	$scope.whoAmIFilter = function(str) {

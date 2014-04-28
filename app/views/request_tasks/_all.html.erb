@@ -93,16 +93,16 @@
         <th>Дата проверки</th>
       </tr>
       <tr>
-        <td><input ng-model="search.id"             class="form-control input-sm"></td>
-        <td><input ng-model="search.task_name"      class="form-control input-sm"></td>
-        <td><input ng-model="search.assigner_name"  class="form-control input-sm"></td>
-        <td><input ng-model="search.executor_name"  class="form-control input-sm"></td>
-        <td><input ng-model="search.auditor_name"   class="form-control input-sm"></td>
-        <td><input ng-model="search.description"    class="form-control input-sm"></td>
-        <td><input ng-model="search.creation_date"  class="form-control input-sm"></td>
-        <td><input ng-model="deadlineDateFilter"    class="form-control input-sm"></td>
-        <td><input ng-model="search.execution_date" class="form-control input-sm"></td>
-        <td><input ng-model="search.audition_date"  class="form-control input-sm"></td>
+        <td><input ng-model="search.id"             class="form-control input-sm" ng-change="changeWidth()"></td>
+        <td><input ng-model="search.task_name"      class="form-control input-sm" ng-change="changeWidth()"></td>
+        <td><input ng-model="search.assigner_name"  class="form-control input-sm" ng-change="changeWidth()"></td>
+        <td><input ng-model="search.executor_name"  class="form-control input-sm" ng-change="changeWidth()"></td>
+        <td><input ng-model="search.auditor_name"   class="form-control input-sm" ng-change="changeWidth()"></td>
+        <td><input ng-model="search.description"    class="form-control input-sm" ng-change="changeWidth()"></td>
+        <td><input ng-model="search.creation_date"  class="form-control input-sm" ng-change="changeWidth()"></td>
+        <td><input ng-model="deadlineDateFilter"    class="form-control input-sm" ng-change="changeWidth()"></td>
+        <td><input ng-model="search.execution_date" class="form-control input-sm" ng-change="changeWidth()"></td>
+        <td><input ng-model="search.audition_date"  class="form-control input-sm" ng-change="changeWidth()"></td>
       </tr>
     </thead>
     <tbody>

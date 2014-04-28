@@ -48,14 +48,14 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 	};
 
 //- Мониторинг изменения моделей ---------------------------
+	$scope.changeWidth = function() {
+		$timeout(function(){$scope.setWidth();}, 300);
+	};
+	
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
-			$timeout(function(){$scope.setWidth();}, 300);
+			$scope.changeWidth();
 		}
-	});
-
-	$scope.$watch('search', function(){
-		$scope.setWidth();
 	});
 
 	$scope.$watch('newRequestTypeId', function() {
@@ -226,7 +226,7 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 
 		$scope.requests = Request.all(attr);
 
-		$timeout(function(){$scope.setWidth();}, 300);
+		$scope.changeWidth();
 	}
 
 	$scope.whoAmIFilter = function(str) {

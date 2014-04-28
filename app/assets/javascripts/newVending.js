@@ -8,22 +8,48 @@ function FixedHeader($compile)
 {       
     return {
 	    link: function($scope, element, attrs) {
-			var fixedHeader;
+	    	var fixedHeader;
 			var table = element.find('table').first();
 			var h;
 
+			var scrollX = $('<div class="scrollX"></div>');
+			var scrollInner = $('<div class="scrollInner"></div>');
+			scrollX.append(scrollInner);
+
 			var setWidth = function() {
-				element.css({
-					height: $( window ).height() - element.offset().top
-				});
+				var headerVisibility = "visible";
+				var headerPositionTop = $(document).scrollTop() + 50 - table.offset().top;
+				if(0 > headerPositionTop) {
+					headerVisibility = "hidden";
+				}
+
+				var scrollXVisibility = "visible";
+				var defaultScrollXVisibility = "hidden";
+				if($(document).scrollTop() + $(window).height() > element.offset().top + element.height()) {
+					scrollXVisibility = "hidden";
+					defaultScrollXVisibility = "auto";
+				}
+
 				if(fixedHeader) {
 					fixedHeader.css({
-						width: table.width()
+						width: table.width(),
+						top: headerPositionTop,
+						visibility: headerVisibility
 					});
+
 					h.find('tr').first().find('th').each(function(index) {
 						$(this).css({
 							width: $(table.find('tr').first().find('th')[index]).innerWidth()
 						});
+					});
+
+					scrollX.css({
+						width: element.width(),
+						visibility: scrollXVisibility
+					});
+
+					scrollInner.css({
+						width: table.width()
 					});
 				}
 			};
@@ -45,21 +71,26 @@ function FixedHeader($compile)
 
 				setWidth();
 
-				element.prepend(fixedHeader);
+				scrollX.insertAfter(element);
+				element.prepend(fh);
 			};
 
-			element.bind('scroll', function() {
-				if(!fixedHeader) {
-					cloneHeader();
-				}
-				fixedHeader.css({
-					top: -table.position().top
-				});
+			cloneHeader();
+
+			$(window).bind('scroll', function() {
 				setWidth();
 			});
 
 			$(window).resize(function() {
 				setWidth();
+			});
+
+			element.bind('scroll', function() {
+				scrollX.scrollLeft(element.scrollLeft());
+			});
+
+			scrollX.bind('scroll', function() {
+				element.scrollLeft(scrollX.scrollLeft());
 			});
         }
     };

@@ -27,6 +27,10 @@ function RequestTypesCtrl($scope, $timeout, RequestType, Message) {
 	};
 
 //- Мониторинг изменения моделей ---------------------------
+	$scope.changeWidth = function() {
+		$timeout(function(){$scope.setWidth();}, 300);
+	};
+	
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
 			$timeout(function(){$scope.setWidth();}, 300);
