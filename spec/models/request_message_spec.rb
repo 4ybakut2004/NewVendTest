@@ -1,5 +1,11 @@
 require 'spec_helper'
 
 describe RequestMessage do
-  pending "add some examples to (or delete) #{__FILE__}"
+  	let(:request_message) { FactoryGirl.create(:request_message) }
+
+  	subject { request_message }
+
+  	it { should respond_to(:request_id) }
+  	it { should respond_to(:message_id) }
+
 end

@@ -14,9 +14,14 @@ FactoryGirl.define do
 
   factory :request do
   	description "Новая заявка"
-	phone "89999999999"
-	machine_id 0
-	registrar_id 0
+  	phone "89999999999"
+  	machine_id 0
+  	registrar_id 0
+
+    after(:build) do |request|
+      request.machine_id = FactoryGirl.create(:machine).id
+      request.registrar_id = FactoryGirl.create(:employee).id
+    end
   end
 
   factory :request_type do
@@ -58,5 +63,15 @@ FactoryGirl.define do
     assigner_description "desc"
     executor_description "desc"
     auditor_description "desc"
+  end
+
+  factory :request_message do
+    request_id 0
+    message_id 0
+
+    after(:build) do |request_message|
+      request_message.request_id = FactoryGirl.create(:request).id
+      request_message.message_id = FactoryGirl.create(:message).id
+    end
   end
 end

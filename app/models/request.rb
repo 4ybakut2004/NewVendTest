@@ -13,15 +13,6 @@ class Request < ActiveRecord::Base
 	validates :registrar_id, presence: true
 	validate :validate_machine_id
 
-	REQUEST_TYPES = {
-	    :phone => "С Телефона",
-	    :other => "Произвольная"
-	}
-
-    def self.request_types
-    	REQUEST_TYPES
-    end
-
     def getFullInfo
     	fullInfo = self.attributes
         fullInfo["registrar_name"] = self.registrar.name

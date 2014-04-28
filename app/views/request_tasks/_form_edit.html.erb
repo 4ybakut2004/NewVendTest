@@ -29,8 +29,9 @@
           </div>
         </div>
 
-        <div class="form-group" ng-class='{"has-success": editingInputs.deadlineDate}' 
-             ng-show="canEditDeadlineDate(<%= current_user.employee_id %>)">
+        <div class="form-group" 
+          ng-class='{"has-success": editingInputs.deadlineDate}' 
+          ng-show="canEditDeadlineDate(<%= current_user.employee_id %>)">
           <label class="col-sm-3 control-label" for="deadline_date">Плановая дата</label>
           <div class="col-sm-9">
             <input datetimepickerfromnow 
@@ -41,7 +42,8 @@
           </div>
         </div>
 
-        <div class="form-group" ng-show="!canEditDeadlineDate(<%= current_user.employee_id %>)">
+        <div class="form-group" 
+          ng-show="!canEditDeadlineDate(<%= current_user.employee_id %>)">
           <label class="col-sm-3 text-right" for="deadline_date">Плановая дата</label>
           <div class="col-sm-9 text-left"
             id="deadline_date">
@@ -49,7 +51,8 @@
           </div>
         </div>
 
-        <div class="form-group" ng-class='{"has-success": editingInputs.executionDate}'>
+        <div class="form-group" 
+          ng-class='{"has-success": editingInputs.executionDate}'>
           <label class="col-sm-3 control-label" for="execution_date">Дата выполнения</label>
           <div class="col-sm-9">
             <input datetimepicker
@@ -60,7 +63,8 @@
           </div>
         </div>
 
-        <div class="form-group" ng-class='{"has-success": editingInputs.auditionDate}'>
+        <div class="form-group" 
+          ng-class='{"has-success": editingInputs.auditionDate}'>
           <label class="col-sm-3 control-label" for="audition_date">Дата проверки</label>
           <div class="col-sm-9">
             <input datetimepicker
@@ -68,6 +72,17 @@
               id="audition_date"
               ng-model="editingAuditionDate"
               class="form-control">
+          </div>
+        </div>
+
+        <div class="form-group" ng-show="requestTasks[editingIdx].audition_date">
+          <label class="col-sm-3 text-right" 
+            for="audition_entering_date">
+            Внос информации о проверке
+          </label>
+          <div class="col-sm-9 text-left"
+            id="audition_entering_date">
+            {{formattedDate(requestTasks[editingIdx].audition_entering_date)}}
           </div>
         </div>
 
