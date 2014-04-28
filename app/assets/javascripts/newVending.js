@@ -71,8 +71,9 @@ function FixedHeader($compile)
 
 				setWidth();
 
-				scrollX.insertAfter(element);
+				//scrollX.insertAfter(element);
 				element.prepend(fh);
+				element.prepend(scrollX);
 			};
 
 			cloneHeader();
