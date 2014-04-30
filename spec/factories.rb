@@ -30,13 +30,13 @@ FactoryGirl.define do
 
   factory :message do
   	name "Не выдал сдачу"
-  	employee_id 0
   	description "Описание"
   end
 
   factory :task do
   	name "Починить раздатчик"
   	deadline 1
+    solver_id 0
   end
 
   factory :attribute do

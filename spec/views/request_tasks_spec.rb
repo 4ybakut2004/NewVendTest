@@ -35,6 +35,7 @@ describe "Request Tasks pages" do
         it { should have_selector('thead th', :text => 'Плановая дата') }
         it { should have_selector('thead th', :text => 'Дата выполнения') }
         it { should have_selector('thead th', :text => 'Дата проверки') }
+        it { should have_selector('thead th', :text => 'Автомат') }
     end
   end
 

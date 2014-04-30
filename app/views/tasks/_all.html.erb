@@ -23,12 +23,14 @@
         <th>Номер</th>
         <th>Наименование</th>
         <th>Плановый срок (дней)</th>
+        <th>Решатель</th>
       </tr>
       <tr>
         <td></td>
         <td><input ng-model="search.id" class="form-control input-sm" ng-change="changeWidth()"></td>
         <td><input ng-model="search.name" class="form-control input-sm" ng-change="changeWidth()"></td>
         <td><input ng-model="search.deadline" class="form-control input-sm" ng-change="changeWidth()"></td>
+        <td><input ng-model="search.solver_name" class="form-control input-sm" ng-change="changeWidth()"></td>
       </tr>
     </thead>
 
@@ -38,6 +40,7 @@
         <td ng-click="clickTask($index)">{{task.id}}</td>
         <td ng-click="clickTask($index)">{{task.name}}</td>
         <td ng-click="clickTask($index)">{{task.deadline}}</td>
+        <td ng-click="clickTask($index)">{{task.solver_name}}</td>
       </tr>
     </tbody>
   </table>

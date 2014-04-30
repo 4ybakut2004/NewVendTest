@@ -83,40 +83,43 @@
       <tr>
         <th>Номер</th>
         <th>Тип</th>
-        <th>Назначатель</th>
-        <th>Исполнитель</th>
-        <th>Контролер</th>
         <th>Описание</th>
         <th>Дата создания</th>
         <th>Плановая дата</th>
         <th>Дата выполнения</th>
         <th>Дата проверки</th>
+        <th>Автомат</th>
+        <th>Назначатель</th>
+        <th>Исполнитель</th>
+        <th>Контролер</th>
       </tr>
       <tr>
         <td><input ng-model="search.id"             class="form-control input-sm" ng-change="changeWidth()"></td>
         <td><input ng-model="search.task_name"      class="form-control input-sm" ng-change="changeWidth()"></td>
-        <td><input ng-model="search.assigner_name"  class="form-control input-sm" ng-change="changeWidth()"></td>
-        <td><input ng-model="search.executor_name"  class="form-control input-sm" ng-change="changeWidth()"></td>
-        <td><input ng-model="search.auditor_name"   class="form-control input-sm" ng-change="changeWidth()"></td>
         <td><input ng-model="search.description"    class="form-control input-sm" ng-change="changeWidth()"></td>
         <td><input ng-model="search.creation_date"  class="form-control input-sm" ng-change="changeWidth()"></td>
         <td><input ng-model="deadlineDateFilter"    class="form-control input-sm" ng-change="changeWidth()"></td>
         <td><input ng-model="search.execution_date" class="form-control input-sm" ng-change="changeWidth()"></td>
         <td><input ng-model="search.audition_date"  class="form-control input-sm" ng-change="changeWidth()"></td>
+        <td><input ng-model="search.machine_name"   class="form-control input-sm" ng-change="changeWidth()"></td>
+        <td><input ng-model="search.assigner_name"  class="form-control input-sm" ng-change="changeWidth()"></td>
+        <td><input ng-model="search.executor_name"  class="form-control input-sm" ng-change="changeWidth()"></td>
+        <td><input ng-model="search.auditor_name"   class="form-control input-sm" ng-change="changeWidth()"></td>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="requestTask in requestTasks | filter:search">
         <td ng-click="clickRequestTask($index)">{{requestTask.id}}</td>
         <td ng-click="clickRequestTask($index)">{{requestTask.task_name}}</td>
-        <td ng-click="clickRequestTask($index)">{{requestTask.assigner_name}}</td>
-        <td ng-click="clickRequestTask($index)">{{requestTask.executor_name}}</td>
-        <td ng-click="clickRequestTask($index)">{{requestTask.auditor_name}}</td>
         <td ng-click="clickRequestTask($index)">{{requestTask.description}}</td>
         <td ng-click="clickRequestTask($index)">{{formattedDate(requestTask.creation_date)}}</td>
         <td ng-click="clickRequestTask($index)">{{formattedDate(requestTask.deadline_date)}}</td>
         <td ng-click="clickRequestTask($index)">{{formattedDate(requestTask.execution_date)}}</td>
         <td ng-click="clickRequestTask($index)">{{formattedDate(requestTask.audition_date)}}</td>
+        <td ng-click="clickRequestTask($index)">{{requestTask.machine_name}}</td>
+        <td ng-click="clickRequestTask($index)">{{requestTask.assigner_name}}</td>
+        <td ng-click="clickRequestTask($index)">{{requestTask.executor_name}}</td>
+        <td ng-click="clickRequestTask($index)">{{requestTask.auditor_name}}</td>
       </tr>
     </tbody>
   </table>

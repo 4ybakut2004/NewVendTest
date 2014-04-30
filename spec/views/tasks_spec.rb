@@ -23,11 +23,13 @@ describe "Tasks pages" do
       it { should have_selector('thead th', :text => 'Номер') }
       it { should have_selector('thead th', :text => 'Наименование') }
       it { should have_selector('thead th', :text => 'Плановый срок (дней)') }
+      it { should have_selector('thead th', :text => 'Решатель') }
     end
 
     describe "Fields in creation form" do
       it { should have_selector('#newTask label', :text => 'Наименование') }
       it { should have_selector('#newTask label', :text => 'Плановый срок (дней)') }
+      it { should have_selector('#newTask label', :text => 'Решатель') }
     end
   end
 

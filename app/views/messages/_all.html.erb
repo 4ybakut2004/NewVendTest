@@ -18,14 +18,12 @@
         <th></th>
         <th>Номер</th>
         <th>Наименование</th>
-        <th>Решатель</th>
         <th>Описание</th>
       </tr>
       <tr>
         <td></td>
         <td><input ng-model="search.id" class="form-control input-sm" ng-change="changeWidth()"></td>
         <td><input ng-model="search.name" class="form-control input-sm" ng-change="changeWidth()"></td>
-        <td><input ng-model="search.solver_name" class="form-control input-sm" ng-change="changeWidth()"></td>
         <td><input ng-model="search.description" class="form-control input-sm" ng-change="changeWidth()"></td>
       </tr>
     </thead>
@@ -35,7 +33,6 @@
         <td><input type="checkbox" ng-model="message.checked"></td>
         <td ng-click="clickMessage($index)">{{message.id}}</td>
         <td ng-click="clickMessage($index)">{{message.name}}</td>
-        <td ng-click="clickMessage($index)">{{message.solver_name}}</td>
         <td ng-click="clickMessage($index)">{{message.description}}</td>
       </tr>
     </tbody>

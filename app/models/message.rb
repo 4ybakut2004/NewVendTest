@@ -14,7 +14,6 @@ class Message < ActiveRecord::Base
   	def attrs
   		self.attributes.merge({ :tasks => self.tasks, 
                               :attributes => self.message_attributes.collect { |a| a.attribute } ,
-                              :solver_name => self.employee ? self.employee.name : nil,
                               :request_types => self.request_types
                             }) 
   	end

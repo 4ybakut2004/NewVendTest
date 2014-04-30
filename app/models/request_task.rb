@@ -11,27 +11,38 @@ class RequestTask < ActiveRecord::Base
     before_save :set_audition_entering_date
 
 	def getFullInfo
+        request_message = self.request_message
+        assigner = self.assigner
+        executor = self.executor
+        auditor = self.auditor
+
     	fullInfo = self.attributes
-        fullInfo["request_id"] = self.request_message.request_id
+        fullInfo["request_id"] = request_message.request_id
         fullInfo["task_name"] = self.task.name
-        fullInfo["assigner_name"] = self.assigner_id ? self.assigner.name : nil
-        fullInfo["executor_name"] = self.executor_id ? self.executor.name : nil
-        fullInfo["auditor_name"] = self.auditor_id ? self.auditor.name : nil
+        fullInfo["assigner_name"] = assigner ? assigner.name : nil
+        fullInfo["executor_name"] = executor ? executor.name : nil
+        fullInfo["auditor_name"] = auditor ? auditor.name : nil
         fullInfo["checked"] = false;
 
-        fullInfo["request"] = self.request_message.request.getFullInfo
-        fullInfo["attributes"] = self.request_message.request_attributes.collect { |ra| { :name => ra.attribute.name, :value => ra.value } }
+        fullInfo["request"] = request_message.request.getFullInfo
+        fullInfo["attributes"] = request_message.request_attributes.collect { |ra| { :name => ra.attribute.name, :value => ra.value } }
 
         return fullInfo
     end
 
     def attrs
+        request_message = self.request_message
+        assigner = self.assigner
+        executor = self.executor
+        auditor = self.auditor
+
     	fullInfo = self.attributes
-        fullInfo["request_id"] = self.request_message.request_id
+        fullInfo["request_id"] = request_message.request_id
+        fullInfo["machine_name"] = request_message.request.machine.name
     	fullInfo["task_name"] = self.task.name
-    	fullInfo["assigner_name"] = self.assigner_id ? self.assigner.name : nil
-    	fullInfo["executor_name"] = self.executor_id ? self.executor.name : nil
-    	fullInfo["auditor_name"] = self.auditor_id ? self.auditor.name : nil
+    	fullInfo["assigner_name"] = assigner ? assigner.name : nil
+    	fullInfo["executor_name"] = executor ? executor.name : nil
+    	fullInfo["auditor_name"] = auditor ? auditor.name : nil
         fullInfo["checked"] = false;
 
     	return fullInfo

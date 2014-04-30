@@ -52,8 +52,8 @@ class RequestsController < ApplicationController
           request_message = RequestMessage.create(:request_id => @request.id,
                                                   :message_id => m[:id])
           message = Message.find(m[:id])
-          assigner_id = message.employee_id ? message.employee_id : @request.registrar_id
           message.tasks.each { |task|
+            assigner_id = task.solver ? task.solver_id : @request.registrar_id
             request_task = RequestTask.create(:assigner_id => assigner_id,
                                               :auditor_id  => assigner_id,
                                               :task_id => task.id,

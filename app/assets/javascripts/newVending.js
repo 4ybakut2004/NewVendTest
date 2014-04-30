@@ -113,11 +113,26 @@ function DateTimePicker($compile)
 	    link: function($scope, element, attrs) {
 			element.datetimepicker({
 		      lang: 'ru',
-		      mask: DATE_MASK,
+		      mask: true,
 		      format: 'd.m.Y H:i:s',
 		      dayOfWeekStart: 1,
 		      allowBlank: true
 		    });
+
+		    var inputContainer = $('<div style="position: relative;"></div>');
+		    var parent = element.parent();
+
+		    var clearButton = $('<button type="button" class="close input-clear">&times;</button>');
+
+		    clearButton.click(function() {
+		    	element.val(DATE_MASK);
+		    	$scope[attrs.ngModel] = DATE_MASK;
+		    });
+
+		   	inputContainer.append(element);
+		   	inputContainer.append(clearButton);
+
+		   	parent.append(inputContainer);
         }
     };
 }
@@ -128,7 +143,7 @@ function DateTimePickerFromNow($compile)
 	    link: function($scope, element, attrs) {
 			element.datetimepicker({
 		      lang: 'ru',
-		      mask: DATE_MASK,
+		      mask: true,
 		      format: 'd.m.Y H:i:s',
 		      dayOfWeekStart: 1,
 		      allowBlank: true,
@@ -141,6 +156,21 @@ function DateTimePickerFromNow($compile)
 		        }
 		      }
 		    });
+
+		    var inputContainer = $('<div style="position: relative;"></div>');
+		    var parent = element.parent();
+
+		    var clearButton = $('<button type="button" class="close input-clear">&times;</button>');
+
+		    clearButton.click(function() {
+		    	element.val(DATE_MASK);
+		    	$scope[attrs.ngModel] = DATE_MASK;
+		    });
+
+		   	inputContainer.append(element);
+		   	inputContainer.append(clearButton);
+
+		   	parent.append(inputContainer);
         }
     };
 }

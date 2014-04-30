@@ -28,6 +28,20 @@
           ng-required="true">
       </div>
     </div>
+
+    <div class="form-group"
+      ng-class='{"has-success": editingInputs.solverId}'>
+      <label class="col-sm-2 control-label" for="solverId">Решатель</label>
+      <div class="col-sm-8">
+        <select id="solverId"
+          type="text"
+          ng-options="employee.id as employee.name for employee in employees"
+          ng-model='editingSolverId'
+          class="form-control">
+          <option value=""></option>
+        </select>
+      </div>
+    </div>
     
     <div class="row">
       <div class="col-sm-2"></div>

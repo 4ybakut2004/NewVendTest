@@ -6,7 +6,7 @@ describe Message do
   	subject { message }
 
   	it { should respond_to(:name) }
-  	it { should respond_to(:employee_id) }
+  	it { should_not respond_to(:employee_id) }
   	it { should respond_to(:description) }
 
   	it { should be_valid }

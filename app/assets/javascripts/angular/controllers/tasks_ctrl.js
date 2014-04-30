@@ -4,21 +4,28 @@
  * Контроллер страницы Типы Поручений.
  **********************************************************/
 
-function TasksCtrl($scope, $timeout, Task, Message) {
+function TasksCtrl($scope, $timeout, Task, Message, Employee) {
 //- Инициализация моделей ----------------------------------
 	$scope.tasks = Task.all();
 	$scope.messages = Message.all();
+	$scope.employees = Employee.all();
+
+	/*$scope.employees.$promise.then(function() {
+		$scope.employees.unshift({ name: "" });
+	});*/
 
 	$scope.editing = false;
 
 	$scope.inputs = {
 		name: false,
-		deadline: false
+		deadline: false,
+		solverId: false
 	};
 
 	$scope.editingInputs = {
 		name: false,
-		deadline: false
+		deadline: false,
+		solverId: false
 	};
 
 //- Мониторинг изменения моделей ---------------------------
@@ -32,16 +39,16 @@ function TasksCtrl($scope, $timeout, Task, Message) {
 		}
 	});
 
-	$scope.$watch('search', function() {
-		$scope.setWidth();
-	});
-
 	$scope.$watch('newName', function() {
 		$scope.inputs.name = ($scope.newName != "" && $scope.newName != null);
 	});
 
 	$scope.$watch('newDeadline', function() {
 		$scope.inputs.deadline = ($scope.newDeadline != "" && $scope.newDeadline != null);
+	});
+
+	$scope.$watch('newSolverId', function() {
+		$scope.inputs.solverId = ($scope.newSolverId != "" && $scope.newSolverId != null);
 	});
 
 	$scope.$watch('editingName', function() {
@@ -52,11 +59,16 @@ function TasksCtrl($scope, $timeout, Task, Message) {
 		$scope.editingInputs.deadline = ($scope.editingDeadline != "" && $scope.editingDeadline != null);
 	});
 
+	$scope.$watch('editingSolverId', function() {
+		$scope.editingInputs.solverId = ($scope.editingSolverId != "" && $scope.editingSolverId != null);
+	});
+
 //- Изменение моделей --------------------------------------
 	$scope.createTask = function() {
 		var attr = {};
 		attr.name = $scope.newName;
 		attr.deadline = $scope.newDeadline;
+		attr.solver_id = $scope.newSolverId;
 		attr.messages = [];
 		angular.forEach($scope.messages, function(message){
 			if(message.checked) {
@@ -68,6 +80,7 @@ function TasksCtrl($scope, $timeout, Task, Message) {
 		$scope.tasks.unshift(newTask);
 		$scope.newName = "";
 		$scope.newDeadline = "";
+		$scope.newSolverId = "";
 		$('#newTask').modal('hide');
 	};
 
@@ -75,11 +88,13 @@ function TasksCtrl($scope, $timeout, Task, Message) {
 		var attr = {};
 		attr.name = $scope.editingName;
 		attr.deadline = $scope.editingDeadline;
+		attr.solver_id = $scope.editingSolverId;
 		var updatedTask = Task.update($scope.editingId, attr);
 		$scope.tasks[$scope.editingIdx] = updatedTask;
 
 		$scope.editingName = "";
 		$scope.editingDeadline = "";
+		$scope.editingSolverId = "";
 		$scope.editing = false;
 	};
 
@@ -107,6 +122,7 @@ function TasksCtrl($scope, $timeout, Task, Message) {
 		$scope.editingIdx = idx;
 		$scope.editingName = $scope.tasks[idx].name;
 		$scope.editingDeadline = $scope.tasks[idx].deadline;
+		$scope.editingSolverId = $scope.tasks[idx].solver_id;
 
 		$scope.taskMessages = $scope.tasks[idx].messages;
 
@@ -118,4 +134,4 @@ function TasksCtrl($scope, $timeout, Task, Message) {
 	};
 }
 
-newVending.controller("TasksCtrl",['$scope', '$timeout', 'Task', 'Message', TasksCtrl]);
+newVending.controller("TasksCtrl",['$scope', '$timeout', 'Task', 'Message', 'Employee', TasksCtrl]);

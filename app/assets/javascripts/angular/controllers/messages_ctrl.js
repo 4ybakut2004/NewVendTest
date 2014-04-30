@@ -4,12 +4,11 @@
  * Контроллер страницы Типы Сигналов.
  **********************************************************/
 
-function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, RequestType) {
+function MessagesCtrl($scope, $timeout, Message, Task, Attribute, RequestType) {
 //- Инициализация моделей ----------------------------------
 	$scope.messages = Message.all();
 	$scope.tasks = Task.all();
 	$scope.attributes = Attribute.all();
-	$scope.employees = Employee.all();
 	$scope.requestTypes = RequestType.all();
 	$scope.newAttributes = []; // Массив для новых типов атрибутов при создании нового типа сигнала
 	$scope.newTasks = [];      // Массив для новых типов поручений при создании нового типа сигнала
@@ -17,13 +16,11 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 
 	$scope.inputs = {
 		name: false,
-		solverId: false,
 		description: false
 	};
 
 	$scope.editingInputs = {
 		name: false,
-		solverId: false,
 		description: false
 	};
 
@@ -51,20 +48,12 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 		$scope.inputs.name = ($scope.newName != "" && $scope.newName != null);
 	});
 
-	$scope.$watch('newSolverId', function() {
-		$scope.inputs.solverId = ($scope.newSolverId != "" && $scope.newSolverId != null);
-	});
-
 	$scope.$watch('newDescription', function() {
 		$scope.inputs.description = ($scope.newDescription != "" && $scope.newDescription != null);
 	});
 
 	$scope.$watch('editingName', function() {
 		$scope.editingInputs.name = ($scope.editingName != "" && $scope.editingName != null);
-	});
-
-	$scope.$watch('editingSolverId', function() {
-		$scope.editingInputs.solverId = ($scope.editingSolverId != "" && $scope.editingSolverId != null);
 	});
 
 	$scope.$watch('editingDescription', function() {
@@ -75,13 +64,11 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 	$scope.resetNewMessage = function() {
 		$scope.newName = "";
 		$scope.newDescription = "";
-		$scope.newSolverId = $scope.employees[0].id;
 	};
 
 	$scope.createMessage = function() {
 		var attr = {};
 		attr.name = $scope.newName;
-		attr.employee_id = $scope.newSolverId;
 		attr.description = $scope.newDescription;
 		attr.new_tasks = $scope.newTasks;
 		attr.new_attributes = $scope.newAttributes;
@@ -120,7 +107,6 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 	$scope.updateMessage = function() {
 		var attr = {};
 		attr.name = $scope.editingName;
-		attr.employee_id = $scope.editingSolverId;
 		attr.description = $scope.editingDescription;
 
 		// Если были изменения типов поручений, говорим серверу сменить их
@@ -160,7 +146,6 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 		$scope.messages[$scope.editingIdx] = updatedMessage;
 
 		$scope.editingName = "";
-		$scope.editingSolverId = "";
 		$scope.editingDescription = "";
 		$scope.editing = false;
 		$scope.messageTaskChanged = false;
@@ -171,7 +156,6 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 		$scope.editingId = $scope.messages[idx].id;
 		$scope.editingIdx = idx;
 		$scope.editingName = $scope.messages[idx].name;
-		$scope.editingSolverId = $scope.messages[idx].employee_id;
 		$scope.editingDescription = $scope.messages[idx].description;
 
 		// Отмечаем поручения, которые связаны с сигналом
@@ -288,4 +272,4 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, Employee, Requ
 	};
 }
 
-newVending.controller("MessagesCtrl",['$scope', '$timeout', 'Message', 'Task', 'Attribute', 'Employee', 'RequestType', MessagesCtrl]);
+newVending.controller("MessagesCtrl",['$scope', '$timeout', 'Message', 'Task', 'Attribute', 'RequestType', MessagesCtrl]);

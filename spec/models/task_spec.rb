@@ -6,6 +6,7 @@ describe Task do
 
   	it { should respond_to(:name) }
   	it { should respond_to(:deadline) }
+  	it { should respond_to(:solver_id) }
 
   	it { should be_valid }
 
