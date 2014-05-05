@@ -16,23 +16,25 @@
 	});
 </script>
 
-<div id="newVending" ng-controller="<%= @ng_controller || 'Application' %>Ctrl">
+<div application
+	id="newVending" 
+	ng-controller="<%= @ng_controller || 'Application' %>Ctrl"
+	class="application"
+	signed="<%= signed_in? %>"
+	menu-position="<%= signed_in? ? current_user.menu_position : 'hidden' %>"
+	user-id="<%= signed_in? ? current_user.id : nil %>">
 	<%= render 'layouts/header' %>
 
-	<div class="container-fluid">
-		<div class="row">
-			<% if signed_in? %>
-			<div class="col-md-2">
-				<%= render 'layouts/menu' %>
-			</div>
-			<% else %>
-			<div class="col-md-1"></div>
-			<% end %>
-			<div class="col-md-10">
-				<%= yield %>
-			</div>
-		</div>
+	<div class="menu">
+		<% if signed_in? %>
+			<%= render 'layouts/menu' %>
+		<% end %>
 	</div>
+
+	<div class="workspace">
+		<%= yield %>
+	</div>
+
 </div>
 
 </body>

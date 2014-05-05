@@ -1,5 +1,5 @@
 body {
-	margin-top: 80px;
+	margin-top: 60px;
 	background-color: #e9ebec;
 }
 
@@ -16,6 +16,70 @@ body {
     }
 }*/
 
+.application {
+	position: relative;
+}
+
+.menu {
+	position: fixed;
+	width: 200px;
+}
+
+.workspace {
+	margin-left: 200px;
+}
+
+.menu-nav {
+	width: 180px;
+	float: left;
+	white-space: nowrap;
+}
+
+.close-button {
+	width: 20px;
+	height: 100%;
+	float: left;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-o-border-radius: 6px;
+	border-radius: 6px;
+	position: relative;
+}
+
+.close-button-triangle-left {
+	width: 0px;
+	height: 0px;
+	border-style: solid;
+	border-width: 5px 10px 5px 0;
+	border-color: transparent #BDBDBD transparent transparent;
+
+	position: absolute;
+	margin: auto;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.close-button-triangle-right {
+	width: 0px;
+	height: 0px;
+	border-style: solid;
+	border-width: 5px 0 5px 10px;
+	border-color: transparent transparent transparent #BDBDBD;
+
+	position: absolute;
+	margin: auto;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.close-button:hover {
+	background-color: #D2D2D2;
+}
+
 .border-top {
 	border-top: 1px solid #c5c5c5;
 }
@@ -25,19 +89,23 @@ body {
 }
 
 .content {
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	-o-border-radius: 6px;
-	border-radius: 6px;
+	-webkit-border-top-left-radius: 6px;
+	-moz-border-top-left-radius: 6px;
+	-o-border-top-left-radius: 6px;
+	border-top-left-radius: 6px;
+
+	-webkit-border-bottom-left-radius: 6px;
+	-moz-border-bottom-left-radius: 6px;
+	-o-border-bottom-left-radius: 6px;
+	border-bottom-left-radius: 6px;
+	
 	background-color: #FFFFFF;
 	border: 1px solid #BDBDBD;
 	padding: 15px;
-	/*-webkit-box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
-	-moz-box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
-	box-shadow: 3px 3px 5px rgba(0,0,0,0.3);*/
 	min-width: 600px;
 	margin-bottom: 15px;
 	position: relative;
+	box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
 }
 
 .form-footer {
@@ -61,10 +129,6 @@ ul.non-point {
 	position: relative;
 }
 
-/*.standart-table-container table {
-	white-space: nowrap;
-}*/
-
 .standart-table-container thead {
 	white-space: nowrap;
 }
@@ -79,8 +143,7 @@ ul.non-point {
 .scrollX {
 	overflow-x: auto;
 	overflow-y: hidden;
-	position: fixed;
-	bottom: 0px;
+	position: absolute;
 	height: 15px;
 }
 
@@ -94,8 +157,9 @@ ul.non-point {
 }
 
 .count-label {
-	color: #D93333;
-	background-color: #FFBFBF;
+	color: #FFFFFF;
+	font-weight: bold;
+	background-color: #FF5D5D;
 	padding: 4px;
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;

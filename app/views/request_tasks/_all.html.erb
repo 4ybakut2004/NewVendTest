@@ -5,16 +5,16 @@
   <div class="inline-block">
     <h1 style="margin-bottom: 0px;">
       <button type="button"
-        class="btn btn-link btn-lg"
-        ng-class="{active: whoAmI.assigner}"
+        class="btn btn-lg"
+        ng-class="{active: whoAmI.assigner, 'btn-link': !whoAmI.assigner}"
         ng-click="whoAmIFilter('assigner')">
         Назначатель,
       </button>
     </h1>
     <h4 style="margin: 0px;">
       <button type="button"
-      class="btn btn-link"
-      ng-class="{active: indicators.assign}"
+      class="btn"
+      ng-class="{active: indicators.assign, 'btn-link': !indicators.assign}"
       ng-click="indicatorsFilter('assign')">
       Назначить <span ng-show="toAssignCount" class="count-label">{{toAssignCount}}</span>
       </button>
@@ -24,16 +24,16 @@
   <div class="inline-block">
     <h1 style="margin-bottom: 0px;">
       <button type="button"
-        class="btn btn-link btn-lg"
-        ng-class="{active: whoAmI.executor}"
+        class="btn btn-lg"
+        ng-class="{active: whoAmI.executor, 'btn-link': !whoAmI.executor}"
         ng-click="whoAmIFilter('executor')">
         Исполнитель,
       </button>
     </h1>
     <h4 style="margin: 0px;">
       <button type="button"
-        class="btn btn-link"
-        ng-class="{active: indicators.execute}"
+        class="btn"
+        ng-class="{active: indicators.execute, 'btn-link': !indicators.execute}"
         ng-click="indicatorsFilter('execute')">
         Выполнить <span ng-show="toExecuteCount" class="count-label">{{toExecuteCount}}</span>
       </button>
@@ -43,16 +43,16 @@
   <div class="inline-block">
     <h1 style="margin-bottom: 0px;">
       <button type="button"
-        class="btn btn-link btn-lg"
-        ng-class="{active: whoAmI.auditor}"
+        class="btn btn-lg"
+        ng-class="{active: whoAmI.auditor, 'btn-link': !whoAmI.auditor}"
         ng-click="whoAmIFilter('auditor')">
         Контролер
       </button>
     </h1>
     <h4 style="margin: 0px;">
       <button type="button"
-        class="btn btn-link"
-        ng-class="{active: indicators.audit}"
+        class="btn"
+        ng-class="{active: indicators.audit, 'btn-link': !indicators.audit}"
         ng-click="indicatorsFilter('audit')">
         Проконтролировать <span ng-show="toAuditCount" class="count-label">{{toAuditCount}}</span>
       </button>
@@ -63,14 +63,14 @@
 <h4 style="margin: 0px;">Которые:
   <div class="btn-group">
     <button type="button"
-      class="btn btn-link"
-      ng-class="{active: overdued.done}"
+      class="btn"
+      ng-class="{active: overdued.done, 'btn-link': !overdued.done}"
       ng-click="overduedFilter('done')">
       Просрочены и сделаны,
     </button>
     <button type="button"
-      class="btn btn-link"
-      ng-class="{active: overdued.not_done}"
+      class="btn"
+      ng-class="{active: overdued.not_done, 'btn-link': !overdued.not_done}"
       ng-click="overduedFilter('not_done')">
       Просрочены и не сделаны
     </button>

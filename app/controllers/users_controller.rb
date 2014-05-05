@@ -56,7 +56,7 @@ class UsersController < ApplicationController
 		end
 
 		def user_params
-			params.require(:user).permit(:employee_id)
+			params.require(:user).permit(:employee_id, :menu_position)
 		end
 
 		def new_user_params

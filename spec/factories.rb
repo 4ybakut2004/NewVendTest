@@ -46,6 +46,7 @@ FactoryGirl.define do
 
   factory :employee do
   	name "Виктор Викторов"
+    email "test@gmail.com"
   end
 
   factory :request_task do

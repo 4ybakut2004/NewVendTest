@@ -26,6 +26,7 @@ describe "Employees pages" do
 
     describe "Fields in creation form" do
       it { should have_selector('#newEmployee label', :text => 'Имя') }
+      it { should have_selector('#newEmployee label', :text => 'Электронная почта') }
     end
   end
 
