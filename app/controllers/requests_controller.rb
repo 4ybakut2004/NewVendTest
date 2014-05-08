@@ -48,6 +48,8 @@ class RequestsController < ApplicationController
 
     if @request.save
       if messages
+        request_tasks_count = {}
+
         messages.each { |m|
           request_message = RequestMessage.create(:request_id => @request.id,
                                                   :message_id => m[:id])
@@ -61,6 +63,14 @@ class RequestsController < ApplicationController
                                               :creation_date => DateTime.now,
                                               :deadline_date => DateTime.now + task.deadline.days,
                                               :registrar_description => message.description)
+
+            assigner = Employee.find(assigner_id)
+
+            if request_tasks_count[assigner.id]
+              request_tasks_count[assigner.id] += 1
+            else
+              request_tasks_count[assigner.id] = 1
+            end
           }
 
           if m[:attributes]
@@ -70,6 +80,10 @@ class RequestsController < ApplicationController
                                                           :value => a[:value])
             }
           end
+        }
+
+        request_tasks_count.each { |key, value|
+          Employee.find(key).send_assign_email(value)
         }
       end
       respond_with(@request.attrs, :status => :created, :location => @request)

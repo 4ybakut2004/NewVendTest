@@ -48,11 +48,11 @@ class RequestTasksController < ApplicationController
 			@indicators.each do |type|
 				case type
 				when "assign"
-				  indicators_filter << assign_filter
+				  indicators_filter << RequestTask.assign_filter
 				when "execute"
-				  indicators_filter << execute_filter
+				  indicators_filter << RequestTask.execute_filter
 				when "audit"
-				  indicators_filter << audit_filter
+				  indicators_filter << RequestTask.audit_filter
 				end
 			end
 		end
@@ -79,40 +79,25 @@ class RequestTasksController < ApplicationController
 	    end
 	end
 
-	def assign_filter
-		"executor_id IS NULL OR deadline_date IS NULL"
-	end
-
-	def execute_filter
-		"execution_date IS NULL"
-	end
-
-	def audit_filter
-		"execution_date IS NULL AND deadline_date < '#{DateTime.now}' OR execution_date IS NOT NULL AND audition_date IS NULL"
-	end
-
 	def to_assign_count
-		filter = {}
-		if current_user.employee
-			filter[("assigner_id").to_sym] = current_user.employee.id
+		employee = current_user.employee
+		if employee
+			respond_with RequestTask.to_assign_count(employee)
 		end
-		respond_with RequestTask.where(filter).where(assign_filter).size
 	end
 
 	def to_execute_count
-		filter = {}
-		if current_user.employee
-			filter[("executor_id").to_sym] = current_user.employee.id
+		employee = current_user.employee
+		if employee
+			respond_with RequestTask.to_execute_count(employee)
 		end
-		respond_with RequestTask.where(filter).where(execute_filter).size
 	end
 
 	def to_audit_count
-		filter = {}
-		if current_user.employee
-			filter[("auditor_id").to_sym] = current_user.employee.id
+		employee = current_user.employee
+		if employee
+			respond_with RequestTask.to_audit_count(employee)
 		end
-		respond_with RequestTask.where(filter).where(audit_filter).size
 	end
 
 	def signed_in_user

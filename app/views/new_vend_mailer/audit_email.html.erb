@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <% if @employee.email %>
+      <h1>Уважаемый <%= @employee.name %></h1>
+      <p>
+        Вы являетесь контролером поручения в системе Новый Вендинг.
+      </p>
+      <p>
+        Необходимо проконтроллировать поручений: <%= @to_audit_count %>.
+      </p>
+      <p>
+        Поручения можно просмотреть по адресу: <%= @url %>.
+      </p>
+      <p>
+        Чтобы войти в систему, перейдите по ссылке: <%= @sign_in_url %>.
+      </p>
+      <p>Спасибо!</p>
+    <% end %>
+  </body>
+</html>

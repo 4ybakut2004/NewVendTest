@@ -26,6 +26,8 @@ gem 'json'
 
 gem 'enum_simulator'
 
+gem 'delayed_job_active_record'
+
 group :doc do
   gem 'sdoc', require: false
 end

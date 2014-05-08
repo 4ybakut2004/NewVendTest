@@ -22,7 +22,8 @@ function Application($compile, User)
 	    	var signed = attrs.signed;
 
 	    	var closeButton;
-	    	var closeButtonWidth;
+	    	var closeButtonWidth; // Уменьшим меню на эту ширину, чтобы засунуть кнопку закрытия
+	    	var menuWidth;        // На данный отступ сейчас смещена рабочая область. Запомнить для открытия меню
 	    	var showButton;
 	    	var hideButton;
 
@@ -30,6 +31,7 @@ function Application($compile, User)
 			var workspace = element.find('.workspace').first();
 			var menuContainer = element.find('.menu').first();
 			var menu = menuContainer.find('.menu-nav').first();
+			menuWidth = menu.width();
 
 			if(signed != "true") {
 				menuContainer.css({
@@ -63,7 +65,7 @@ function Application($compile, User)
 					});
 
 					workspace.animate({
-						'margin-left': '200px'
+						'margin-left': menuWidth + 'px'
 					}, function() {
 						if($scope.setWidth) {
 							$scope.setWidth();
@@ -75,11 +77,11 @@ function Application($compile, User)
 				}
 				else {
 					menuContainer.animate({
-						'margin-left': '-180px'
+						'margin-left': (closeButtonWidth - menuWidth) + 'px'
 					});
 
 					workspace.animate({
-						'margin-left': '20px'
+						'margin-left': closeButtonWidth + 'px'
 					}, function() {
 						if($scope.setWidth) {
 							$scope.setWidth();
@@ -95,6 +97,7 @@ function Application($compile, User)
 
 			closeButton.insertAfter(menu);
 			closeButtonWidth = closeButton.width();
+			menu.css({width: (menuWidth - closeButtonWidth) + 'px'});
 
 			// Кнопка смены типа меню
 			showButton = $('<button class="btn btn-link"><small>Показывать меню</small></button>');
@@ -152,11 +155,11 @@ function Application($compile, User)
 
 			if(hidden) {
 				menuContainer.css({
-					'margin-left': '-180px'
+					'margin-left': (closeButtonWidth - menuWidth) + 'px'
 				});
 
 				workspace.css({
-						'margin-left': '20px'
+						'margin-left': closeButtonWidth + 'px'
 				});
 			}
 			else {
@@ -165,7 +168,7 @@ function Application($compile, User)
 				});
 
 				workspace.css({
-						'margin-left': '200px'
+						'margin-left': menuWidth + 'px'
 				});
 			}
         }

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <% if @employee.email %>
+      <h1>Уважаемый <%= @employee.name %></h1>
+      <p>
+        Вы являетесь назначателем поручения в системе Новый Вендинг.
+      </p>
+      <p>
+        Новых поручений: <%= @tasks_count %>.
+      </p>
+      <p>
+        Неназначенных поручений: <%= @to_assign_count %>.
+      </p>
+      <p>
+        Поручения можно просмотреть по адресу: <%= @url %>.
+      </p>
+      <p>
+        Чтобы войти в систему, перейдите по ссылке: <%= @sign_in_url %>.
+      </p>
+      <p>Спасибо!</p>
+    <% end %>
+  </body>
+</html>

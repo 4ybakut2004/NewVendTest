@@ -11,6 +11,21 @@ class Employee < ActiveRecord::Base
 	def attrs
 		self.attributes.merge!({ "checked" => false })
 	end
+
+	def send_execute_email
+        NewVendMailer.execute_email(self).deliver
+    end
+    handle_asynchronously :send_execute_email
+
+    def send_assign_email(tasks_count)
+        NewVendMailer.assign_email(self, tasks_count).deliver
+    end
+    handle_asynchronously :send_assign_email
+
+    def send_audit_email
+        NewVendMailer.audit_email(self).deliver
+    end
+    handle_asynchronously :send_assign_email
 end
 
 class Solver < Employee
