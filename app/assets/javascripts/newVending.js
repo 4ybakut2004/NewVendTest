@@ -321,7 +321,7 @@ function DateTimePickerFromNow($compile)
 		      dayOfWeekStart: 1,
 		      allowBlank: true,
 		      minDate: 0,
-		      onChangeDateTime:function(dp,$input){
+		      onChangeDateTime:function(dp,$input) {
 		        var now = new Date();
 		        var val = new Date($input.val().replace(/(\d+).(\d+).(\d+)/, '$2/$1/$3'));
 		        if(val < now) {
