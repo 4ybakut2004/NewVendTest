@@ -1,5 +1,5 @@
 class NewVendMailer < ActionMailer::Base
-  default from: '4ybakut2004@gmail.com'
+  default from: 'NewVendSystem@gmail.com'
  
   def send_email(employee)
   	@employee = employee
