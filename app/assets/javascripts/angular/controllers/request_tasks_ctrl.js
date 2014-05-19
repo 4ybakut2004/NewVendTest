@@ -24,7 +24,22 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		});
 	};
 
+	$scope.setReadIndicatorsCounts = function() {
+		RequestTask.to_read_assign_count().then(function(d) {
+			$scope.toReadAssignCount = d;
+		});
+
+		RequestTask.to_read_execute_count().then(function(d) {
+			$scope.toReadExecuteCount = d;
+		});
+
+		RequestTask.to_read_audit_count().then(function(d) {
+			$scope.toReadAuditCount = d;
+		});
+	};
+
 	$scope.setIndicatorsCounts();
+	$scope.setReadIndicatorsCounts();
 
 	$scope.editing = false;
 	$scope.search = { checked: false };
@@ -227,6 +242,11 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 			$scope.rememberScroll();
 
 			$scope.editing = true;
+		});
+
+		RequestTask.read($scope.requestTasks[idx].id).then(function(d) {
+			console.log(d);
+			$scope.setReadIndicatorsCounts();
 		});
 	};
 

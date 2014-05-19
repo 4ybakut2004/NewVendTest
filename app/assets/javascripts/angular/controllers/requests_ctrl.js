@@ -197,10 +197,14 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 	};
 
 	$scope.addMessage = function(message) {
-		$scope.newMessages.unshift($.extend(true, {}, message));
+		message.count ? message.count++ : message.count = 1;
+		var newMessage = $.extend(true, {}, message);
+		newMessage.message = message;
+		$scope.newMessages.unshift(newMessage);
 	};
 
 	$scope.deleteMessage = function(idx) {
+		$scope.newMessages[idx].message.count--;
 		$scope.newMessages.splice(idx, 1);
 	};
 

@@ -1,0 +1,71 @@
+<h2>Информация по поручению</h2>
+<p>
+  <strong>Тип:</strong> <%= @request_task_attrs["task_name"] %>
+</p>
+<p>
+  <strong>Номер автомата:</strong> <%= @request_task_attrs["machine_name"] %>
+</p>
+
+<% if @request_task.creation_date %>
+  <p>
+    <strong>Дата создания:</strong> <%= @creation_date %>
+  </p>
+<% end %>
+
+<% if @request_task.deadline_date %>
+  <p>
+    <strong>Плановая дата:</strong> <%= @deadline_date %>
+  </p>
+<% end %>
+
+<% if @request_task.execution_date %>
+  <p>
+    <strong>Дата выполнения:</strong> <%= @execution_date %>
+  </p>
+<% end %>
+
+<% if @request_task.audition_date %>
+  <p>
+    <strong>Дата проверки:</strong> <%= @audition_date %>
+  </p>
+<% end %>
+
+<br>
+
+<% if @request_task.assigner_id %>
+  <p>
+    <strong>Назначатель:</strong> <%= @request_task_attrs["assigner_name"] %>
+  </p>
+<% end %>
+
+<% if @request_task.executor_id %>
+  <p>
+    <strong>Исполнитель:</strong> <%= @request_task_attrs["executor_name"] %>
+  </p>
+<% end %>
+
+<% if @request_task.auditor_id %>
+  <p>
+    <strong>Контролер:</strong> <%= @request_task_attrs["auditor_name"] %>
+  </p>
+<% end %>
+
+<br>
+
+<p>
+  <strong>Описание:</strong> <%= @request_task.description %>
+</p>
+<p>
+  <strong>Описание регистратора:</strong> <%= @request_task.registrar_description %>
+</p>
+<p>
+  <strong>Описание назначателя:</strong> <%= @request_task.assigner_description %>
+</p>
+<p>
+  <strong>Описание исполнителя:</strong> <%= @request_task.executor_description %>
+</p>
+<p>
+  <strong>Описание контролера:</strong> <%= @request_task.auditor_description %>
+</p>
+
+<br>

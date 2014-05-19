@@ -54,7 +54,7 @@
       type="button"
       class="btn btn-default"
       ng-click="addMessage(message)">
-      {{message.name}}
+      {{message.name}} <span ng-show="message.count" class="message-count-label">{{message.count}}</span>
     </button>
   </div>
 

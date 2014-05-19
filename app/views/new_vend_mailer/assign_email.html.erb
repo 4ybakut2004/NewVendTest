@@ -2,25 +2,42 @@
 <html>
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <style type="text/css">
+      p {
+        margin-bottom: 3px;
+        margin-top: 3px;
+      }
+    </style>
   </head>
   <body>
     <% if @employee.email %>
       <h1>Уважаемый <%= @employee.name %></h1>
       <p>
-        Вы являетесь назначателем поручения в системе Новый Вендинг.
+        Вы являетесь <strong>назначателем</strong> поручений в системе Новый Вендинг.
       </p>
       <p>
-        Новых поручений: <%= @tasks_count %>.
+        <strong>Новых поручений:</strong> <%= @tasks_count %>.
       </p>
       <p>
-        Неназначенных поручений: <%= @to_assign_count %>.
+        <strong>Неназначенных поручений:</strong> <%= @to_assign_count %>.
+      </p>
+
+      <br>
+
+      <p>
+        Чтобы подтвердить прочтение, перейдите по ссылке:
       </p>
       <p>
-        Поручения можно просмотреть по адресу: <%= @url %>.
+        <big>
+          <%= link_to("Прочитать", url_for(controller: 'request_tasks',
+              action: 'index',
+              only_path: false,
+              host: @host)) %>
+        </big>
       </p>
-      <p>
-        Чтобы войти в систему, перейдите по ссылке: <%= @sign_in_url %>.
-      </p>
+
+      <br>
+      
       <p>Спасибо!</p>
     <% end %>
   </body>

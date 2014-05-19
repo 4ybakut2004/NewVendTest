@@ -36,28 +36,43 @@ newVending.factory('RequestTask', ['$resource', '$http', function($resource, $ht
     return this.service.update({requestTaskId: id}, attr);
   };
 
-  RequestTask.prototype.to_assign_count = function() {
-      var promise = $http.get('/to_assign_count.json').then(function (response) {
-        return response.data;
-      });
+  // В данном методе происходит прием ответа от сервера,
+  // который содержит число.
+  // Данный метод достает это число и возвращает его в качестве ответа
+  function getSimpleResponse(url, params) {
+    var promise = $http.get(url, {params: params}).then(function (response) {
+      return response.data;
+    });
 
-      return promise;
+    return promise;
+  }
+
+  RequestTask.prototype.to_assign_count = function() {
+      return getSimpleResponse('/to_assign_count.json');
   };
 
   RequestTask.prototype.to_execute_count = function() {
-      var promise = $http.get('/to_execute_count.json').then(function (response) {
-        return response.data;
-      });
-
-      return promise;
+      return getSimpleResponse('/to_execute_count.json');
   };
 
   RequestTask.prototype.to_audit_count = function() {
-      var promise = $http.get('/to_audit_count.json').then(function (response) {
-        return response.data;
-      });
+      return getSimpleResponse('/to_audit_count.json');
+  };
 
-      return promise;
+  RequestTask.prototype.to_read_assign_count = function() {
+      return getSimpleResponse('/to_read_assign_count.json');
+  };
+
+  RequestTask.prototype.to_read_execute_count = function() {
+      return getSimpleResponse('/to_read_execute_count.json');
+  };
+
+  RequestTask.prototype.to_read_audit_count = function() {
+      return getSimpleResponse('/to_read_audit_count.json');
+  };
+
+  RequestTask.prototype.read = function(id) {
+      return getSimpleResponse('/read_request_task.json', {id: id});
   };
 
   return new RequestTask();

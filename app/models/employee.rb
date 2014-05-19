@@ -12,26 +12,30 @@ class Employee < ActiveRecord::Base
 		self.attributes.merge!({ "checked" => false })
 	end
 
-	def send_execute_email
-		if self.email != nil && self.email != ''
-        	NewVendMailer.execute_email(self).deliver
+	def send_execute_email(params)
+		if self.has_email
+        	NewVendMailer.execute_email(self, params).deliver
     	end
     end
     handle_asynchronously :send_execute_email
 
-    def send_assign_email(tasks_count)
-    	if self.email != nil && self.email != ''
-        	NewVendMailer.assign_email(self, tasks_count).deliver
+    def send_assign_email(params)
+    	if self.has_email
+        	NewVendMailer.assign_email(self, params).deliver
     	end
     end
     handle_asynchronously :send_assign_email
 
-    def send_audit_email
-    	if self.email != nil && self.email != ''
-        	NewVendMailer.audit_email(self).deliver
+    def send_audit_email(params)
+    	if self.has_email
+        	NewVendMailer.audit_email(self, params).deliver
     	end
     end
     handle_asynchronously :send_audit_email
+
+    def has_email
+        self.email != nil && self.email != ''
+    end
 end
 
 class Solver < Employee

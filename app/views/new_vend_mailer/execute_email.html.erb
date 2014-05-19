@@ -2,22 +2,41 @@
 <html>
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <style type="text/css">
+      p {
+        margin-bottom: 3px;
+        margin-top: 3px;
+      }
+    </style>
   </head>
   <body>
     <% if @employee.email %>
-      <h1>Уважаемый <%= @employee.name %></h1>
+      <h2>Уважаемый <%= @employee.name %></h2>
       <p>
-        Вас назначили исполнителем поручения в системе Новый Вендинг.
+        Вас назначили <strong>исполнителем</strong> поручения 
+        <%= @request_task.id %> (<strong><%= @request_task_attrs["task_name"] %></strong>) в системе Новый Вендинг.
       </p>
       <p>
-        Невыполненных поручений: <%= @to_execute_count %>.
+        Поручение необходимо выполнить до <strong><%= @deadline_date %></strong>.
       </p>
       <p>
-        Поручения можно просмотреть по адресу: <%= @url %>.
+        Чтобы подтвердить прочтение, перейдите по ссылке:
       </p>
       <p>
-        Чтобы войти в систему, перейдите по ссылке: <%= @sign_in_url %>.
+        <big>
+          <%= link_to("Прочитать", url_for(controller: 'request_tasks',
+              action: 'index',
+              only_path: false,
+              host: @host)) %>
+        </big>
       </p>
+
+      <%= render 'request_info' %>
+
+      <p>
+        <strong>Невыполненных поручений:</strong> <%= @to_execute_count %>
+      </p>
+
       <p>Спасибо!</p>
     <% end %>
   </body>

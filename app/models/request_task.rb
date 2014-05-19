@@ -11,7 +11,6 @@ class RequestTask < ActiveRecord::Base
 	belongs_to :auditor, :class_name => "Employee", :foreign_key => "auditor_id"
 
     before_save :set_audition_entering_date
-    after_update :send_email
 
 	def getFullInfo
         request_message = self.request_message
@@ -21,6 +20,7 @@ class RequestTask < ActiveRecord::Base
 
     	fullInfo = self.attributes
         fullInfo["request_id"] = request_message.request_id
+        fullInfo["machine_name"] = request_message.request.machine.name
         fullInfo["task_name"] = self.task.name
         fullInfo["assigner_name"] = assigner ? assigner.name : nil
         fullInfo["executor_name"] = executor ? executor.name : nil
@@ -81,21 +81,43 @@ class RequestTask < ActiveRecord::Base
         return RequestTask.where(filter).where(RequestTask.audit_filter).size
     end
 
+    def self.to_read_assign_count(assigner)
+        filter = {}
+        filter[("assigner_id").to_sym] = assigner.id
+        filter[("is_read_by_assigner").to_sym] = false
+        return RequestTask.where(filter).size
+    end
+
+    def self.to_read_execute_count(executor)
+        filter = {}
+        filter[("executor_id").to_sym] = executor.id
+        filter[("is_read_by_assigner").to_sym] = true
+        filter[("is_read_by_executor").to_sym] = false
+        return RequestTask.where(filter).size
+    end
+
+    def self.to_read_audit_count(auditor)
+        filter = {}
+        filter[("auditor_id").to_sym] = auditor.id
+        filter[("is_read_by_assigner").to_sym] = true
+        filter[("is_read_by_executor").to_sym] = true
+        filter[("is_read_by_auditor").to_sym] = false
+        return RequestTask.where(filter).size
+    end
+
+    def needs_send_execute_email
+        (self.deadline_date_changed? || self.executor_id_changed? || self.auditor_id_changed?) &&
+        (self.deadline_date && self.executor_id && self.auditor_id)
+    end
+
+    def needs_send_audit_email
+        self.execution_date_changed? && self.execution_date && self.auditor_id
+    end
+
     private
         def set_audition_entering_date
             if self.audition_date != nil
                 self.audition_entering_date = DateTime.now
-            end
-        end
-
-        def send_email
-            if (self.deadline_date_changed? || self.executor_id_changed? || self.auditor_id_changed?) &&
-                (self.deadline_date && self.executor_id && self.auditor_id) then
-                self.executor.send_execute_email
-            end
-
-            if self.execution_date_changed? && self.execution_date && self.auditor_id then
-                self.auditor.send_audit_email
             end
         end
 end

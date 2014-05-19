@@ -83,7 +83,12 @@ class RequestsController < ApplicationController
         }
 
         request_tasks_count.each { |key, value|
-          Employee.find(key).send_assign_email(value)
+          params = {
+            :tasks_count => value,
+            :host => request.host_with_port,
+            :request => @request
+          }
+          Employee.find(key).send_assign_email(params)
         }
       end
       respond_with(@request.attrs, :status => :created, :location => @request)

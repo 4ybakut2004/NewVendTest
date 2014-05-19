@@ -167,10 +167,26 @@ ul.non-point {
 	border-radius: 6px;
 }
 
+.message-count-label {
+	color: #FFFFFF;
+	background-color: #7D88EC;
+	padding: 4px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-o-border-radius: 6px;
+	border-radius: 6px;
+}
+
 .input-clear {
 	margin: auto;
   	position: absolute;
   	top: 0; 
   	bottom: 0; 
   	right: 10px;
+}
+
+.to-read-count {
+	margin: 0px;
+	padding-left: 12px;
+	padding-right: 12px;
 }

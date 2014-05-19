@@ -69,7 +69,25 @@ class RequestTasksController < ApplicationController
 
 	def update
 		respond_to do |format|
-	      if @request_task.update(request_task_params)
+		  @request_task.assign_attributes(request_task_params)
+
+		  execute_email = @request_task.needs_send_execute_email
+		  audit_email = @request_task.needs_send_audit_email
+
+	      if @request_task.save
+	      	params = {
+                :request_task => @request_task,
+                :host => request.host_with_port
+            }
+
+	      	if execute_email
+	      		@request_task.executor.send_execute_email(params)
+	      	end
+
+	      	if audit_email
+	      		@request_task.auditor.send_audit_email(params)
+	      	end
+
 	        format.html { redirect_to @request_task, notice: 'Request_task was successfully updated.' }
 	        format.json { render json: @request_task.attrs, status: :created }
 	      else
@@ -98,6 +116,31 @@ class RequestTasksController < ApplicationController
 		if employee
 			respond_with RequestTask.to_audit_count(employee)
 		end
+	end
+
+	def to_read_assign_count
+		employee = current_user.employee
+		if employee
+			respond_with RequestTask.to_read_assign_count(employee)
+		end
+	end
+
+	def to_read_execute_count
+		employee = current_user.employee
+		if employee
+			respond_with RequestTask.to_read_execute_count(employee)
+		end
+	end
+
+	def to_read_audit_count
+		employee = current_user.employee
+		if employee
+			respond_with RequestTask.to_read_audit_count(employee)
+		end
+	end
+
+	def read
+		respond_with "done"
 	end
 
 	def signed_in_user
