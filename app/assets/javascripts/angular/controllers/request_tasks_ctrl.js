@@ -5,11 +5,69 @@
  **********************************************************/
 
 function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
-//- Инициализация моделей ----------------------------------
-	$scope.requestTasks = RequestTask.all({ request_id: getURLParameter('request_id') });
-	$scope.employees = Employee.all();
+	/*
+	 * init()
+	 * Конструктор
+	 */
+	function init() {
+		$scope.requestTasks = RequestTask.all({ request_id: getURLParameter('request_id') });
+		$scope.employees = Employee.all();
+		Employee.current_employee().then(function(d) {
+			$scope.currentEmployee = d;
+		});
 
-	// Получение количества поручений, с которыми необходимо совершить действия
+		// Получаем количества индикаторных поручений и поручений, которые нужно прочитать
+		$scope.setIndicatorsCounts();
+		$scope.setReadIndicatorsCounts();
+
+		// Переменая, отвечающая за показ окна редактирования
+		$scope.editing = false;
+		// Фильтр отмеченных строк
+		$scope.search = { checked: false };
+
+		// Нужны для редактируемых полей. Отвечают за стили
+		$scope.editingInputs = {
+			executorId: false,
+			auditorId: false,
+			description: false,
+			deadlineDate: false,
+			executionDate: false,
+			auditionDate: false,
+			registrarDescription: false,
+			assignerDescription: false,
+			executorDescription: false,
+			auditorDescription: false
+		};
+
+		// Фильтры по принадлежности поручений
+		$scope.whoAmI = {
+			assigner: false,
+			executor: false,
+			auditor: false
+		};
+
+		// Фильтры сигнальных индикаторов
+		$scope.indicators = {
+			assign: false,
+			execute: false,
+			audit: false
+		};
+
+		// Фильтры просроченности
+		$scope.overdued = {
+			done: false,
+			not_done: false
+		};
+
+		// Настраиваем доступ к функциям с html страницы
+		$scope.formattedDate = formattedDate;
+		$scope.dateForInput = dateForInput;
+		}
+
+	/*
+	 * $scope.setIndicatorsCounts()
+	 * Получение количеств поручений, с которыми необходимо совершить действия
+	 */
 	$scope.setIndicatorsCounts = function() {
 		RequestTask.to_assign_count().then(function(d) {
 			$scope.toAssignCount = d;
@@ -24,6 +82,10 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		});
 	};
 
+	/*
+	 * $scope.setReadIndicatorsCounts()
+	 * Получение количеств поручений, которые необходимо прочитать
+	 */
 	$scope.setReadIndicatorsCounts = function() {
 		RequestTask.to_read_assign_count().then(function(d) {
 			$scope.toReadAssignCount = d;
@@ -32,50 +94,9 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		RequestTask.to_read_execute_count().then(function(d) {
 			$scope.toReadExecuteCount = d;
 		});
-
-		RequestTask.to_read_audit_count().then(function(d) {
-			$scope.toReadAuditCount = d;
-		});
 	};
 
-	$scope.setIndicatorsCounts();
-	$scope.setReadIndicatorsCounts();
-
-	$scope.editing = false;
-	$scope.search = { checked: false };
-
-	$scope.editingInputs = {
-		executorId: false,
-		auditorId: false,
-		description: false,
-		deadlineDate: false,
-		executionDate: false,
-		auditionDate: false,
-		registrarDescription: false,
-		assignerDescription: false,
-		executorDescription: false,
-		auditorDescription: false
-	};
-
-	// Фильтры по принадлежности поручений
-	$scope.whoAmI = {
-		assigner: false,
-		executor: false,
-		auditor: false
-	};
-
-	// Фильтры сигнальных индикаторов
-	$scope.indicators = {
-		assign: false,
-		execute: false,
-		audit: false
-	};
-
-	// Фильтры просроченности
-	$scope.overdued = {
-		done: false,
-		not_done: false
-	};
+	init();
 
 //- Мониторинг изменения моделей ---------------------------
 	$scope.changeWidth = function() {
@@ -195,14 +216,18 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		attr.execution_date = strDateToUTC($scope.editingExecutionDate);
 		attr.audition_date = strDateToUTC($scope.editingAuditionDate);
 
+		// Обновляем поручение
 		var updatedRequestTask = RequestTask.update($scope.editingId, attr);
 
+		// Производим действия, которые нужно выполнить после обновления
 		updatedRequestTask.$promise.then(function() {
 			$scope.setIndicatorsCounts();
+			$scope.setReadIndicatorsCounts();
 		});
 
 		$scope.requestTasks[$scope.editingIdx] = updatedRequestTask;
 
+		// Обнуляем ипользуемые при редактировании поля
 		$scope.editingExecutorId = "";
 		$scope.editingAuditorId = "";
 		$scope.editingDescription = "";
@@ -215,13 +240,15 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		$scope.editingAuditorDescription = "";
 		$scope.editingIdx = null;
 
-		$scope.editing = false;
-		$scope.changeScroll();
+		// Скрываем окно редактирования и перемещаем страницу в предыдущее место
+		$scope.closeEditing();
 	};
 
 	$scope.clickRequestTask = function(idx) {
 		var r = RequestTask.get($scope.requestTasks[idx].id);
+		// После получения информации о поручении
 		r.$promise.then(function() {
+			// Сохраняем информацию в редактируемые поля
 			$scope.editingRequestTask = r;
 			$scope.editingRequest = r.request;
 			$scope.editingAttributes = r.attributes;
@@ -239,24 +266,33 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 			$scope.editingExecutionDate = $scope.dateForInput(r.execution_date);
 			$scope.editingAuditionDate = $scope.dateForInput(r.audition_date);
 
+			// Запоминаем позицию страницы
 			$scope.rememberScroll();
 
+			// Показываем окно редактирования
 			$scope.editing = true;
 		});
 
-		RequestTask.read($scope.requestTasks[idx].id).then(function(d) {
-			console.log(d);
-			$scope.setReadIndicatorsCounts();
-		});
+		// Если у пользователя настроен сотрудник,
+		// посылаем на сервер сигнал, что поручение прочитано
+		if($scope.currentEmployee) {
+			RequestTask.read($scope.requestTasks[idx].id,
+							$scope.currentEmployee.id).then(function(d) {
+				// Потом обновляем данные этого поручения
+				$scope.requestTasks[idx].is_read_by_assigner = d.is_read_by_assigner;
+				$scope.requestTasks[idx].is_read_by_executor = d.is_read_by_executor;
+				$scope.requestTasks[idx].is_read_by_auditor = d.is_read_by_auditor;
+				// И после этого обновляем число непрочитанных поручений
+				$scope.setReadIndicatorsCounts();
+			});
+		}
 	};
 
+	// Закрываем окно реадктирования
 	$scope.closeEditing = function() {
 		$scope.editing = false;
 		$scope.changeScroll();
 	};
-
-	$scope.formattedDate = formattedDate;
-	$scope.dateForInput = dateForInput;
 
 	$scope.canEditDeadlineDate = function(employee_id) {
 		return ($scope.editingIdx != null) ? 
@@ -266,24 +302,28 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 
 	// Обновляет массив поручений в зависимости от настроенных фильтров
 	function requestTasksFilter() {
+		// Массив атрибутов фильтра
 		var attr = {
 			'who_am_i[]': [],
 			'overdued[]': [],
 			'indicators[]': []
 		};
 
+		// Запоминаем отмеченные пункты просроченности
 		for(var key in $scope.overdued) {
 			if($scope.overdued[key]) {
 				attr['overdued[]'].push(key);
 			}
 		}
 
+		// Запоминаем отмеченные пункты принадлежности
 		for(var key in $scope.whoAmI) {
 			if($scope.whoAmI[key]) {
 				attr['who_am_i[]'].push(key);
 			}
 		}
 
+		// Запоминаем отмеченные пункты индикаторов
 		for(var key in $scope.indicators) {
 			if($scope.indicators[key]) {
 				attr['indicators[]'].push(key);
@@ -292,9 +332,14 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 
 		$scope.requestTasks = RequestTask.all(attr);
 
+		// После фильтра подгоняем ширину шапки таблицы
 		$scope.changeWidth();
 	}
 
+	/*
+	 * $scope.whoAmIFilter(str)
+	 * Изменяет фильтр принадлежности
+	 */
 	$scope.whoAmIFilter = function(str) {
 		$scope.whoAmI[str] = !$scope.whoAmI[str];
 
@@ -317,11 +362,19 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		requestTasksFilter();
 	};
 
+	/*
+	 * $scope.overduedFilter(str)
+	 * Изменяет фильтр просроченности
+	 */
 	$scope.overduedFilter = function(str) {
 		$scope.overdued[str] = !$scope.overdued[str];
 		requestTasksFilter();
 	};
 
+	/*
+	 * $scope.indicatorsFilter(str)
+	 * Изменяет фильтр индикаторов
+	 */
 	$scope.indicatorsFilter = function(str) {
 		$scope.indicators[str] = !$scope.indicators[str];
 
@@ -342,6 +395,29 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		}
 
 		requestTasksFilter();
+	};
+
+	/*
+	 * $scope.needsToRead(requestTask)
+	 * Определяет, нужно ли прочитать данное поручение
+	 */
+	$scope.needsToRead = function(requestTask) {
+		if($scope.currentEmployee) {
+			return (($scope.currentEmployee.id == requestTask.assigner_id && 
+			!requestTask.is_read_by_assigner &&
+			requestTask.email_to_assigner_date) ||
+
+			($scope.currentEmployee.id == requestTask.executor_id &&  
+			!requestTask.is_read_by_executor &&
+			requestTask.email_to_executor_date) ||
+
+			($scope.currentEmployee.id == requestTask.auditor_id &&
+			!requestTask.is_read_by_auditor &&
+			requestTask.email_to_auditor_date));
+		}
+		else {
+			return false;
+		}
 	};
 }
 

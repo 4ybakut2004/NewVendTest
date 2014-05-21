@@ -81,37 +81,83 @@ class RequestTask < ActiveRecord::Base
         return RequestTask.where(filter).where(RequestTask.audit_filter).size
     end
 
+    # Возвращает количество непрочитанных поручений,
+    # для которых был назначен исполнитель.
+    # Информация нужна назначателю
     def self.to_read_assign_count(assigner)
         filter = {}
-        filter[("assigner_id").to_sym] = assigner.id
-        filter[("is_read_by_assigner").to_sym] = false
-        return RequestTask.where(filter).size
+        date_filter = ""
+
+        # В этих поручениях я являюсь назначателем
+        filter[:assigner_id] = assigner.id
+        # А так же исполнители их не прочитали
+        filter[:is_read_by_executor] = false
+        # Дополнительно проверяем, нужно ли вообще им их читать
+        date_filter = "email_to_executor_date IS NOT NULL"
+
+
+        return RequestTask.where(filter).where(date_filter).size
     end
 
+    # Возвращает количество непрочитанных поручений,
+    # у которых была проставлена дата выполнения.
+    # Информация нужна исполнителю
     def self.to_read_execute_count(executor)
         filter = {}
-        filter[("executor_id").to_sym] = executor.id
-        filter[("is_read_by_assigner").to_sym] = true
-        filter[("is_read_by_executor").to_sym] = false
-        return RequestTask.where(filter).size
+        date_filter = ""
+
+        # В этих поручениях я являюсь исполнителем
+        filter[:executor_id] = executor.id
+        # А так же контролеры их не прочитали
+        filter[:is_read_by_auditor] = false
+        # Дополнительно проверяем, нужно ли вообще им их читать
+        date_filter = "email_to_auditor_date IS NOT NULL"
+
+        return RequestTask.where(filter).where(date_filter).size
     end
 
-    def self.to_read_audit_count(auditor)
-        filter = {}
-        filter[("auditor_id").to_sym] = auditor.id
-        filter[("is_read_by_assigner").to_sym] = true
-        filter[("is_read_by_executor").to_sym] = true
-        filter[("is_read_by_auditor").to_sym] = false
-        return RequestTask.where(filter).size
+    def validate_read_by_assigner(assigner)
+        # Необходимо высавить флаг прочтения только тогда,
+        # когда читающий, это назначатель,
+        # когда оно еще не прочитано
+        # и если письмо для подтверждения было отправлено
+        assigner.id == self.assigner_id && !self.is_read_by_assigner && self.email_to_assigner_date
     end
+
+    def validate_read_by_executor(executor)
+        # Необходимо высавить флаг прочтения только тогда,
+        # когда читающий, это исполнитель,
+        # когда оно еще не прочитано
+        # и если письмо для подтверждения было отправлено
+        executor.id == self.executor_id && !self.is_read_by_executor && self.email_to_executor_date
+    end
+
+    def validate_read_by_auditor(auditor)
+        # Необходимо высавить флаг прочтения только тогда,
+        # когда читающий, это контролер,
+        # когда оно еще не прочитано
+        # и если письмо для подтверждения было отправлено
+        auditor.id == self.auditor_id && !self.is_read_by_auditor && self.email_to_auditor_date
+    end
+
+    # Отправлять письма нужно только в том случае, если 
+    # нужные поля были изменены, а так же все остальные необходимые заполнены
 
     def needs_send_execute_email
         (self.deadline_date_changed? || self.executor_id_changed? || self.auditor_id_changed?) &&
-        (self.deadline_date && self.executor_id && self.auditor_id)
+        assigner_columns_filled
+    end
+
+    def assigner_columns_filled
+        self.deadline_date && self.executor_id && self.auditor_id
     end
 
     def needs_send_audit_email
-        self.execution_date_changed? && self.execution_date && self.auditor_id
+        self.execution_date_changed? && executor_columns_filled
+    end
+
+    def executor_columns_filled
+        self.execution_date && self.auditor_id
     end
 
     private

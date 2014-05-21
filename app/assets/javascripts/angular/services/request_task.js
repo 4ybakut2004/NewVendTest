@@ -67,12 +67,8 @@ newVending.factory('RequestTask', ['$resource', '$http', function($resource, $ht
       return getSimpleResponse('/to_read_execute_count.json');
   };
 
-  RequestTask.prototype.to_read_audit_count = function() {
-      return getSimpleResponse('/to_read_audit_count.json');
-  };
-
-  RequestTask.prototype.read = function(id) {
-      return getSimpleResponse('/read_request_task.json', {id: id});
+  RequestTask.prototype.read = function(id, employee_id) {
+      return getSimpleResponse('/read_request_task.json', {id: id, employee_id: employee_id});
   };
 
   return new RequestTask();

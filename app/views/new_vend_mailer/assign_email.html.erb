@@ -11,29 +11,66 @@
   </head>
   <body>
     <% if @employee.email %>
-      <h1>Уважаемый <%= @employee.name %></h1>
+      <h2>Уважаемый <%= @employee.name %></h2>
       <p>
-        Вы являетесь <strong>назначателем</strong> поручений в системе Новый Вендинг.
+        Вы являетесь <strong>назначателем</strong> поручений заявки <%= @request.id %> в системе Новый Вендинг.
       </p>
-      <p>
-        <strong>Новых поручений:</strong> <%= @tasks_count %>.
-      </p>
-      <p>
-        <strong>Неназначенных поручений:</strong> <%= @to_assign_count %>.
-      </p>
-
-      <br>
-
       <p>
         Чтобы подтвердить прочтение, перейдите по ссылке:
       </p>
       <p>
         <big>
-          <%= link_to("Прочитать", url_for(controller: 'request_tasks',
-              action: 'index',
+          <%= link_to("Подтвердить",
+            url_for(controller: 'request_tasks',
+              action: 'read',
               only_path: false,
-              host: @host)) %>
+              host: @host,
+              id: @request.id,
+              type: 'assign',
+              employee_id: @employee.id)) %>
         </big>
+      </p>
+
+      <h2>Информация по заявке</h2>
+      <p>
+        <strong>Номер заявки:</strong> <%= @request.id %>
+      </p>
+      <p>
+        <strong>Регистратор:</strong> <%= @request_attrs["registrar_name"] %>
+      </p>
+      <p>
+        <strong>Автомат:</strong> <%= @request_attrs["machine_name"] %>
+      </p>
+      <p>
+        <strong>Описание:</strong> <%= @request_attrs["description"] %>
+      </p>
+      <p>
+        <strong>Тип:</strong> <%= @request_attrs["request_type_name"] %>
+      </p>
+      <p>
+        <strong>Дата регистрации:</strong> <%= @creation_date %>
+      </p>
+      <p>
+        <strong>Сигналы:</strong> <%= @request_attrs["request_messages"].collect { |rm| rm["name"] }.join(", ") %>
+      </p>
+
+      <br>
+
+      <p>
+        <strong>Поручения, где Вы являетесь назначателем:</strong>
+      </p>
+      <% @request_tasks.each do |rt| %>
+        <% if rt["assigner_id"] == @employee.id %>
+          <p>
+            <%= rt["task_name"] %>
+          </p>
+        <% end %>
+      <% end %>
+
+      <br>
+
+      <p>
+        <strong>Неназначенных поручений:</strong> <%= @to_assign_count %>
       </p>
 
       <br>

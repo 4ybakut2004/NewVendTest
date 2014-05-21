@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140519081829) do
+ActiveRecord::Schema.define(version: 20140521063842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,9 @@ ActiveRecord::Schema.define(version: 20140519081829) do
     t.boolean  "is_read_by_assigner",    default: false
     t.boolean  "is_read_by_executor",    default: false
     t.boolean  "is_read_by_auditor",     default: false
+    t.datetime "email_to_assigner_date"
+    t.datetime "email_to_executor_date"
+    t.datetime "email_to_auditor_date"
   end
 
   create_table "request_type_messages", force: true do |t|

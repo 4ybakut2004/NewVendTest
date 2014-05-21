@@ -47,6 +47,10 @@ class EmployeesController < ApplicationController
     redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
   end
 
+  def current_employee
+    respond_with current_user.employee
+  end
+
   private
 
   	def set_employee

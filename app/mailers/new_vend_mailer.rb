@@ -4,6 +4,7 @@ class NewVendMailer < ActionMailer::Base
   def send_execute_or_audit_email(employee, params)
   	@employee = employee
     @host = params[:host]
+
     @request_task = params[:request_task]
     @request_task_attrs = @request_task.getFullInfo
 
@@ -28,6 +29,9 @@ class NewVendMailer < ActionMailer::Base
     @employee = employee
     @host = params[:host]
     @request = params[:request]
+    @request_attrs = @request.getFullInfo
+    @request_tasks = @request.request_tasks.map { |rt| rt.getFullInfo  }
+    @creation_date = @request.created_at ? @request.created_at.utc.localtime.to_s(:ru_datetime) : ''
   	subject = "Автомат #{@request.machine.name}, К назначению"
 
     mail(to: @employee.email, subject: subject)

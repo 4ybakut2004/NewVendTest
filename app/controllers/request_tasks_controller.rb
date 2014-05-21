@@ -1,6 +1,6 @@
 class RequestTasksController < ApplicationController
 	before_action :set_request_task, only: [:show, :edit, :update, :destroy]
-	before_action :signed_in_user
+	before_action :signed_in_user, except: [:read]
 
 	respond_to :html, :json
 
@@ -69,17 +69,33 @@ class RequestTasksController < ApplicationController
 
 	def update
 		respond_to do |format|
+		  # Перезаписываем атрибуты.
+		  # Не испольузем update, так как он автоматически сохраняет запись,
+		  # А нам нужно посмотреть, какие поля были изменены
 		  @request_task.assign_attributes(request_task_params)
 
+		  # Смотрим, нужно ли отсылась письма после редактирования поручения
 		  execute_email = @request_task.needs_send_execute_email
 		  audit_email = @request_task.needs_send_audit_email
 
+		  # Если нужно отправить письма, сохраняем даты отправки
+		  if execute_email
+		  	@request_task.email_to_executor_date = DateTime.now
+		  end
+
+		  if audit_email
+		  	@request_task.email_to_auditor_date = DateTime.now
+		  end
+
+		  # Остальное делаем, если при сохранении записи не было ошибок
 	      if @request_task.save
+	      	# Эти данные нужны отправщику сообщений для формирования письма
 	      	params = {
                 :request_task => @request_task,
                 :host => request.host_with_port
             }
 
+            # Отсылаем письма, если необходимо
 	      	if execute_email
 	      		@request_task.executor.send_execute_email(params)
 	      	end
@@ -140,7 +156,44 @@ class RequestTasksController < ApplicationController
 	end
 
 	def read
-		respond_with "done"
+		# Если получили сотрудника в запросе, ищем его в базе данных.
+		# Это означает переход по ссылки в email
+		if params[:employee_id]
+			employee = Employee.find(params[:employee_id])
+		# Иначе получаем из текущего пользователя.
+		# Это означает работу в системе
+		else
+			employee = current_user.employee
+		end
+
+		if params[:type] == "assign"
+		# Этот случай означает, что переход осуществился через письмо,
+		# и обработать нужно целую заявку, причем только для назначателей
+			@request = Request.find(params[:id])
+			@request.request_tasks.each do |rt|
+				if rt.validate_read_by_assigner(employee)
+					rt.update({:is_read_by_assigner => true})
+				end
+			end
+		else
+			@request_task = RequestTask.find(params[:id])
+			# Выставляем поручению статус прочитано только тогда,
+			# когда его читает ответственный за нее человек
+			if @request_task.validate_read_by_assigner(employee)
+				@request_task.update({:is_read_by_assigner => true})
+			elsif @request_task.validate_read_by_executor(employee)
+				@request_task.update({:is_read_by_executor => true})
+			elsif @request_task.validate_read_by_auditor(employee)
+				@request_task.update({:is_read_by_auditor => true})
+			end
+
+			# Формируем ответ для обновления данных на клиенте
+			response = { :is_read_by_executor => @request_task.is_read_by_executor,
+				:is_read_by_assigner => @request_task.is_read_by_assigner,
+				:is_read_by_auditor => @request_task.is_read_by_auditor }
+
+			respond_with response
+		end
 	end
 
 	def signed_in_user

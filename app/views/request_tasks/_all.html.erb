@@ -20,7 +20,7 @@
       </button>
     </h4>
     <span ng-show="toReadAssignCount" class="to-read-count">
-      <small>Просмотреть <span class="count-label">{{toReadAssignCount}}</span></small>
+      <small>Не прочитано <span class="count-label">{{toReadAssignCount}}</span></small>
     </span>
   </div>
 
@@ -42,7 +42,7 @@
       </button>
     </h4>
     <span ng-show="toReadExecuteCount" class="to-read-count">
-      <small>Просмотреть <span class="count-label">{{toReadExecuteCount}}</span></small>
+      <small>Не прочитано <span class="count-label">{{toReadExecuteCount}}</span></small>
     </span>
   </div>
 
@@ -63,9 +63,6 @@
         Проконтролировать <span ng-show="toAuditCount" class="count-label">{{toAuditCount}}</span>
       </button>
     </h4>
-    <span ng-show="toReadAuditCount" class="to-read-count">
-      <small>Просмотреть <span class="count-label">{{toReadAuditCount}}</span></small>
-    </span>
   </div>
 </div>
 
@@ -118,8 +115,10 @@
     </thead>
     <tbody>
       <tr ng-repeat="requestTask in requestTasks | filter:search">
-        <td ng-click="clickRequestTask($index)">{{requestTask.id}}</td>
-        <td ng-click="clickRequestTask($index)">{{requestTask.task_name}}</td>
+        <td ng-class="{'td-to-read': needsToRead(requestTask)}" 
+          ng-click="clickRequestTask($index)">{{requestTask.id}}</td>
+        <td ng-class="{'td-to-read': needsToRead(requestTask)}"
+          ng-click="clickRequestTask($index)">{{requestTask.task_name}}</td>
         <td ng-click="clickRequestTask($index)">{{requestTask.description}}</td>
         <td ng-click="clickRequestTask($index)">{{requestTask.machine_name}}</td>
         <td ng-click="clickRequestTask($index)">{{formattedDate(requestTask.creation_date)}}</td>

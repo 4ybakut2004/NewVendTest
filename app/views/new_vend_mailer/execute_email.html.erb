@@ -24,10 +24,14 @@
       </p>
       <p>
         <big>
-          <%= link_to("Прочитать", url_for(controller: 'request_tasks',
-              action: 'index',
+          <%= link_to("Подтвердить",
+            url_for(controller: 'request_tasks',
+              action: 'read',
               only_path: false,
-              host: @host)) %>
+              host: @host,
+              id: @request_task.id,
+              type: 'execute',
+              employee_id: @employee.id)) %>
         </big>
       </p>
 

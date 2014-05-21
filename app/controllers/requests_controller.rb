@@ -62,7 +62,8 @@ class RequestsController < ApplicationController
                                               :request_message_id => request_message.id,
                                               :creation_date => DateTime.now,
                                               :deadline_date => DateTime.now + task.deadline.days,
-                                              :registrar_description => message.description)
+                                              :registrar_description => message.description,
+                                              :email_to_assigner_date => DateTime.now)
 
             assigner = Employee.find(assigner_id)
 
