@@ -1,5 +1,9 @@
 <% provide(:title, 'Read Request Task') %>
 
 <div class="content text-center">
-	<h3>Подтверждено</h3>
+	<% if @error %>
+		<h3>Ссылка недействительна</h3>
+	<% else %>
+		<h3>Подтверждено</h3>
+	<% end %>
 </div>

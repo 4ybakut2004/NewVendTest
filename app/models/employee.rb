@@ -38,10 +38,6 @@ class Employee < ActiveRecord::Base
     end
 end
 
-class Solver < Employee
-	has_many :tasks 
-end
-
 class Registrar < Employee
 	has_many :requests 
 end

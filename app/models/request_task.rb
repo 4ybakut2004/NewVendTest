@@ -93,8 +93,12 @@ class RequestTask < ActiveRecord::Base
         # А так же исполнители их не прочитали
         filter[:is_read_by_executor] = false
         # Дополнительно проверяем, нужно ли вообще им их читать
-        date_filter = "email_to_executor_date IS NOT NULL"
-
+        date_filter = "email_to_executor_date IS NOT NULL "
+        # И не просрочили ли они прочтение
+        read_confirm_time = NewVendSettings.getSettings.read_confirm_time
+        if read_confirm_time
+            date_filter += "AND email_to_executor_date < '#{(DateTime.now - read_confirm_time.minutes).utc}'"
+        end
 
         return RequestTask.where(filter).where(date_filter).size
     end
@@ -111,7 +115,12 @@ class RequestTask < ActiveRecord::Base
         # А так же контролеры их не прочитали
         filter[:is_read_by_auditor] = false
         # Дополнительно проверяем, нужно ли вообще им их читать
-        date_filter = "email_to_auditor_date IS NOT NULL"
+        date_filter = "email_to_auditor_date IS NOT NULL "
+        # И не просрочили ли они прочтение
+        read_confirm_time = NewVendSettings.getSettings.read_confirm_time
+        if read_confirm_time
+            date_filter += "AND email_to_auditor_date < '#{(DateTime.now - read_confirm_time.minutes).utc}'"
+        end
 
         return RequestTask.where(filter).where(date_filter).size
     end

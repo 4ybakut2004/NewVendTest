@@ -156,6 +156,7 @@ class RequestTasksController < ApplicationController
 	end
 
 	def read
+		response = ""
 		# Если получили сотрудника в запросе, ищем его в базе данных.
 		# Это означает переход по ссылки в email
 		if params[:employee_id]
@@ -169,31 +170,41 @@ class RequestTasksController < ApplicationController
 		if params[:type] == "assign"
 		# Этот случай означает, что переход осуществился через письмо,
 		# и обработать нужно целую заявку, причем только для назначателей
-			@request = Request.find(params[:id])
-			@request.request_tasks.each do |rt|
-				if rt.validate_read_by_assigner(employee)
-					rt.update({:is_read_by_assigner => true})
+			@request = Request.find_by_id(params[:id])
+			if @request
+				@request.request_tasks.each do |rt|
+					if rt.validate_read_by_assigner(employee)
+						rt.update({:is_read_by_assigner => true})
+					end
 				end
+			else
+				@error = true
+				response = "can't find request"
 			end
 		else
-			@request_task = RequestTask.find(params[:id])
-			# Выставляем поручению статус прочитано только тогда,
-			# когда его читает ответственный за нее человек
-			if @request_task.validate_read_by_assigner(employee)
-				@request_task.update({:is_read_by_assigner => true})
-			elsif @request_task.validate_read_by_executor(employee)
-				@request_task.update({:is_read_by_executor => true})
-			elsif @request_task.validate_read_by_auditor(employee)
-				@request_task.update({:is_read_by_auditor => true})
+			@request_task = RequestTask.find_by_id(params[:id])
+			if @request_task
+				# Выставляем поручению статус прочитано только тогда,
+				# когда его читает ответственный за нее человек
+				if @request_task.validate_read_by_assigner(employee)
+					@request_task.update({:is_read_by_assigner => true})
+				elsif @request_task.validate_read_by_executor(employee)
+					@request_task.update({:is_read_by_executor => true})
+				elsif @request_task.validate_read_by_auditor(employee)
+					@request_task.update({:is_read_by_auditor => true})
+				end
+
+				# Формируем ответ для обновления данных на клиенте
+				response = { :is_read_by_executor => @request_task.is_read_by_executor,
+					:is_read_by_assigner => @request_task.is_read_by_assigner,
+					:is_read_by_auditor => @request_task.is_read_by_auditor }
+			else
+				@error = true
+				response = "can't find request task"
 			end
-
-			# Формируем ответ для обновления данных на клиенте
-			response = { :is_read_by_executor => @request_task.is_read_by_executor,
-				:is_read_by_assigner => @request_task.is_read_by_assigner,
-				:is_read_by_auditor => @request_task.is_read_by_auditor }
-
-			respond_with response
 		end
+
+		respond_with response
 	end
 
 	def signed_in_user

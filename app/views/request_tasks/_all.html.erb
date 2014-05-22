@@ -120,7 +120,8 @@
         <td ng-class="{'td-to-read': needsToRead(requestTask)}"
           ng-click="clickRequestTask($index)">{{requestTask.task_name}}</td>
         <td ng-click="clickRequestTask($index)">{{requestTask.description}}</td>
-        <td ng-click="clickRequestTask($index)">{{requestTask.machine_name}}</td>
+        <td ng-class="{'td-to-read': needsToRead(requestTask)}" 
+          ng-click="clickRequestTask($index)">{{requestTask.machine_name}}</td>
         <td ng-click="clickRequestTask($index)">{{formattedDate(requestTask.creation_date)}}</td>
         <td ng-click="clickRequestTask($index)">{{formattedDate(requestTask.deadline_date)}}</td>
         <td ng-click="clickRequestTask($index)">{{formattedDate(requestTask.execution_date)}}</td>

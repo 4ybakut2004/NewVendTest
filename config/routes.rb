@@ -11,6 +11,7 @@ NewVend::Application.routes.draw do
   resources :message_tasks, only: [:index]
   resources :attributes, only: [:index, :create, :destroy, :update]
   resources :request_types, only: [:index, :create, :destroy, :update, :show]
+  resources :new_vend_settings, only: [:index, :show, :update]
 
   root  'static_pages#home'
   match '/help',  to: 'static_pages#help',       via: 'get'
