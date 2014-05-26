@@ -334,6 +334,8 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 
 		// После фильтра подгоняем ширину шапки таблицы
 		$scope.changeWidth();
+
+		$scope.setReadIndicatorsCounts();
 	}
 
 	/*
