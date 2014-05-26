@@ -3,7 +3,7 @@ class NewVendMailer < ActionMailer::Base
  
   def send_execute_or_audit_email(employee, params)
   	@employee = employee
-    @host = params[:host]
+    @host = '192.168.0.32:3000' #params[:host]
 
     @request_task = params[:request_task]
     @request_task_attrs = @request_task.getFullInfo
@@ -27,7 +27,7 @@ class NewVendMailer < ActionMailer::Base
   	@to_assign_count = RequestTask.to_assign_count(employee)
   	@tasks_count = params[:tasks_count]
     @employee = employee
-    @host = params[:host]
+    @host = '192.168.0.32:3000' #params[:host]
     @request = params[:request]
     @request_attrs = @request.getFullInfo
     @request_tasks = @request.request_tasks.map { |rt| rt.getFullInfo  }
