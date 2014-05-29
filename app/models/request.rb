@@ -4,7 +4,6 @@ class Request < ActiveRecord::Base
 	belongs_to :machine
 	belongs_to :registrar, :class_name => "Employee", :foreign_key => "registrar_id"
     belongs_to :request_type
-    belongs_to :request_task
 	has_many :request_messages, dependent: :destroy
   	has_many :messages, through: :request_messages
   	has_many :request_tasks, through: :request_messages

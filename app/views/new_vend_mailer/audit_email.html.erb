@@ -10,41 +10,25 @@
     </style>
   </head>
   <body>
+
     <% if @employee.email %>
-      <h2>Уважаемый <%= @employee.name %></h2>
-      <p>
-        Вы являетесь <strong>контролером</strong> поручения 
-        <%= @request_task.id %> (<strong><%= @request_task_attrs["task_name"] %></strong>) в системе Новый Вендинг.
-      </p>
-      <p>
-        Поручение было выполнено <strong><%= @execution_date %></strong>.
-      </p>
-      <p>
-        Дата выполнения была запланирована на  <strong><%= @deadline_date %></strong>.
-      </p>
-      <p>
-        Чтобы подтвердить прочтение, перейдите по ссылке:
-      </p>
-      <p>
-        <big>
-          <%= link_to("Подтвердить",
-            url_for(controller: 'request_tasks',
-              action: 'read',
-              only_path: false,
-              host: @host,
-              id: @request_task.id,
-              type: 'audit',
-              employee_id: @employee.id)) %>
-        </big>
-      </p>
 
       <%= render 'request_info' %>
 
+      <br>
+
       <p>
-        <strong>Необходимо проконтроллировать поручений:</strong> <%= @to_audit_count %>.
+        Чтобы подтвердить прочтение, перейдите по ссылке: 
+        <%= link_to("Подтвердить",
+                    url_for(controller: 'request_tasks',
+                            action: 'read',
+                            only_path: false,
+                            host: @host,
+                            id: @request_task.id,
+                            type: 'audit',
+                            employee_id: @employee.id)) %>
       </p>
 
-      <p>Спасибо!</p>
     <% end %>
   </body>
 </html>

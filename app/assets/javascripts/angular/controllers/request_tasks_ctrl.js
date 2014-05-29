@@ -59,10 +59,16 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 			not_done: false
 		};
 
+		// Фильтры прочитанности
+		$scope.to_read = {
+			assigner: false,
+			executor: false
+		};
+
 		// Настраиваем доступ к функциям с html страницы
 		$scope.formattedDate = formattedDate;
 		$scope.dateForInput = dateForInput;
-		}
+	}
 
 	/*
 	 * $scope.setIndicatorsCounts()
@@ -306,7 +312,8 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		var attr = {
 			'who_am_i[]': [],
 			'overdued[]': [],
-			'indicators[]': []
+			'indicators[]': [],
+			'to_read[]' : []
 		};
 
 		// Запоминаем отмеченные пункты просроченности
@@ -327,6 +334,13 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		for(var key in $scope.indicators) {
 			if($scope.indicators[key]) {
 				attr['indicators[]'].push(key);
+			}
+		}
+
+		// Запоминаем отмеченные пункты прочитанности
+		for(var key in $scope.to_read) {
+			if($scope.to_read[key]) {
+				attr['to_read[]'].push(key);
 			}
 		}
 
@@ -392,6 +406,28 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 
 				case 'audit':
 					$scope.whoAmI.auditor = true;
+					break;
+			}
+		}
+
+		requestTasksFilter();
+	};
+
+	/*
+	 * $scope.toReadFilter(str)
+	 * Изменяет фильтр прочитанности
+	 */
+	$scope.toReadFilter = function(str) {
+		$scope.to_read[str] = !$scope.to_read[str];
+
+		if($scope.to_read[str]) {
+			switch(str) {
+				case 'assigner':
+					$scope.whoAmI.assigner = true;
+					break;
+
+				case 'executor':
+					$scope.whoAmI.executor = true;
 					break;
 			}
 		}

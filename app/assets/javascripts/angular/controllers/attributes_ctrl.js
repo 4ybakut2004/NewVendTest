@@ -6,9 +6,10 @@
 
 function AttributesCtrl($scope, $timeout, Attribute, Message) {
 //- Инициализация моделей ----------------------------------
-	$scope.attributes = Attribute.all();
-	$scope.messages = Message.all();
-	$scope.newAttributeType = "number";
+	$scope.attributes = Attribute.all(); // Получаем все типы атрибутов
+	$scope.messages = Message.all();     // Получаем все типы сигналов
+	$scope.newAttributeType = "number";  // Тип создаваемого атрибута по умолчанию
+	// TODO получать возможные типы атрибутов от сервера
 
 	$scope.editing = false;
 
@@ -64,11 +65,16 @@ function AttributesCtrl($scope, $timeout, Attribute, Message) {
 		});
 
 		var newAttribute = Attribute.create(attr);
-
-		$scope.attributes.unshift(newAttribute);
-		$scope.newName = "";
-		$scope.newAttributeType = "";
-		$('#newAttribute').modal('hide');
+		newAttribute.$promise.then(function() {
+			// Если удалось создать тип атрибута
+			$scope.attributes.unshift(newAttribute);
+			$scope.newName = "";
+			$scope.newAttributeType = "";
+			$('#newAttribute').modal('hide');
+		}, function(d) {
+			// Если во время создания были ошибки
+			console.log(d);
+		});
 	};
 
 	$scope.updateAttribute = function() {

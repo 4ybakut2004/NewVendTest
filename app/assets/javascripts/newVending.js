@@ -1,3 +1,9 @@
+// Описание ошибок, возвращаемых сервером
+var ResponseErrors = {
+	"has already been taken": "Запись с таким значением уже существует",
+	"can't be blank": "Поле должно быть заполнено"
+};
+
 var newVending = angular.module('newVending', ['ngResource', 'ngRoute']);
 
 $(document).on('ready page:load', function() {

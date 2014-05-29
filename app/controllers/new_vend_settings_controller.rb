@@ -9,7 +9,7 @@ class NewVendSettingsController < ApplicationController
 
 		respond_to do |format|
 			format.html { }
-      format.json { render json: NewVendSettings.all }
+      		format.json { render json: NewVendSettings.all }
 		end
 	end
 

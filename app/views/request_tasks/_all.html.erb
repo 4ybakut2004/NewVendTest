@@ -13,15 +13,20 @@
     </h1>
     <h4 style="margin: 0px;">
       <button type="button"
-      class="btn"
-      ng-class="{active: indicators.assign, 'btn-link': !indicators.assign}"
-      ng-click="indicatorsFilter('assign')">
-      Назначить <span ng-show="toAssignCount" class="count-label">{{toAssignCount}}</span>
+        class="btn"
+        ng-class="{active: indicators.assign, 'btn-link': !indicators.assign}"
+        ng-click="indicatorsFilter('assign')">
+        Назначить <span ng-show="toAssignCount" class="count-label">{{toAssignCount}}</span>
       </button>
     </h4>
-    <span ng-show="toReadAssignCount" class="to-read-count">
-      <small>Не прочитано <span class="count-label">{{toReadAssignCount}}</span></small>
-    </span>
+    <h4 style="margin: 0px;" ng-show="toReadAssignCount">
+      <button type="button"
+        class="btn"
+        ng-class="{active: to_read.assigner, 'btn-link': !to_read.assigner}"
+        ng-click="toReadFilter('assigner')">
+        Не прочитано <br> исполнителем <span class="count-label">{{toReadAssignCount}}</span>
+      </button>
+    </h4>
   </div>
 
   <div class="inline-block">
@@ -41,9 +46,14 @@
         Выполнить <span ng-show="toExecuteCount" class="count-label">{{toExecuteCount}}</span>
       </button>
     </h4>
-    <span ng-show="toReadExecuteCount" class="to-read-count">
-      <small>Не прочитано <span class="count-label">{{toReadExecuteCount}}</span></small>
-    </span>
+    <h4 style="margin: 0px;" ng-show="toReadExecuteCount">
+      <button type="button"
+        class="btn"
+        ng-class="{active: to_read.executor, 'btn-link': !to_read.executor}"
+        ng-click="toReadFilter('executor')">
+        Не прочитано <br> контролером <span class="count-label">{{toReadExecuteCount}}</span>
+      </button>
+    </h4>
   </div>
 
   <div class="inline-block">

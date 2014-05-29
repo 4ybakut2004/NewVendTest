@@ -10,38 +10,25 @@
     </style>
   </head>
   <body>
+
     <% if @employee.email %>
-      <h2>Уважаемый <%= @employee.name %></h2>
-      <p>
-        Вас назначили <strong>исполнителем</strong> поручения 
-        <%= @request_task.id %> (<strong><%= @request_task_attrs["task_name"] %></strong>) в системе Новый Вендинг.
-      </p>
-      <p>
-        Поручение необходимо выполнить до <strong><%= @deadline_date %></strong>.
-      </p>
-      <p>
-        Чтобы подтвердить прочтение, перейдите по ссылке:
-      </p>
-      <p>
-        <big>
-          <%= link_to("Подтвердить",
-            url_for(controller: 'request_tasks',
-              action: 'read',
-              only_path: false,
-              host: @host,
-              id: @request_task.id,
-              type: 'execute',
-              employee_id: @employee.id)) %>
-        </big>
-      </p>
 
       <%= render 'request_info' %>
 
+      <br>
+
       <p>
-        <strong>Невыполненных поручений:</strong> <%= @to_execute_count %>
+        Чтобы подтвердить прочтение, перейдите по ссылке: 
+        <%= link_to("Подтвердить",
+                    url_for(controller: 'request_tasks',
+                            action: 'read',
+                            only_path: false,
+                            host: @host,
+                            id: @request_task.id,
+                            type: 'execute',
+                            employee_id: @employee.id)) %>
       </p>
 
-      <p>Спасибо!</p>
     <% end %>
   </body>
 </html>

@@ -4,7 +4,7 @@ class Attribute < ActiveRecord::Base
 	has_many :message_attributes, dependent: :destroy
 	has_many :messages, through: :message_attributes
 
-	validates :name, presence: true
+	validates :name, presence: true, uniqueness: true
 	validates :attribute_type, presence: true
 
 	validates_inclusion_of :attribute_type, :in => [:number, :string]

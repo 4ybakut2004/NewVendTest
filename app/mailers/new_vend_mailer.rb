@@ -3,7 +3,7 @@ class NewVendMailer < ActionMailer::Base
  
   def send_execute_or_audit_email(employee, params)
   	@employee = employee
-    @host = '194.126.168.74:8081' #params[:host]
+    @host = getHostName
 
     @request_task = params[:request_task]
     @request_task_attrs = @request_task.getFullInfo
@@ -27,7 +27,7 @@ class NewVendMailer < ActionMailer::Base
   	@to_assign_count = RequestTask.to_assign_count(employee)
   	@tasks_count = params[:tasks_count]
     @employee = employee
-    @host = '194.126.168.74:8081' #params[:host]
+    @host = getHostName
     @request = params[:request]
     @request_attrs = @request.getFullInfo
     @request_tasks = @request.request_tasks.map { |rt| rt.getFullInfo  }
@@ -41,5 +41,14 @@ class NewVendMailer < ActionMailer::Base
   	@to_audit_count = RequestTask.to_audit_count(employee)
     @action_type = 'На контроль'
     send_execute_or_audit_email(employee, params)
+  end
+
+  def getHostName
+    settings = NewVendSettings.first
+    if settings.host_name
+      return settings.host_name
+    else
+      return "127.0.0.1:3000"
+    end
   end
 end

@@ -11,44 +11,24 @@
   </head>
   <body>
     <% if @employee.email %>
-      <h2>Уважаемый <%= @employee.name %></h2>
-      <p>
-        Вы являетесь <strong>назначателем</strong> поручений заявки <%= @request.id %> в системе Новый Вендинг.
-      </p>
-      <p>
-        Чтобы подтвердить прочтение, перейдите по ссылке:
-      </p>
-      <p>
-        <big>
-          <%= link_to("Подтвердить",
-            url_for(controller: 'request_tasks',
-              action: 'read',
-              only_path: false,
-              host: @host,
-              id: @request.id,
-              type: 'assign',
-              employee_id: @employee.id)) %>
-        </big>
-      </p>
 
-      <h2>Информация по заявке</h2>
       <p>
         <strong>Номер заявки:</strong> <%= @request.id %>
-      </p>
-      <p>
-        <strong>Регистратор:</strong> <%= @request_attrs["registrar_name"] %>
-      </p>
-      <p>
-        <strong>Автомат:</strong> <%= @request_attrs["machine_name"] %>
-      </p>
-      <p>
-        <strong>Описание:</strong> <%= @request_attrs["description"] %>
       </p>
       <p>
         <strong>Тип:</strong> <%= @request_attrs["request_type_name"] %>
       </p>
       <p>
+        <strong>Автомат:</strong> <%= @request_attrs["machine_name"] %>
+      </p>
+      <p>
         <strong>Дата регистрации:</strong> <%= @creation_date %>
+      </p>
+      <p>
+        <strong>Регистратор:</strong> <%= @request_attrs["registrar_name"] %>
+      </p>
+      <p>
+        <strong>Описание:</strong> <%= @request_attrs["description"] %>
       </p>
       <p>
         <strong>Сигналы:</strong> <%= @request_attrs["request_messages"].collect { |rm| rm["name"] }.join(", ") %>
@@ -70,12 +50,16 @@
       <br>
 
       <p>
-        <strong>Неназначенных поручений:</strong> <%= @to_assign_count %>
+        Чтобы подтвердить прочтение, перейдите по ссылке:
+        <%= link_to("Подтвердить",
+                    url_for(controller: 'request_tasks',
+                            action: 'read',
+                            only_path: false,
+                            host: @host,
+                            id: @request.id,
+                            type: 'assign',
+                            employee_id: @employee.id)) %>
       </p>
-
-      <br>
-      
-      <p>Спасибо!</p>
     <% end %>
   </body>
 </html>

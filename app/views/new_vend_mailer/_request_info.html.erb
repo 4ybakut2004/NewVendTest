@@ -1,4 +1,3 @@
-<h2>Информация по поручению</h2>
 <p>
   <strong>Тип:</strong> <%= @request_task_attrs["task_name"] %>
 </p>
@@ -30,6 +29,22 @@
   </p>
 <% end %>
 
+<p>
+  <strong>Описание:</strong> <%= @request_task.description %>
+</p>
+<p>
+  <strong>Описание регистратора:</strong> <%= @request_task.registrar_description %>
+</p>
+<p>
+  <strong>Описание назначателя:</strong> <%= @request_task.assigner_description %>
+</p>
+<p>
+  <strong>Описание исполнителя:</strong> <%= @request_task.executor_description %>
+</p>
+<p>
+  <strong>Описание контролера:</strong> <%= @request_task.auditor_description %>
+</p>
+
 <br>
 
 <% if @request_task.assigner_id %>
@@ -49,23 +64,3 @@
     <strong>Контролер:</strong> <%= @request_task_attrs["auditor_name"] %>
   </p>
 <% end %>
-
-<br>
-
-<p>
-  <strong>Описание:</strong> <%= @request_task.description %>
-</p>
-<p>
-  <strong>Описание регистратора:</strong> <%= @request_task.registrar_description %>
-</p>
-<p>
-  <strong>Описание назначателя:</strong> <%= @request_task.assigner_description %>
-</p>
-<p>
-  <strong>Описание исполнителя:</strong> <%= @request_task.executor_description %>
-</p>
-<p>
-  <strong>Описание контролера:</strong> <%= @request_task.auditor_description %>
-</p>
-
-<br>

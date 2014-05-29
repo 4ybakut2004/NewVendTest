@@ -4,8 +4,6 @@ class RequestTask < ActiveRecord::Base
 	belongs_to :task
 	belongs_to :request_message
 
-    has_many :requests
-
 	belongs_to :assigner, :class_name => "Employee", :foreign_key => "assigner_id"
 	belongs_to :executor, :class_name => "Employee", :foreign_key => "executor_id"
 	belongs_to :auditor, :class_name => "Employee", :foreign_key => "auditor_id"
@@ -63,6 +61,28 @@ class RequestTask < ActiveRecord::Base
         "execution_date IS NULL AND deadline_date < '#{DateTime.now}' OR execution_date IS NOT NULL AND audition_date IS NULL"
     end
 
+    def self.to_read_assigner_filter
+        date_filter = "email_to_executor_date IS NOT NULL AND is_read_by_executor = FALSE "
+        # И не просрочили ли они прочтение
+        read_confirm_time = NewVendSettings.getSettings.read_confirm_time
+        if read_confirm_time
+            date_filter += "AND email_to_executor_date < '#{(DateTime.now - read_confirm_time.minutes).utc}'"
+        end
+
+        return date_filter
+    end
+
+    def self.to_read_executor_filter
+        date_filter = "email_to_auditor_date IS NOT NULL AND is_read_by_auditor = FALSE "
+        # И не просрочили ли они прочтение
+        read_confirm_time = NewVendSettings.getSettings.read_confirm_time
+        if read_confirm_time
+            date_filter += "AND email_to_auditor_date < '#{(DateTime.now - read_confirm_time.minutes).utc}'"
+        end
+
+        return date_filter
+    end
+
     def self.to_assign_count(assigner)
         filter = {}
         filter[("assigner_id").to_sym] = assigner.id
@@ -91,14 +111,9 @@ class RequestTask < ActiveRecord::Base
         # В этих поручениях я являюсь назначателем
         filter[:assigner_id] = assigner.id
         # А так же исполнители их не прочитали
-        filter[:is_read_by_executor] = false
+        #filter[:is_read_by_executor] = false
         # Дополнительно проверяем, нужно ли вообще им их читать
-        date_filter = "email_to_executor_date IS NOT NULL "
-        # И не просрочили ли они прочтение
-        read_confirm_time = NewVendSettings.getSettings.read_confirm_time
-        if read_confirm_time
-            date_filter += "AND email_to_executor_date < '#{(DateTime.now - read_confirm_time.minutes).utc}'"
-        end
+        date_filter = to_read_assigner_filter
 
         return RequestTask.where(filter).where(date_filter).size
     end
@@ -113,14 +128,9 @@ class RequestTask < ActiveRecord::Base
         # В этих поручениях я являюсь исполнителем
         filter[:executor_id] = executor.id
         # А так же контролеры их не прочитали
-        filter[:is_read_by_auditor] = false
+        #filter[:is_read_by_auditor] = false
         # Дополнительно проверяем, нужно ли вообще им их читать
-        date_filter = "email_to_auditor_date IS NOT NULL "
-        # И не просрочили ли они прочтение
-        read_confirm_time = NewVendSettings.getSettings.read_confirm_time
-        if read_confirm_time
-            date_filter += "AND email_to_auditor_date < '#{(DateTime.now - read_confirm_time.minutes).utc}'"
-        end
+        date_filter = to_read_executor_filter
 
         return RequestTask.where(filter).where(date_filter).size
     end

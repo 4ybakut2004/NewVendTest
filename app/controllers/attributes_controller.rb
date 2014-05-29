@@ -5,29 +5,38 @@ class AttributesController < ApplicationController
 	respond_to :html, :json
 
 	def index
+		# Передаем во вьюшку имя контроллера AngularJS
 		@ng_controller = "Attributes"
 
-    	respond_to do |format|
-	      format.html { }
-	      format.json { render json: Attribute.order("created_at DESC").all.collect { |a| a.attrs } }
-	    end
+		# Формируем ответ
+		respond_to do |format|
+			# При рендере html страницы ничего не возвращаем
+			format.html { }
+			# При ответе в формате JSON формируем ответ с записями таблицы
+			format.json { render json: Attribute.order("created_at DESC").all.collect { |a| a.attrs } }
+		end
 	end
 
 	def create
 		@attribute = Attribute.new(attribute_params)
-		messages = params[:messages]
-		if !messages
-			messages = []
-		end
+		# Получаем из параметров массив с типами сигналов,
+		# которые нужно привязать к создаваемому типу атрибута
+		messages = params[:messages] || []
 
 		if @attribute.save
+			# Если удалось сохранить тип атрибута без ошибок, привязываем к нему типы сигналов
 			messages.each do |m|
 				message_attribute = MessageAttribute.create(:message_id => m,
 					:attribute_id => @attribute.id)
 			end
-			respond_with(@attribute.attrs, :status => :created, :location => @attribute)
+			respond_to do |format|
+				format.json { render :json => @attribute.attrs, :status => :created, :location => @attribute }
+			end
 		else
-			respond_with(@attribute.errors, :status => :unprocessable_entity)
+			# Если не удалось сохранить, формируем ответ с информацией об ошибках
+			respond_to do |format|
+				format.json { render :json => @attribute.errors, :status => :unprocessable_entity }
+			end
 		end
 	end
 
