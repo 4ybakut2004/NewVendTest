@@ -1,5 +1,5 @@
 class RequestType < ActiveRecord::Base
-	validates :name, presence: true
+	validates :name, presence: true, uniqueness: true
 
 	has_many :request_type_messages, dependent: :destroy
 	has_many :messages, through: :request_type_messages

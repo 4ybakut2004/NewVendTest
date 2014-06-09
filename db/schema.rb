@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140609062155) do
+ActiveRecord::Schema.define(version: 20140609083055) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,8 @@ ActiveRecord::Schema.define(version: 20140609062155) do
     t.datetime "updated_at"
     t.string   "email"
   end
+
+  add_index "employees", ["name"], name: "index_employees_on_name", unique: true, using: :btree
 
   create_table "machines", force: true do |t|
     t.string   "uid"
@@ -102,12 +104,16 @@ ActiveRecord::Schema.define(version: 20140609062155) do
     t.datetime "updated_at"
   end
 
+  add_index "request_attributes", ["attribute_id", "request_message_id"], name: "index_request_attributes_on_attribute_id_and_request_message_id", unique: true, using: :btree
+
   create_table "request_messages", force: true do |t|
     t.integer  "request_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "message_id"
   end
+
+  add_index "request_messages", ["message_id", "request_id"], name: "index_request_messages_on_message_id_and_request_id", using: :btree
 
   create_table "request_tasks", force: true do |t|
     t.integer  "assigner_id"
@@ -142,11 +148,15 @@ ActiveRecord::Schema.define(version: 20140609062155) do
     t.datetime "updated_at"
   end
 
+  add_index "request_type_messages", ["message_id", "request_type_id"], name: "index_request_type_messages_on_message_id_and_request_type_id", unique: true, using: :btree
+
   create_table "request_types", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "request_types", ["name"], name: "index_request_types_on_name", unique: true, using: :btree
 
   create_table "requests", force: true do |t|
     t.string   "description"

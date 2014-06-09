@@ -10,7 +10,6 @@ describe Request do
   	it { should respond_to(:phone) }
   	it { should respond_to(:machine_id) }
   	it { should respond_to(:registrar_id) }
-  	it { should respond_to(:request_task_id) }
 
   	it { should be_valid }
 

@@ -2,9 +2,8 @@ class Employee < ActiveRecord::Base
 	before_save { self.email = email ? email.downcase : "" }
 	
 	has_many :users
-	has_many :messages
 
-	validates :name, presence: true
+	validates :name, presence: true, uniqueness: true
 	VALID_EMAIL_REGEX = /\A([\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+)?\z/i
   	validates :email, format: { with: VALID_EMAIL_REGEX }
 
