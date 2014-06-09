@@ -18,9 +18,19 @@ function AttributesCtrl($scope, $timeout, Attribute, Message) {
 		attributeType: false
 	};
 
+	$scope.inputsErrors = {
+		name: "",
+		attribute_type: ""
+	};
+
 	$scope.editingInputs = {
 		name: false,
 		attributeType: false
+	};
+
+	$scope.editingErrors = {
+		name: "",
+		attribute_type: ""
 	};
 
 //- Мониторинг изменения моделей ---------------------------
@@ -36,18 +46,22 @@ function AttributesCtrl($scope, $timeout, Attribute, Message) {
 
 	$scope.$watch('newName', function() {
 		$scope.inputs.name = ($scope.newName != "" && $scope.newName != null);
+		$scope.inputsErrors.name = "";
 	});
 
 	$scope.$watch('newAttributeType', function() {
 		$scope.inputs.attributeType = ($scope.newAttributeType != "" && $scope.newAttributeType != null);
+		$scope.inputsErrors.attribute_type = "";
 	});
 
 	$scope.$watch('editingName', function() {
 		$scope.editingInputs.name = ($scope.editingName != "" && $scope.editingName != null);
+		$scope.editingErrors.name = "";
 	});
 
 	$scope.$watch('editingAttributeType', function() {
 		$scope.editingInputs.attributeType = ($scope.editingAttributeType != "" && $scope.editingAttributeType != null);
+		$scope.editingErrors.attribute_type = "";
 	});
 
 //- Изменение моделей --------------------------------------
@@ -69,11 +83,11 @@ function AttributesCtrl($scope, $timeout, Attribute, Message) {
 			// Если удалось создать тип атрибута
 			$scope.attributes.unshift(newAttribute);
 			$scope.newName = "";
-			$scope.newAttributeType = "";
+			$scope.newAttributeType = "number";
 			$('#newAttribute').modal('hide');
 		}, function(d) {
 			// Если во время создания были ошибки
-			console.log(d);
+			showErrors(d.data, $scope.inputsErrors);
 		});
 	};
 
@@ -82,11 +96,16 @@ function AttributesCtrl($scope, $timeout, Attribute, Message) {
 		attr.name = $scope.editingName;
 		attr.attribute_type = $scope.editingAttributeType;
 		var updatedAttribute = Attribute.update($scope.editingId, attr);
-		$scope.attributes[$scope.editingIdx] = updatedAttribute;
 
-		$scope.editingName = "";
-		$scope.editingAttributeType = "";
-		$scope.editing = false;
+		updatedAttribute.$promise.then(function() {
+			// Если удалось обновить запись
+			$scope.attributes[$scope.editingIdx] = updatedAttribute;
+			$scope.closeEditing();
+		}, function(d) {
+			// Если не удалось обновить запись
+			showErrors(d.data, $scope.editingErrors);
+		});
+		
 	};
 
 	$scope.deleteAttribute = function(id, idx) {
@@ -121,6 +140,16 @@ function AttributesCtrl($scope, $timeout, Attribute, Message) {
 
 	$scope.check = function(item) {
 		item.checked = !item.checked;
+	};
+
+	$scope.closeEditing = function() {
+		$scope.editing = false;
+
+		$scope.editingName = "";
+		$scope.editingAttributeType = "";
+
+		$scope.editingErrors.name = "";
+		$scope.editingErrors.attribute_type = "";
 	};
 }
 

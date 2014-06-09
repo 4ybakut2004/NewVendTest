@@ -1,15 +1,16 @@
 <form ng-submit="createMessage()" class="form-horizontal">
 
   <div class="form-group" 
-    ng-class='{"has-warning": !inputs.name, "has-success": inputs.name}'>
+    ng-class='{"has-warning": !inputs.name && !inputsErrors.name,
+               "has-success": inputs.name  && !inputsErrors.name,
+               "has-error":   inputsErrors.name}'>
     <label class="col-sm-3 control-label" for="name">Наименование</label>
     <div class="col-sm-9">
       <input id="name"
         type="text"
         ng-model='newName'
         placeholder="Введите наименование"
-        class="form-control"
-        ng-required="true">
+        class="form-control">
     </div>
   </div>
 
@@ -22,6 +23,11 @@
         placeholder="Введите описание"
         class="form-control">
     </div>
+  </div>
+
+  <div class="alert alert-danger" ng-show="inputsErrors.name">
+    <button type="button" class="close" ng-click="inputsErrors.name=''">&times;</button>
+    <strong>Наименование:</strong> {{inputsErrors.name}}
   </div>
 
   <div class="row">

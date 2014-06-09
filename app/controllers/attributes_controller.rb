@@ -42,27 +42,24 @@ class AttributesController < ApplicationController
 
 	def update
 		respond_to do |format|
-		  if @attribute.update(attribute_params)
-		    format.html { redirect_to @attribute, notice: 'Task was successfully updated.' }
-		    format.json { render json: @attribute.attrs, status: :created }
-		  else
-		    format.html { render action: 'edit' }
-		    format.json { render json: @attribute.errors, status: :unprocessable_entity }
-		  end
+			if @attribute.update(attribute_params)
+				format.json { render json: @attribute.attrs, status: :created }
+			else
+				format.json { render json: @attribute.errors, status: :unprocessable_entity }
+			end
 		end
 	end
 
 	def destroy
 		@attribute.destroy
-	    respond_to do |format|
-	      format.html { redirect_to attributes_url }
-	      format.json { render json: @attribute.attrs }
-	    end
+		respond_to do |format|
+			format.json { render json: @attribute.attrs }
+		end
 	end
 
 	def signed_in_user
-      redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
-    end
+		redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
+	end
 
 	private
 

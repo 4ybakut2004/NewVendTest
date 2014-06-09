@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
 	include ActiveModel::Dirty
 
-	validates :name,     presence: true, uniqueness: { case_sensitive: false }, length: { maximum: 50 }
+	validates :name, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: 50 }
 	validates :password_digest, presence: true
 
 	belongs_to :employee

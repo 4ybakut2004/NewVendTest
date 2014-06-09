@@ -363,10 +363,12 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 			switch(str) {
 				case 'assigner':
 					$scope.indicators.assign = false;
+					$scope.to_read.assigner = false;
 					break;
 
 				case 'executor':
 					$scope.indicators.execute = false;
+					$scope.to_read.executor = false;
 					break;
 
 				case 'auditor':

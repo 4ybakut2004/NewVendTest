@@ -4,6 +4,19 @@ var ResponseErrors = {
 	"can't be blank": "Поле должно быть заполнено"
 };
 
+function showErrors (data, container) {
+	angular.forEach(data, function(fieldErrors, fieldName) {
+		// Преобразовываем массив английских ошибок в массив русских
+		var rusErrors = [];
+		angular.forEach(fieldErrors, function(errorName) {
+			rusErrors.push(ResponseErrors[errorName]);
+		});
+
+		// Показываем сообщение об ошибке
+		container[fieldName] = errorMessage = rusErrors.join(', ');
+	});
+}
+
 var newVending = angular.module('newVending', ['ngResource', 'ngRoute']);
 
 $(document).on('ready page:load', function() {

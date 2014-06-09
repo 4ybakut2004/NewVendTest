@@ -19,9 +19,17 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, RequestType) {
 		description: false
 	};
 
+	$scope.inputsErrors = {
+		name: ""
+	};
+
 	$scope.editingInputs = {
 		name: false,
 		description: false
+	};
+
+	$scope.editingErrors = {
+		name: ""
 	};
 
 	// Фильтры для элементов, которые связаны с типом сигнала и не связаны соответственно
@@ -46,6 +54,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, RequestType) {
 
 	$scope.$watch('newName', function() {
 		$scope.inputs.name = ($scope.newName != "" && $scope.newName != null);
+		$scope.inputsErrors.name = "";
 	});
 
 	$scope.$watch('newDescription', function() {
@@ -54,6 +63,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, RequestType) {
 
 	$scope.$watch('editingName', function() {
 		$scope.editingInputs.name = ($scope.editingName != "" && $scope.editingName != null);
+		$scope.editingErrors.name = "";
 	});
 
 	$scope.$watch('editingDescription', function() {
@@ -99,9 +109,17 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, RequestType) {
 
 		var newMessage = Message.create(attr);
 
-		$scope.messages.unshift(newMessage);
-		$scope.resetNewMessage();
-		$('#newMessage').modal('hide');
+		newMessage.$promise.then(function(){
+			// Если удалось создать тип сигнала
+			$scope.messages.unshift(newMessage);
+			$scope.resetNewMessage();
+			$('#newMessage').modal('hide');
+		}, function(d) {
+			// Если не удалось, то показываем ошибки
+			showErrors(d.data, $scope.inputsErrors);
+		});
+
+		
 	};
 
 	$scope.updateMessage = function() {
@@ -143,13 +161,15 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, RequestType) {
 		}
 
 		var updatedMessage = Message.update($scope.editingId, attr);
-		$scope.messages[$scope.editingIdx] = updatedMessage;
 
-		$scope.editingName = "";
-		$scope.editingDescription = "";
-		$scope.editing = false;
-		$scope.messageTaskChanged = false;
-		$scope.messageAttributeChanged = false;
+		updatedMessage.$promise.then(function() {
+			// Если удалось обновить тип сигнала
+			$scope.messages[$scope.editingIdx] = updatedMessage;
+			$scope.closeEditing();
+		}, function(d) {
+			// Если не удалось обновить тип сигнала
+			showErrors(d.data, $scope.editingErrors);
+		});
 	};
 
 	$scope.clickMessage = function(idx) {
@@ -269,6 +289,17 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, RequestType) {
 	$scope.changeMessageRequestType = function(item) {
 		item.exists = !item.exists;
 		$scope.messageRequestTypesChanged = true;
+	};
+
+	$scope.closeEditing = function() {
+		$scope.editingName = "";
+		$scope.editingDescription = "";
+
+		$scope.editingErrors.name = "";
+
+		$scope.editing = false;
+		$scope.messageTaskChanged = false;
+		$scope.messageAttributeChanged = false;
 	};
 }
 

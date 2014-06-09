@@ -1,5 +1,5 @@
 class NewVendSettings < ActiveRecord::Base
 	def self.getSettings
-		NewVendSettings.first	
+		NewVendSettings.first
 	end
 end

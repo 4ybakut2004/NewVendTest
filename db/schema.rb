@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140528021557) do
+ActiveRecord::Schema.define(version: 20140529095304) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,8 @@ ActiveRecord::Schema.define(version: 20140528021557) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "attributes", ["name"], name: "index_attributes_on_name", unique: true, using: :btree
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -65,6 +67,8 @@ ActiveRecord::Schema.define(version: 20140528021557) do
     t.datetime "updated_at"
   end
 
+  add_index "message_attributes", ["message_id", "attribute_id"], name: "index_message_attributes_on_message_id_and_attribute_id", unique: true, using: :btree
+
   create_table "message_tasks", force: true do |t|
     t.integer  "message_id"
     t.integer  "task_id"
@@ -78,6 +82,8 @@ ActiveRecord::Schema.define(version: 20140528021557) do
     t.datetime "updated_at"
     t.string   "description"
   end
+
+  add_index "messages", ["name"], name: "index_messages_on_name", unique: true, using: :btree
 
   create_table "new_vend_settings", force: true do |t|
     t.integer  "read_confirm_time"
@@ -148,7 +154,6 @@ ActiveRecord::Schema.define(version: 20140528021557) do
     t.string   "phone"
     t.integer  "registrar_id"
     t.integer  "request_type_id", default: 4
-    t.integer  "request_task_id"
   end
 
   create_table "tasks", force: true do |t|

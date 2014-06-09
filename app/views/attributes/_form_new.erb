@@ -1,5 +1,8 @@
 <form ng-submit="createAttribute()" class="form-horizontal">
-  <div class="form-group" ng-class='{"has-warning": !inputs.name, "has-success": inputs.name}'>
+  <div class="form-group" 
+    ng-class='{"has-warning": !inputs.name && !inputsErrors.name,
+               "has-success": inputs.name  && !inputsErrors.name,
+               "has-error":   inputsErrors.name}'>
     <label class="col-sm-4 control-label" for="name">Наименование</label>
     <div class="col-sm-8">
       <input id="name"
@@ -11,11 +14,23 @@
   </div>
 
   <div class="form-group"
-    ng-class='{"has-warning": !inputs.attributeType, "has-success": inputs.attributeType}'>
+    ng-class='{"has-warning": !inputs.attributeType && !inputsErrors.attribute_type, 
+               "has-success": inputs.attributeType  && !inputsErrors.attribute_type,
+               "has-error":   inputsErrors.attribute_type}'>
     <%= label_tag :attribute_type, "Тип атрибута", :class => "col-sm-4 control-label" %>
     <div class="col-sm-8">
-      <%= select_tag :attribute_type, options_for_select(Attribute.attribute_types.map {|k, v| [ v, k ] }), :class => "form-control", "ng-model" => "newAttributeType", "ng-required" => true %>
+      <%= select_tag :attribute_type, options_for_select(Attribute.attribute_types.map {|k, v| [ v, k ] }), :class => "form-control", "ng-model" => "newAttributeType" %>
     </div>
+  </div>
+
+  <div class="alert alert-danger" ng-show="inputsErrors.name">
+    <button type="button" class="close" ng-click="inputsErrors.name=''">&times;</button>
+    <strong>Наименование:</strong> {{inputsErrors.name}}
+  </div>
+
+  <div class="alert alert-danger" ng-show="inputsErrors.attribute_type">
+    <button type="button" class="close" ng-click="inputsErrors.attribute_type=''">&times;</button>
+    <strong>Тип атрибута:</strong> {{inputsErrors.attribute_type}}
   </div>
 
   <h3>Типы сигналов</h3>
