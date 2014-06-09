@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140529095304) do
+ActiveRecord::Schema.define(version: 20140609062155) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,8 @@ ActiveRecord::Schema.define(version: 20140529095304) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "message_tasks", ["message_id", "task_id"], name: "index_message_tasks_on_message_id_and_task_id", unique: true, using: :btree
 
   create_table "messages", force: true do |t|
     t.string   "name"
@@ -163,6 +165,8 @@ ActiveRecord::Schema.define(version: 20140529095304) do
     t.integer  "deadline",   default: 5
     t.integer  "solver_id"
   end
+
+  add_index "tasks", ["name"], name: "index_tasks_on_name", unique: true, using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name"
