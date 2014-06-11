@@ -58,7 +58,7 @@ class RequestTask < ActiveRecord::Base
     end
 
     def self.audit_filter
-        "execution_date IS NULL AND deadline_date < '#{DateTime.now}' OR execution_date IS NOT NULL AND audition_date IS NULL"
+        "execution_date IS NULL AND deadline_date < '#{DateTime.now.utc}' OR execution_date IS NOT NULL AND audition_date IS NULL"
     end
 
     def self.to_read_assigner_filter
