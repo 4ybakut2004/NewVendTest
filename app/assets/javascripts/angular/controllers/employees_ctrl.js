@@ -11,20 +11,14 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 
 	$scope.inputs = {
 		name: false,
-		email: false
-	};
-
-	$scope.inputsErrors = {
-		email: false
+		email: false,
+		phone: false
 	};
 
 	$scope.editingInputs = {
 		name: false,
-		email: false
-	};
-
-	$scope.editingErrors = {
-		email: false
+		email: false,
+		phone: false
 	};
 
 //- Мониторинг изменения моделей ---------------------------
@@ -34,7 +28,7 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 	
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
-			$timeout(function(){$scope.setWidth();}, 300);
+			$scope.changeWidth();
 		}
 	});
 
@@ -46,6 +40,10 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 		$scope.inputs.email = ($scope.newEmail != "" && $scope.newEmail != null);
 	});
 
+	$scope.$watch('newPhone', function() {
+		$scope.inputs.phone = ($scope.newPhone != "" && $scope.newPhone != null);
+	});
+
 	$scope.$watch('editingName', function() {
 		$scope.editingInputs.name = ($scope.editingName != "" && $scope.editingName != null);
 	});
@@ -54,18 +52,22 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 		$scope.editingInputs.email = ($scope.editingEmail != "" && $scope.editingEmail != null);
 	});
 
+	$scope.$watch('editingPhone', function() {
+		$scope.editingInputs.phone = ($scope.editingPhone != "" && $scope.editingPhone != null);
+	});
+
 //- Изменение моделей --------------------------------------
 	$scope.createEmployee = function() {
 		var attr = {};
 		attr.name = $scope.newName;
 		attr.email = $scope.newEmail;
+		attr.phone = $scope.newPhone;
 		var newEmployee = Employee.create(attr);
 
 		$scope.employees.unshift(newEmployee);
 		$scope.newName = "";
 		$scope.newEmail = "";
-
-		$scope.inputsErrors.email = false;
+		$scope.newPhone = "";
 
 		$('#newEmployee').modal('hide');
 	};
@@ -74,15 +76,16 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 		var attr = {};
 		attr.name = $scope.editingName;
 		attr.email = $scope.editingEmail;
+		attr.phone = $scope.editingPhone;
 		var updatedEmployee = Employee.update($scope.editingId, attr);
 
 		updatedEmployee.$promise.then(function(employee) {
 			$scope.employees[$scope.editingIdx] = updatedEmployee;
 			$scope.editingName = "";
 			$scope.editingEmail = "";
+			$scope.editingPhone = "";
 			$scope.editing = false;
 		}, function(error) {
-			$scope.editingErrors.email = true;
 		});
 	};
 
@@ -110,8 +113,7 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 		$scope.editingIdx = idx;
 		$scope.editingName = $scope.employees[idx].name;
 		$scope.editingEmail = $scope.employees[idx].email;
-
-		$scope.editingErrors.email = false;
+		$scope.editingPhone = $scope.employees[idx].phone;
 
 		$scope.editing = true;
 	};

@@ -107,10 +107,12 @@ class RequestTasksController < ApplicationController
             # Отсылаем письма, если необходимо
 	      	if execute_email
 	      		@request_task.executor.send_execute_email(params)
+	      		@request_task.executor.send_execute_sms(params)
 	      	end
 
 	      	if audit_email
 	      		@request_task.auditor.send_audit_email(params)
+	      		@request_task.auditor.send_audit_sms(params)
 	      	end
 
 	        format.html { redirect_to @request_task, notice: 'Request_task was successfully updated.' }

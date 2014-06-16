@@ -89,7 +89,9 @@ class RequestsController < ApplicationController
             :host => request.host_with_port,
             :request => @request
           }
-          Employee.find(key).send_assign_email(params)
+          employee_to_send = Employee.find(key)
+          employee_to_send.send_assign_email(params)
+          employee_to_send.send_assign_sms(params)
         }
       end
       respond_with(@request.attrs, :status => :created, :location => @request)

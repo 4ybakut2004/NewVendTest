@@ -48,7 +48,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, RequestType) {
 	
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
-			$timeout(function(){$scope.setWidth();}, 300);
+			$scope.changeWidth();
 		}
 	});
 

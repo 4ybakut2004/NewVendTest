@@ -40,7 +40,7 @@ function AttributesCtrl($scope, $timeout, Attribute, Message) {
 	
 	$scope.$watch('editing', function() {
 		if($scope.editing == false) {
-			$timeout(function(){$scope.setWidth();}, 300);
+			$scope.changeWidth();
 		}
 	});
 
