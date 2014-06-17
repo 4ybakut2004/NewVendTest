@@ -187,6 +187,13 @@ class RequestTasksController < ApplicationController
 		end
 	end
 
+	def to_read_by_employee_count
+		employee = current_user.employee
+		if employee
+			respond_with RequestTask.to_read_by_employee_count(employee)
+		end
+	end
+
 	def read
 		response = ""
 		# Если получили сотрудника в запросе, ищем его в базе данных.

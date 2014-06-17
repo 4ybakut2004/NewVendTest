@@ -169,9 +169,9 @@ class RequestTask < ActiveRecord::Base
     end
 
     def self.to_read_by_employee_count(employee)
-        filter = "assigner_id = #{employee.id} AND " + to_read_by_assigner_count
-        filter += "executor_id = #{employee.id} AND " + to_read_by_executor_count
-        filter += "auditor_id = #{employee.id} AND " + to_read_by_auditor_count
+        filter = "assigner_id = #{employee.id} AND " + to_read_by_assigner_filter
+        filter += "OR executor_id = #{employee.id} AND " + to_read_by_executor_filter
+        filter += "OR auditor_id = #{employee.id} AND " + to_read_by_auditor_filter
         return RequestTask.where(filter).size
     end
 

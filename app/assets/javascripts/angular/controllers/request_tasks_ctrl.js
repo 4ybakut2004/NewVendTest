@@ -110,23 +110,19 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 	$scope.setReadByIndicatorsCounts = function() {
 		RequestTask.to_read_by_assigner_count().then(function(d) {
 			$scope.toReadByAssignerCount = d;
-			//console.log($scope.toReadByAssignerCount);
 		});
 
 		RequestTask.to_read_by_executor_count().then(function(d) {
 			$scope.toReadByExecutorCount = d;
-			//console.log($scope.toReadByExecutorCount);
 		});
 
 		RequestTask.to_read_by_auditor_count().then(function(d) {
 			$scope.toReadByAuditorCount = d;
-			//console.log($scope.toReadByAuditorCount);
 		});
 
-		/*RequestTask.to_read_by_employee_count().then(function(d) {
+		RequestTask.to_read_by_employee_count().then(function(d) {
 			$scope.toReadByCount = d;
-			console.log($scope.toReadByCount);
-		});*/
+		});
 	};
 
 	init();
