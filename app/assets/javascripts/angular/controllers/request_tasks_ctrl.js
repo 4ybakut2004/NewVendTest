@@ -19,6 +19,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		// Получаем количества индикаторных поручений и поручений, которые нужно прочитать
 		$scope.setIndicatorsCounts();
 		$scope.setReadIndicatorsCounts();
+		$scope.setReadByIndicatorsCounts();
 
 		// Переменая, отвечающая за показ окна редактирования
 		$scope.editing = false;
@@ -90,7 +91,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 
 	/*
 	 * $scope.setReadIndicatorsCounts()
-	 * Получение количеств поручений, которые необходимо прочитать
+	 * Получение количеств поручений, которые необходимо прочитать назначенным человеком
 	 */
 	$scope.setReadIndicatorsCounts = function() {
 		RequestTask.to_read_assign_count().then(function(d) {
@@ -100,6 +101,32 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		RequestTask.to_read_execute_count().then(function(d) {
 			$scope.toReadExecuteCount = d;
 		});
+	};
+
+	/*
+	 * $scope.setReadByIndicatorsCounts()
+	 * Получение количеств поручений, которые необходимо прочитать у себя
+	 */
+	$scope.setReadByIndicatorsCounts = function() {
+		RequestTask.to_read_by_assigner_count().then(function(d) {
+			$scope.toReadByAssignerCount = d;
+			//console.log($scope.toReadByAssignerCount);
+		});
+
+		RequestTask.to_read_by_executor_count().then(function(d) {
+			$scope.toReadByExecutorCount = d;
+			//console.log($scope.toReadByExecutorCount);
+		});
+
+		RequestTask.to_read_by_auditor_count().then(function(d) {
+			$scope.toReadByAuditorCount = d;
+			//console.log($scope.toReadByAuditorCount);
+		});
+
+		/*RequestTask.to_read_by_employee_count().then(function(d) {
+			$scope.toReadByCount = d;
+			console.log($scope.toReadByCount);
+		});*/
 	};
 
 	init();
@@ -229,6 +256,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		updatedRequestTask.$promise.then(function() {
 			$scope.setIndicatorsCounts();
 			$scope.setReadIndicatorsCounts();
+			$scope.setReadByIndicatorsCounts();
 		});
 
 		$scope.requestTasks[$scope.editingIdx] = updatedRequestTask;
@@ -290,6 +318,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 				$scope.requestTasks[idx].is_read_by_auditor = d.is_read_by_auditor;
 				// И после этого обновляем число непрочитанных поручений
 				$scope.setReadIndicatorsCounts();
+				$scope.setReadByIndicatorsCounts();
 			});
 		}
 	};
@@ -350,6 +379,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		$scope.changeWidth();
 
 		$scope.setReadIndicatorsCounts();
+		$scope.setReadByIndicatorsCounts();
 	}
 
 	/*

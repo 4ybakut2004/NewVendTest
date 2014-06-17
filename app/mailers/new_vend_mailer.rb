@@ -2,11 +2,12 @@ class NewVendMailer < ActionMailer::Base
   default from: 'NewVendSystem@gmail.com'
  
   def send_execute_or_audit_email(employee, params)
-  	@employee = employee
+    @employee = employee
     @host = getHostName
 
     @request_task = params[:request_task]
     @request_task_attrs = @request_task.getFullInfo
+    @request = @request_task.request_message.request
 
     @execution_date = @request_task.execution_date ? @request_task.execution_date.utc.localtime.to_s(:ru_datetime) : ''
     @deadline_date = @request_task.deadline_date ? @request_task.deadline_date.utc.localtime.to_s(:ru_datetime) : ''
@@ -24,21 +25,21 @@ class NewVendMailer < ActionMailer::Base
   end
 
   def assign_email(employee, params)
-  	@to_assign_count = RequestTask.to_assign_count(employee)
-  	@tasks_count = params[:tasks_count]
+    @to_assign_count = RequestTask.to_assign_count(employee)
+    @tasks_count = params[:tasks_count]
     @employee = employee
     @host = getHostName
     @request = params[:request]
     @request_attrs = @request.getFullInfo
     @request_tasks = @request.request_tasks.map { |rt| rt.getFullInfo  }
     @creation_date = @request.created_at ? @request.created_at.utc.localtime.to_s(:ru_datetime) : ''
-  	subject = "Автомат #{@request.machine.name}, К назначению"
+    subject = "Автомат #{@request.machine.name}, К назначению"
 
     mail(to: @employee.email, subject: subject)
   end
 
   def audit_email(employee, params)
-  	@to_audit_count = RequestTask.to_audit_count(employee)
+    @to_audit_count = RequestTask.to_audit_count(employee)
     @action_type = 'На контроль'
     send_execute_or_audit_email(employee, params)
   end

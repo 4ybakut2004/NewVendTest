@@ -67,6 +67,22 @@ newVending.factory('RequestTask', ['$resource', '$http', function($resource, $ht
       return getSimpleResponse('/to_read_execute_count.json');
   };
 
+  RequestTask.prototype.to_read_by_assigner_count = function() {
+      return getSimpleResponse('/to_read_by_assigner_count.json');
+  };
+
+  RequestTask.prototype.to_read_by_executor_count = function() {
+      return getSimpleResponse('/to_read_by_executor_count.json');
+  };
+
+  RequestTask.prototype.to_read_by_auditor_count = function() {
+      return getSimpleResponse('/to_read_by_auditor_count.json');
+  };
+
+  RequestTask.prototype.to_read_by_employee_count = function() {
+      return getSimpleResponse('/to_read_by_employee_count.json');
+  };
+
   RequestTask.prototype.read = function(id, employee_id) {
       return getSimpleResponse('/read_request_task.json', {id: id, employee_id: employee_id});
   };

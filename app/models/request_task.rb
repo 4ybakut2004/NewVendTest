@@ -83,6 +83,18 @@ class RequestTask < ActiveRecord::Base
         return date_filter
     end
 
+    def self.to_read_by_assigner_filter
+        "email_to_assigner_date IS NOT NULL AND is_read_by_assigner = FALSE "
+    end
+
+    def self.to_read_by_auditor_filter
+        "email_to_auditor_date IS NOT NULL AND is_read_by_auditor = FALSE "
+    end
+
+    def self.to_read_by_executor_filter
+        "email_to_executor_date IS NOT NULL AND is_read_by_executor = FALSE "
+    end
+
     def self.to_assign_count(assigner)
         filter = {}
         filter[("assigner_id").to_sym] = assigner.id
@@ -133,6 +145,34 @@ class RequestTask < ActiveRecord::Base
         date_filter = to_read_executor_filter
 
         return RequestTask.where(filter).where(date_filter).size
+    end
+
+    def self.to_read_by_executor_count(executor)
+        filter = {}
+        date_filter = to_read_by_executor_filter
+        filter[:executor_id] = executor.id
+        return RequestTask.where(filter).where(date_filter).size
+    end
+
+    def self.to_read_by_auditor_count(auditor)
+        filter = {}
+        date_filter = to_read_by_auditor_filter
+        filter[:auditor_id] = auditor.id
+        return RequestTask.where(filter).where(date_filter).size
+    end
+
+    def self.to_read_by_assigner_count(assigner)
+        filter = {}
+        date_filter = to_read_by_assigner_filter
+        filter[:assigner_id] = assigner.id
+        return RequestTask.where(filter).where(date_filter).size
+    end
+
+    def self.to_read_by_employee_count(employee)
+        filter = "assigner_id = #{employee.id} AND " + to_read_by_assigner_count
+        filter += "executor_id = #{employee.id} AND " + to_read_by_executor_count
+        filter += "auditor_id = #{employee.id} AND " + to_read_by_auditor_count
+        return RequestTask.where(filter).size
     end
 
     def validate_read_by_assigner(assigner)

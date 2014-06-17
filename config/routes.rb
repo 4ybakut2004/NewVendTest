@@ -24,6 +24,10 @@ NewVend::Application.routes.draw do
   get 'to_execute_count' => 'request_tasks#to_execute_count', :as => :to_execute_count
   get 'to_read_assign_count' => 'request_tasks#to_read_assign_count', :as => :to_read_assign_count
   get 'to_read_execute_count' => 'request_tasks#to_read_execute_count', :as => :to_read_execute_count
+  get 'to_read_by_executor_count' => 'request_tasks#to_read_by_executor_count', :as => :to_read_by_executor_count
+  get 'to_read_by_assigner_count' => 'request_tasks#to_read_by_assigner_count', :as => :to_read_by_assigner_count
+  get 'to_read_by_auditor_count' => 'request_tasks#to_read_by_auditor_count', :as => :to_read_by_auditor_count
+  get 'to_read_by_employee_count' => 'request_tasks#to_read_by_employee_count', :as => :to_read_by_employee_count
   get 'read_request_task' => 'request_tasks#read', :as => :read_request_task
   get 'current_employee' => 'employees#current_employee', :as => :current_employee
   # The priority is based upon order of creation: first created -> highest priority.
