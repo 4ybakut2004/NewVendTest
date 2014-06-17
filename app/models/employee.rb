@@ -73,7 +73,6 @@ class Employee < ActiveRecord::Base
 
         url = URI.parse(URI.encode(url_path.strip))
         response = Net::HTTP.get_response(url)
-        puts response.body
     end
 
     def has_email
