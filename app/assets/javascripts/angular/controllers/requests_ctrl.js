@@ -19,12 +19,6 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 		$('#newRequest').modal('show');
 	}
 
-	/*$('#newRequest').on('show.bs.modal', function (e) {
-		$("body").css({
-			width: $("body").width()
-		});
-	});*/
-
 	$scope.messages = Message.all();
 	$scope.machines = Machine.all();
 
