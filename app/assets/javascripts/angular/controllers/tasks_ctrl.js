@@ -10,10 +10,6 @@ function TasksCtrl($scope, $timeout, Task, Message, Employee) {
 	$scope.messages = Message.all();
 	$scope.employees = Employee.all();
 
-	/*$scope.employees.$promise.then(function() {
-		$scope.employees.unshift({ name: "" });
-	});*/
-
 	$scope.editing = false;
 
 	$scope.inputs = {
@@ -22,10 +18,20 @@ function TasksCtrl($scope, $timeout, Task, Message, Employee) {
 		solverId: false
 	};
 
+	$scope.inputsErrors = {
+		name: "",
+		deadline: ""
+	};
+
 	$scope.editingInputs = {
 		name: false,
 		deadline: false,
 		solverId: false
+	};
+
+	$scope.editingErrors = {
+		name: "",
+		deadline: ""
 	};
 
 //- Мониторинг изменения моделей ---------------------------
@@ -41,10 +47,12 @@ function TasksCtrl($scope, $timeout, Task, Message, Employee) {
 
 	$scope.$watch('newName', function() {
 		$scope.inputs.name = ($scope.newName != "" && $scope.newName != null);
+		$scope.inputsErrors.name = "";
 	});
 
 	$scope.$watch('newDeadline', function() {
 		$scope.inputs.deadline = ($scope.newDeadline != "" && $scope.newDeadline != null);
+		$scope.inputsErrors.deadline = "";
 	});
 
 	$scope.$watch('newSolverId', function() {
@@ -53,10 +61,12 @@ function TasksCtrl($scope, $timeout, Task, Message, Employee) {
 
 	$scope.$watch('editingName', function() {
 		$scope.editingInputs.name = ($scope.editingName != "" && $scope.editingName != null);
+		$scope.editingErrors.name = "";
 	});
 
 	$scope.$watch('editingDeadline', function() {
 		$scope.editingInputs.deadline = ($scope.editingDeadline != "" && $scope.editingDeadline != null);
+		$scope.editingErrors.deadline = "";
 	});
 
 	$scope.$watch('editingSolverId', function() {
@@ -75,13 +85,14 @@ function TasksCtrl($scope, $timeout, Task, Message, Employee) {
 				attr.messages.push(message.id);
 			}
 		});
-		var newTask = Task.create(attr);
 
-		$scope.tasks.unshift(newTask);
-		$scope.newName = "";
-		$scope.newDeadline = "";
-		$scope.newSolverId = "";
-		$('#newTask').modal('hide');
+		var newTask = Task.create(attr);
+		newTask.$promise.then(function() {
+			$scope.tasks.unshift(newTask);
+			$scope.closeNew();
+		}, function(d) {
+			showErrors(d.data, $scope.inputsErrors);
+		});
 	};
 
 	$scope.updateTask = function() {
@@ -89,13 +100,14 @@ function TasksCtrl($scope, $timeout, Task, Message, Employee) {
 		attr.name = $scope.editingName;
 		attr.deadline = $scope.editingDeadline;
 		attr.solver_id = $scope.editingSolverId;
-		var updatedTask = Task.update($scope.editingId, attr);
-		$scope.tasks[$scope.editingIdx] = updatedTask;
 
-		$scope.editingName = "";
-		$scope.editingDeadline = "";
-		$scope.editingSolverId = "";
-		$scope.editing = false;
+		var updatedTask = Task.update($scope.editingId, attr);
+		updatedTask.$promise.then(function() {
+			$scope.tasks[$scope.editingIdx] = updatedTask;
+			$scope.closeEditing();
+		}, function(d) {
+			showErrors(d.data, $scope.editingErrors);
+		});
 	};
 
 	$scope.deleteTask = function(id, idx) {
@@ -131,6 +143,28 @@ function TasksCtrl($scope, $timeout, Task, Message, Employee) {
 
 	$scope.check = function(item) {
 		item.checked = !item.checked;
+	};
+
+	$scope.closeEditing = function() {
+		$scope.editing = false;
+
+		$scope.editingName = "";
+		$scope.editingDeadline = "";
+		$scope.editingSolverId = "";
+
+		$scope.editingErrors.name = "";
+		$scope.editingErrors.deadline = "";
+	};
+
+	$scope.closeNew = function() {
+		$('#newTask').modal('hide');
+		$scope.resetNewTask();
+	};
+
+	$scope.resetNewTask = function() {
+		$scope.newName = "";
+		$scope.newDeadline = "";
+		$scope.newSolverId = "";
 	};
 }
 

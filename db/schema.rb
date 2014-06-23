@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140617042813) do
+ActiveRecord::Schema.define(version: 20140623082808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,7 +121,7 @@ ActiveRecord::Schema.define(version: 20140617042813) do
     t.integer  "assigner_id"
     t.integer  "executor_id"
     t.integer  "auditor_id"
-    t.string   "description"
+    t.text     "description"
     t.integer  "request_message_id"
     t.integer  "task_id"
     t.datetime "created_at"
@@ -130,10 +130,10 @@ ActiveRecord::Schema.define(version: 20140617042813) do
     t.datetime "execution_date"
     t.datetime "audition_date"
     t.datetime "deadline_date"
-    t.string   "registrar_description"
-    t.string   "assigner_description"
-    t.string   "executor_description"
-    t.string   "auditor_description"
+    t.text     "registrar_description"
+    t.text     "assigner_description"
+    t.text     "executor_description"
+    t.text     "auditor_description"
     t.datetime "audition_entering_date"
     t.boolean  "is_read_by_assigner",    default: false
     t.boolean  "is_read_by_executor",    default: false
@@ -161,7 +161,7 @@ ActiveRecord::Schema.define(version: 20140617042813) do
   add_index "request_types", ["name"], name: "index_request_types_on_name", unique: true, using: :btree
 
   create_table "requests", force: true do |t|
-    t.string   "description"
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "machine_id"

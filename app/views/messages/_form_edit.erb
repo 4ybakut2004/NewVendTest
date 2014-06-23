@@ -14,6 +14,9 @@
           ng-model='editingName'
           placeholder="Введите наименование"
           class="form-control">
+        <div class="alert alert-danger alert-field" ng-show="editingErrors.name">
+          {{editingErrors.name}}
+        </div>
       </div>
     </div>
 
@@ -28,11 +31,6 @@
       </div>
     </div>
 
-    <div class="alert alert-danger" ng-show="editingErrors.name">
-      <button type="button" class="close" ng-click="editingErrors.name=''">&times;</button>
-      <strong>Наименование:</strong> {{editingErrors.name}}
-    </div>
-    
     <div class="row">
       <div class="col-sm-2"></div>
       <div class="col-sm-8">

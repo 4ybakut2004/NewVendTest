@@ -82,9 +82,7 @@ function AttributesCtrl($scope, $timeout, Attribute, Message) {
 		newAttribute.$promise.then(function() {
 			// Если удалось создать тип атрибута
 			$scope.attributes.unshift(newAttribute);
-			$scope.newName = "";
-			$scope.newAttributeType = "number";
-			$('#newAttribute').modal('hide');
+			$scope.closeNew();
 		}, function(d) {
 			// Если во время создания были ошибки
 			showErrors(d.data, $scope.inputsErrors);
@@ -105,7 +103,6 @@ function AttributesCtrl($scope, $timeout, Attribute, Message) {
 			// Если не удалось обновить запись
 			showErrors(d.data, $scope.editingErrors);
 		});
-		
 	};
 
 	$scope.deleteAttribute = function(id, idx) {
@@ -140,6 +137,16 @@ function AttributesCtrl($scope, $timeout, Attribute, Message) {
 
 	$scope.check = function(item) {
 		item.checked = !item.checked;
+	};
+
+	$scope.resetNewAttribute = function() {
+		$scope.newName = "";
+		$scope.newAttributeType = "number";
+	};
+
+	$scope.closeNew = function() {
+		$('#newAttribute').modal('hide');
+		$scope.resetNewAttribute();
 	};
 
 	$scope.closeEditing = function() {

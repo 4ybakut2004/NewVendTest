@@ -115,10 +115,8 @@ class RequestTasksController < ApplicationController
 	      		@request_task.auditor.send_audit_sms(params)
 	      	end
 
-	        format.html { redirect_to @request_task, notice: 'Request_task was successfully updated.' }
 	        format.json { render json: @request_task.attrs, status: :created }
 	      else
-	        format.html { render action: 'edit' }
 	        format.json { render json: @request_task.errors, status: :unprocessable_entity }
 	      end
 	    end

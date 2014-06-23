@@ -13,6 +13,9 @@
           ng-model='editingName'
           placeholder="Введите наименование"
           class="form-control">
+        <div class="alert alert-danger alert-field" ng-show="editingErrors.name">
+          {{editingErrors.name}}
+        </div>
       </div>
     </div>
 
@@ -23,19 +26,12 @@
       <%= label_tag :attribute_type, "Тип атрибута", :class => "col-sm-2 control-label" %>
       <div class="col-sm-8">
         <%= select_tag :attribute_type, options_for_select(Attribute.attribute_types.map {|k, v| [ v, k ] }), :class => "form-control", "ng-model" => "editingAttributeType" %>
+        <div class="alert alert-danger" ng-show="editingErrors.attribute_type">
+          {{editingErrors.attribute_type}}
+        </div>
       </div>
     </div>
 
-    <div class="alert alert-danger" ng-show="editingErrors.name">
-      <button type="button" class="close" ng-click="editingErrors.name=''">&times;</button>
-      <strong>Наименование:</strong> {{editingErrors.name}}
-    </div>
-
-    <div class="alert alert-danger" ng-show="editingErrors.attribute_type">
-      <button type="button" class="close" ng-click="editingErrors.attribute_type=''">&times;</button>
-      <strong>Тип атрибута:</strong> {{editingErrors.attribute_type}}
-    </div>
-    
     <div class="row">
       <div class="col-sm-2"></div>
       <div class="col-sm-8">

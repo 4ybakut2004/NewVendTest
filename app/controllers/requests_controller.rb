@@ -94,9 +94,13 @@ class RequestsController < ApplicationController
           employee_to_send.send_assign_sms(params)
         }
       end
-      respond_with(@request.attrs, :status => :created, :location => @request)
+      respond_to do |format|
+          format.json { render json: @request.attrs, status: :created }
+      end
     else
-      respond_with(@request.errors, :status => :unprocessable_entity)
+      respond_to do |format|
+          format.json { render json: @request.errors, :status => :unprocessable_entity }
+      end
     end
   end
 
@@ -105,10 +109,8 @@ class RequestsController < ApplicationController
   def update
     respond_to do |format|
       if @request.update(request_params)
-        format.html { redirect_to @request, notice: 'Request was successfully updated.' }
         format.json { render json: @request.attrs, status: :created }
       else
-        format.html { render action: 'edit' }
         format.json { render json: @request.errors, status: :unprocessable_entity }
       end
     end
@@ -119,7 +121,6 @@ class RequestsController < ApplicationController
   def destroy
     @request.destroy
     respond_to do |format|
-      format.html { redirect_to requests_url }
       format.json { render json: @request.attrs }
     end
   end

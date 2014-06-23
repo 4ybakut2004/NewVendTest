@@ -40,6 +40,14 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 			auditorDescription: false
 		};
 
+		$scope.editingErrors = {
+			description: "",
+			registrar_description: "",
+			assigner_description: "",
+			executor_description: "",
+			auditor_description: ""
+		};
+
 		// Фильтры по принадлежности поручений
 		$scope.whoAmI = {
 			assigner: false,
@@ -201,6 +209,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 
 	$scope.$watch('editingDescription', function() {
 		$scope.editingInputs.description = ($scope.editingDescription != "" && $scope.editingDescription != null);
+		$scope.editingErrors.description = "";
 	});
 
 	$scope.$watch('editingDeadlineDate', function() {
@@ -217,18 +226,22 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 
 	$scope.$watch('editingRegistrarDescription', function() {
 		$scope.editingInputs.registrarDescription = ($scope.editingRegistrarDescription != "" && $scope.editingRegistrarDescription != null);
+		$scope.editingErrors.registrar_description = "";
 	});
 
 	$scope.$watch('editingAssignerDescription', function() {
 		$scope.editingInputs.assignerDescription = ($scope.editingAssignerDescription != "" && $scope.editingAssignerDescription != null);
+		$scope.editingErrors.assigner_description = "";
 	});
 
 	$scope.$watch('editingExecutorDescription', function() {
 		$scope.editingInputs.executorDescription = ($scope.editingExecutorDescription != "" && $scope.editingExecutorDescription != null);
+		$scope.editingErrors.executor_description = "";
 	});
 
 	$scope.$watch('editingAuditorDescription', function() {
 		$scope.editingInputs.auditorDescription = ($scope.editingAuditorDescription != "" && $scope.editingAuditorDescription != null);
+		$scope.editingErrors.auditor_description = "";
 	});
 
 //- Изменение моделей --------------------------------------
@@ -250,28 +263,16 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 
 		// Производим действия, которые нужно выполнить после обновления
 		updatedRequestTask.$promise.then(function() {
+			$scope.requestTasks[$scope.editingIdx] = updatedRequestTask;
+
+			$scope.closeEditing();
+
 			$scope.setIndicatorsCounts();
 			$scope.setReadIndicatorsCounts();
 			$scope.setReadByIndicatorsCounts();
+		}, function(d) {
+			showErrors(d.data, $scope.editingErrors);
 		});
-
-		$scope.requestTasks[$scope.editingIdx] = updatedRequestTask;
-
-		// Обнуляем ипользуемые при редактировании поля
-		$scope.editingExecutorId = "";
-		$scope.editingAuditorId = "";
-		$scope.editingDescription = "";
-		$scope.editingDeadlineDate = "";
-		$scope.editingExecutionDate = "";
-		$scope.editingAuditionDate = "";
-		$scope.editingRegistrarDescription = "";
-		$scope.editingAssignerDescription = "";
-		$scope.editingExecutorDescription = "";
-		$scope.editingAuditorDescription = "";
-		$scope.editingIdx = null;
-
-		// Скрываем окно редактирования и перемещаем страницу в предыдущее место
-		$scope.closeEditing();
 	};
 
 	$scope.clickRequestTask = function(idx) {
@@ -323,6 +324,24 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 	$scope.closeEditing = function() {
 		$scope.editing = false;
 		$scope.changeScroll();
+
+		$scope.editingExecutorId = "";
+		$scope.editingAuditorId = "";
+		$scope.editingDescription = "";
+		$scope.editingDeadlineDate = "";
+		$scope.editingExecutionDate = "";
+		$scope.editingAuditionDate = "";
+		$scope.editingRegistrarDescription = "";
+		$scope.editingAssignerDescription = "";
+		$scope.editingExecutorDescription = "";
+		$scope.editingAuditorDescription = "";
+		$scope.editingIdx = null;
+
+		$scope.editingErrors.description = "";
+		$scope.editingErrors.assigner_description = "";
+		$scope.editingErrors.executor_description = "";
+		$scope.editingErrors.auditor_description = "";
+		$scope.editingErrors.registrar_description = "";
 	};
 
 	$scope.canEditDeadlineDate = function(employee_id) {

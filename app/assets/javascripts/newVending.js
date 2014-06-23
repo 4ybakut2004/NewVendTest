@@ -1,22 +1,3 @@
-// Описание ошибок, возвращаемых сервером
-var ResponseErrors = {
-	"has already been taken": "Запись с таким значением уже существует",
-	"can't be blank": "Поле должно быть заполнено"
-};
-
-function showErrors (data, container) {
-	angular.forEach(data, function(fieldErrors, fieldName) {
-		// Преобразовываем массив английских ошибок в массив русских
-		var rusErrors = [];
-		angular.forEach(fieldErrors, function(errorName) {
-			rusErrors.push(ResponseErrors[errorName]);
-		});
-
-		// Показываем сообщение об ошибке
-		container[fieldName] = errorMessage = rusErrors.join(', ');
-	});
-}
-
 var newVending = angular.module('newVending', ['ngResource', 'ngRoute']);
 
 $(document).on('ready page:load', function() {
@@ -367,7 +348,46 @@ function DateTimePickerFromNow($compile)
     };
 }
 
+function FormGroup($compile) {
+	return {
+		link: function($scope, element, attrs) {
+			var a = {};
+			$.extend(true, a, attrs);
+			//console.log(a);
+			//$compile(fh)($scope);
+			/*<div class="form-group"
+	          ng-class='{"has-success": editingInputs.description && !editingErrors.description,
+	                     "has-error":   editingErrors.description}'>
+	          <label class="col-sm-3 control-label" for="description">Описание</label>
+	          <div class="col-sm-9">
+	            <textarea id="description"
+	              type="text"
+	              ng-model='editingDescription'
+	              placeholder="Введите описание"
+	              class="form-control">
+	            </textarea>
+	            <div class="alert alert-danger alert-field" ng-show="editingErrors.description">
+	              {{editingErrors.description}}
+	            </div>
+	          </div>
+	        </div>*/
+		}
+	};
+}
+
+/*<div form-group
+  filled-indicator="editingInputs.description"
+  error-message="editingErrors.description"
+  model="editingDescription"
+  warning="true"
+  label="Описание"
+  type="textarea"
+  label-width="3"
+  input-width="9">
+</div>*/
+
 newVending.directive('application', ['$compile', 'User', Application]);
 newVending.directive('fixedheader', ['$compile', FixedHeader]);
 newVending.directive('datetimepicker', ['$compile', DateTimePicker]);
 newVending.directive('datetimepickerfromnow', ['$compile', DateTimePickerFromNow]);
+newVending.directive('formgroup', ['$compile', FormGroup]);

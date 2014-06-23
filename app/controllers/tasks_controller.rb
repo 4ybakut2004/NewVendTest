@@ -26,35 +26,36 @@ class TasksController < ApplicationController
 					:task_id => @task.id)
 			end
 
-			respond_with(@task.attrs, :status => :created, :location => @task)
+			respond_to do |format|
+				format.json { render :json => @task.attrs, :status => :created, :location => @task }
+			end
 		else
-			respond_with(@task.errors, :status => :unprocessable_entity)
+			respond_to do |format|
+				format.json { render :json => @task.errors, :status => :unprocessable_entity }
+			end
 		end
 	end
 
 	def update
 		respond_to do |format|
-		  if @task.update(task_params)
-		    format.html { redirect_to @task, notice: 'Task was successfully updated.' }
-		    format.json { render json: @task.attrs, status: :created }
-		  else
-		    format.html { render action: 'edit' }
-		    format.json { render json: @task.errors, status: :unprocessable_entity }
-		  end
+			if @task.update(task_params)
+				format.json { render json: @task.attrs, status: :created }
+			else
+				format.json { render json: @task.errors, status: :unprocessable_entity }
+			end
 		end
 	end
 
 	def destroy
 		@task.destroy
-	    respond_to do |format|
-	      format.html { redirect_to tasks_url }
-	      format.json { render json: @task.attrs }
-	    end
+		respond_to do |format|
+			format.json { render json: @task.attrs }
+		end
 	end
 
 	def signed_in_user
-      redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
-    end
+		redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
+	end
 
 	private
 

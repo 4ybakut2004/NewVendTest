@@ -11,6 +11,9 @@
         ng-model='newName'
         placeholder="Введите наименование"
         class="form-control">
+      <div class="alert alert-danger alert-field" ng-show="inputsErrors.name">
+        {{inputsErrors.name}}
+      </div>
     </div>
   </div>
 
@@ -23,11 +26,6 @@
         placeholder="Введите описание"
         class="form-control">
     </div>
-  </div>
-
-  <div class="alert alert-danger" ng-show="inputsErrors.name">
-    <button type="button" class="close" ng-click="inputsErrors.name=''">&times;</button>
-    <strong>Наименование:</strong> {{inputsErrors.name}}
   </div>
 
   <div class="row">

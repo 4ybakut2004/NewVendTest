@@ -15,10 +15,20 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 		phone: false
 	};
 
+	$scope.inputsErrors = {
+		name: "",
+		email: ""
+	};
+
 	$scope.editingInputs = {
 		name: false,
 		email: false,
 		phone: false
+	};
+
+	$scope.editingErrors = {
+		name: "",
+		email: ""
 	};
 
 //- Мониторинг изменения моделей ---------------------------
@@ -34,10 +44,12 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 
 	$scope.$watch('newName', function() {
 		$scope.inputs.name = ($scope.newName != "" && $scope.newName != null);
+		$scope.inputsErrors.name = "";
 	});
 
 	$scope.$watch('newEmail', function() {
 		$scope.inputs.email = ($scope.newEmail != "" && $scope.newEmail != null);
+		$scope.inputsErrors.email = "";
 	});
 
 	$scope.$watch('newPhone', function() {
@@ -46,10 +58,12 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 
 	$scope.$watch('editingName', function() {
 		$scope.editingInputs.name = ($scope.editingName != "" && $scope.editingName != null);
+		$scope.editingErrors.name = "";
 	});
 
 	$scope.$watch('editingEmail', function() {
 		$scope.editingInputs.email = ($scope.editingEmail != "" && $scope.editingEmail != null);
+		$scope.editingErrors.email = "";
 	});
 
 	$scope.$watch('editingPhone', function() {
@@ -62,14 +76,14 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 		attr.name = $scope.newName;
 		attr.email = $scope.newEmail;
 		attr.phone = $scope.newPhone;
+
 		var newEmployee = Employee.create(attr);
-
-		$scope.employees.unshift(newEmployee);
-		$scope.newName = "";
-		$scope.newEmail = "";
-		$scope.newPhone = "";
-
-		$('#newEmployee').modal('hide');
+		newEmployee.$promise.then(function() {
+			$scope.employees.unshift(newEmployee);
+			$scope.closeNew();
+		}, function(d) {
+			showErrors(d.data, $scope.inputsErrors);
+		});
 	};
 
 	$scope.updateEmployee = function() {
@@ -81,11 +95,9 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 
 		updatedEmployee.$promise.then(function(employee) {
 			$scope.employees[$scope.editingIdx] = updatedEmployee;
-			$scope.editingName = "";
-			$scope.editingEmail = "";
-			$scope.editingPhone = "";
-			$scope.editing = false;
-		}, function(error) {
+			$scope.closeEditing();
+		}, function(d) {
+			showErrors(d.data, $scope.editingErrors);
 		});
 	};
 
@@ -116,6 +128,28 @@ function EmployeesCtrl($scope, $timeout, Employee) {
 		$scope.editingPhone = $scope.employees[idx].phone;
 
 		$scope.editing = true;
+	};
+
+	$scope.closeEditing = function() {
+		$scope.editing = false;
+
+		$scope.editingName = "";
+		$scope.editingEmail = "";
+		$scope.editingPhone = "";
+
+		$scope.editingErrors.name = "";
+		$scope.editingErrors.email = "";
+	};
+
+	$scope.closeNew = function() {
+		$('#newEmployee').modal('hide');
+		$scope.resetNewEmployee();
+	};
+
+	$scope.resetNewEmployee = function() {
+		$scope.newName = "";
+		$scope.newEmail = "";
+		$scope.newPhone = "";
 	};
 }
 

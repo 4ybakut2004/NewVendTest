@@ -17,9 +17,13 @@ class EmployeesController < ApplicationController
     @employee = Employee.new(employee_params)
 
     if @employee.save
-      respond_with(@employee, :status => :created, :location => @employee)
+      respond_to do |format|
+        format.json { render :json => @employee, :status => :created, :location => @employee }
+      end
     else
-      respond_with(@employee.errors, :status => :unprocessable_entity)
+      respond_to do |format|
+        format.json { render :json => @employee.errors, :status => :unprocessable_entity }
+      end
     end
   end
 

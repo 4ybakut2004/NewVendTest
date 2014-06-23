@@ -19,6 +19,12 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 		$('#newRequest').modal('show');
 	}
 
+	/*$('#newRequest').on('show.bs.modal', function (e) {
+		$("body").css({
+			width: $("body").width()
+		});
+	});*/
+
 	$scope.messages = Message.all();
 	$scope.machines = Machine.all();
 
@@ -32,15 +38,25 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 	$scope.newMessages = [];
 
 	$scope.inputs = {
-		machine_id: false,
+		machineId: false,
 		requestTypeId: false,
 		phone: false,
 		description: false
 	};
 
+	$scope.inputsErrors = {
+		machine_id: "",
+		description: ""
+	};
+
 	$scope.editingInputs = {
 		description: false,
 		machineId: false
+	};
+
+	$scope.editingErrors = {
+		machine_id: "",
+		description: ""
 	};
 
 	$scope.whoAmI = {
@@ -69,6 +85,7 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 
 	$scope.$watch('newMachineId', function() {
 		$scope.inputs.machineId = ($scope.newMachineId != "" && $scope.newMachineId != null);
+		$scope.inputsErrors.machine_id = "";
 	});
 
 	$scope.$watch('newPhone', function() {
@@ -77,14 +94,17 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 
 	$scope.$watch('newDescription', function() {
 		$scope.inputs.description = ($scope.newDescription != "" && $scope.newDescription != null);
+		$scope.inputsErrors.description = "";
 	});
 
 	$scope.$watch('editingDescription', function() {
 		$scope.editingInputs.description = ($scope.editingDescription != "" && $scope.editingDescription != null);
+		$scope.editingErrors.description = "";
 	});
 
 	$scope.$watch('editingMachineId', function() {
 		$scope.editingInputs.machineId = ($scope.editingMachineId != "" && $scope.editingMachineId != null);
+		$scope.editingErrors.machine_id = "";
 	});
 
 //- Изменение моделей --------------------------------------
@@ -94,6 +114,22 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 		$scope.newPhone = "";
 		$scope.newMessages = [];
 		$scope.newDescription = "";
+		$scope.requestTypeMessages = {};
+	};
+
+	$scope.closeNew = function() {
+		$scope.resetNewRequest();
+		$('#newRequest').modal('hide');
+	};
+
+	$scope.closeEditing = function() {
+		$scope.editing = false;
+
+		$scope.editingDescription = "";
+		$scope.editingMachineId = "";
+
+		$scope.editingErrors.machine_id = "";
+		$scope.editingErrors.description = "";
 	};
 
 	$scope.createRequest = function() {
@@ -130,22 +166,26 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 		});
 
 		var newRequest = Request.create(attr);
-
-		$scope.requests.unshift(newRequest);
-		$scope.resetNewRequest();
-		$('#newRequest').modal('hide');
+		newRequest.$promise.then(function() {
+			$scope.requests.unshift(newRequest);
+			$scope.closeNew();
+		}, function(d) {
+			showErrors(d.data, $scope.inputsErrors);
+		});
 	};
 
 	$scope.updateRequest = function() {
 		var attr = {};
 		attr.description = $scope.editingDescription;
 		attr.machine_id = $scope.editingMachineId;
-		var updatedRequest = Request.update($scope.editingId, attr);
-		$scope.requests[$scope.editingIdx] = updatedRequest;
 
-		$scope.editingDescription = "";
-		$scope.editingMachineId = "";
-		$scope.editing = false;
+		var updatedRequest = Request.update($scope.editingId, attr);
+		updatedRequest.$promise.then(function() {
+			$scope.requests[$scope.editingIdx] = updatedRequest;
+			$scope.closeEditing();
+		}, function(d) {
+			showErrors(d.data, $scope.editingErrors);
+		});
 	};
 
 	$scope.deleteRequest = function(id, idx) {

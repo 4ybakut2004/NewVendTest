@@ -10,6 +10,7 @@ class Request < ActiveRecord::Base
 
 	validates :machine_id, presence: true
 	validates :registrar_id, presence: true
+    validates :description, length: { maximum: 512 }
 	validate :validate_machine_id
 
     def getFullInfo

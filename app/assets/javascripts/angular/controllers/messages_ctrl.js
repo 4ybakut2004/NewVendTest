@@ -112,8 +112,7 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, RequestType) {
 		newMessage.$promise.then(function(){
 			// Если удалось создать тип сигнала
 			$scope.messages.unshift(newMessage);
-			$scope.resetNewMessage();
-			$('#newMessage').modal('hide');
+			$scope.closeNew();
 		}, function(d) {
 			// Если не удалось, то показываем ошибки
 			showErrors(d.data, $scope.inputsErrors);
@@ -300,6 +299,11 @@ function MessagesCtrl($scope, $timeout, Message, Task, Attribute, RequestType) {
 		$scope.editing = false;
 		$scope.messageTaskChanged = false;
 		$scope.messageAttributeChanged = false;
+	};
+
+	$scope.closeNew = function() {
+		$('#newMessage').modal('hide');
+		$scope.resetNewMessage();
 	};
 }
 

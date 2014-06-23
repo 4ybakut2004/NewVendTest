@@ -93,7 +93,9 @@
           <div class="col-sm-9"><h3>Описания</h3></div>
         </div>
 
-        <div class="form-group" ng-class='{"has-success": editingInputs.description}'>
+        <div class="form-group"
+          ng-class='{"has-success": editingInputs.description && !editingErrors.description,
+                     "has-error": editingErrors.description}'>
           <label class="col-sm-3 control-label" for="description">Описание</label>
           <div class="col-sm-9">
             <textarea type="text"
@@ -101,10 +103,15 @@
               ng-model="editingDescription"
               class="form-control">
             </textarea>
+            <div class="alert alert-danger alert-field" ng-show="editingErrors.description">
+              {{editingErrors.description}}
+            </div>
           </div>
         </div>
 
-        <div class="form-group" ng-class='{"has-success": editingInputs.registrarDescription}'>
+        <div class="form-group"
+          ng-class='{"has-success": editingInputs.registrarDescription && !editingErrors.registrar_description,
+                     "has-error":   editingErrors.registrar_description}'>
           <label class="col-sm-3 control-label" for="registrarDescription">Описание регистратора</label>
           <div class="col-sm-9">
             <textarea type="text"
@@ -112,10 +119,15 @@
               ng-model="editingRegistrarDescription"
               class="form-control">
             </textarea>
+            <div class="alert alert-danger alert-field" ng-show="editingErrors.registrar_description">
+              {{editingErrors.registrar_description}}
+            </div>
           </div>
         </div>
 
-        <div class="form-group" ng-class='{"has-success": editingInputs.assignerDescription}'>
+        <div class="form-group"
+          ng-class='{"has-success": editingInputs.assignerDescription && !editingErrors.assigner_description,
+                     "has-error":   editingErrors.assigner_description}'>
           <label class="col-sm-3 control-label" for="assignerDescription">Описание назначателя</label>
           <div class="col-sm-9">
             <textarea type="text"
@@ -123,10 +135,15 @@
               ng-model="editingAssignerDescription"
               class="form-control">
             </textarea>
+            <div class="alert alert-danger alert-field" ng-show="editingErrors.assigner_description">
+              {{editingErrors.assigner_description}}
+            </div>
           </div>
         </div>
 
-        <div class="form-group" ng-class='{"has-success": editingInputs.executorDescription}'>
+        <div class="form-group"
+          ng-class='{"has-success": editingInputs.executorDescription && !editingErrors.executor_description,
+                     "has-error": editingErrors.executor_description}'>
           <label class="col-sm-3 control-label" for="executorDescription">Описание исполнителя</label>
           <div class="col-sm-9">
             <textarea type="text"
@@ -134,16 +151,25 @@
               ng-model="editingExecutorDescription"
               class="form-control">
             </textarea>
+            <div class="alert alert-danger alert-field" ng-show="editingErrors.executor_description">
+              {{editingErrors.executor_description}}
+            </div>
           </div>
         </div>
 
-        <div class="form-group" ng-class='{"has-success": editingInputs.auditorDescription}'>
+        <div class="form-group"
+          ng-class='{"has-success": editingInputs.auditorDescription && !editingErrors.auditor_description,
+                     "has-error":   editingErrors.auditor_description}'>
           <label class="col-sm-3 control-label" for="auditorDescription">Описание контролера</label>
           <div class="col-sm-9">
             <textarea type="text"
               id="auditorDescription"
               ng-model="editingAuditorDescription"
-              class="form-control"></textarea>
+              class="form-control">
+            </textarea>
+            <div class="alert alert-danger alert-field" ng-show="editingErrors.auditor_description">
+              {{editingErrors.auditor_description}}
+            </div>
           </div>
         </div>
 

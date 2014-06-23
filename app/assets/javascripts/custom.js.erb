@@ -1,4 +1,10 @@
 DATE_MASK = "__.__.____ __:__:__";
+ResponseErrors = {
+	"has already been taken": "Запись с таким значением уже существует",
+	"can't be blank": "Поле должно быть заполнено",
+	"is not a number": "Должно быть числом",
+	"is invalid": "Недопустимо"
+};
 
 function addZero(str) {
 	return (str.toString().length == 1) ? ('0' + str) : str;
@@ -41,4 +47,42 @@ function strDateToUTC(string) {
 
 function getURLParameter(name) {
 	return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+}
+
+function showErrors (data, container) {
+	console.log(data);
+	angular.forEach(data, function(fieldErrors, fieldName) {
+		// Преобразовываем массив английских ошибок в массив русских
+		var rusErrors = [];
+		angular.forEach(fieldErrors, function(errorName) {
+			var message = ResponseErrors[errorName];
+			if(message == undefined) {
+				
+				while(true) {
+					var match = errorName.match(/is too long \(maximum is (\d*) characters\)/);
+					if (match) {
+						message = "Максимальная длина " + match[1] + " символов";
+						break;
+					}
+
+					match = errorName.match(/is too short \(minimum is (\d*) characters\)/);
+					if (match) {
+						message = "Минимальная длина " + match[1] + " символов";
+						break;
+					}
+					match = errorName.match(/must be greater than or equal to (\d*)/);
+					if (match) {
+						message = "Должно быть больше или равно " + match[1];
+						break;
+					}
+
+					break;
+				}
+			}
+			rusErrors.push(message || "Неверный формат");
+		});
+
+		// Показываем сообщение об ошибке
+		container[fieldName] = errorMessage = rusErrors.join(', ');
+	});
 }
