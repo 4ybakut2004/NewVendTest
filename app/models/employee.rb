@@ -56,7 +56,7 @@ class Employee < ActiveRecord::Base
     handle_asynchronously :send_audit_sms
 
     def send_sms(employee, params, type)
-        url_path = NewVendSettings.first.phone_host_name || 'http://127.0.0.1:3000'
+        url_path = NewVendSettings.first.phone_host_name || '127.0.0.1:3000'
         url_path += '/send_msg?'
         if params[:request]
             url_path += "id=#{params[:request].id}"
@@ -72,6 +72,8 @@ class Employee < ActiveRecord::Base
         url_path += "&type=#{type}"
 
         url = URI.parse(URI.encode(url_path.strip))
+        puts '!!!!!!!!!!!!!!!!!'
+        puts url
         response = Net::HTTP.get_response(url)
     end
 

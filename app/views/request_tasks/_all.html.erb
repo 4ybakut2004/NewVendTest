@@ -16,7 +16,8 @@
         class="btn"
         ng-class="{active: indicators.assign, 'btn-link': !indicators.assign}"
         ng-click="indicatorsFilter('assign')">
-        Назначить <span ng-show="toAssignCount" class="count-label">{{toAssignCount}}</span>
+        Назначить <span ng-show="toAssignCount" class="count-label">{{toAssignCount}}</span> 
+        <span ng-show="toReadByAssignerCount">({{toReadByAssignerCount}})</span>
       </button>
     </h4>
     <h4 style="margin: 0px;" ng-show="toReadAssignCount">
@@ -43,7 +44,8 @@
         class="btn"
         ng-class="{active: indicators.execute, 'btn-link': !indicators.execute}"
         ng-click="indicatorsFilter('execute')">
-        Выполнить <span ng-show="toExecuteCount" class="count-label">{{toExecuteCount}}</span>
+        Выполнить <span ng-show="toExecuteCount" class="count-label">{{toExecuteCount}}</span> 
+        <span ng-show="toReadByExecutorCount">({{toReadByExecutorCount}})</span>
       </button>
     </h4>
     <h4 style="margin: 0px;" ng-show="toReadExecuteCount">
@@ -70,7 +72,8 @@
         class="btn"
         ng-class="{active: indicators.audit, 'btn-link': !indicators.audit}"
         ng-click="indicatorsFilter('audit')">
-        Проконтролировать <span ng-show="toAuditCount" class="count-label">{{toAuditCount}}</span>
+        Проконтролировать <span ng-show="toAuditCount" class="count-label">{{toAuditCount}}</span> 
+        <span ng-show="toReadByAuditorCount">({{toReadByAuditorCount}})</span>
       </button>
     </h4>
   </div>

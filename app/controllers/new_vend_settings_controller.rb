@@ -9,7 +9,7 @@ class NewVendSettingsController < ApplicationController
 
 		respond_to do |format|
 			format.html { }
-      		format.json { render json: NewVendSettings.all }
+			format.json { render json: NewVendSettings.all }
 		end
 	end
 
@@ -18,28 +18,28 @@ class NewVendSettingsController < ApplicationController
 	end
 
 	def update
-    respond_to do |format|
-      if @new_vend_settings.update(new_vend_settings_params)
-        format.html { redirect_to @new_vend_settings, notice: 'settings was successfully updated.' }
-        format.json { render json: @new_vend_settings, status: :created }
-      else
-        format.html { render action: 'index' }
-        format.json { render json: @new_vend_settings.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+		respond_to do |format|
+			if @new_vend_settings.update(new_vend_settings_params)
+				format.html { redirect_to @new_vend_settings, notice: 'settings was successfully updated.' }
+				format.json { render json: @new_vend_settings, status: :created }
+			else
+				format.html { render action: 'index' }
+				format.json { render json: @new_vend_settings.errors, status: :unprocessable_entity }
+			end
+		end
+	end
 
 	def signed_in_user
-    redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
-  end
+		redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
+	end
 
-  private
+	private
 
-  	def set_new_vend_settings
+		def set_new_vend_settings
 			@new_vend_settings = NewVendSettings.find(params[:id])
 		end
 
-    def new_vend_settings_params
-			params.require(:new_vend_setting).permit(:read_confirm_time)
+	def new_vend_settings_params
+			params.require(:new_vend_setting).permit(:read_confirm_time, :host_name, :phone_host_name)
 		end
 end
