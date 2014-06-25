@@ -1,6 +1,8 @@
 class RequestTask < ActiveRecord::Base
     include ActiveModel::Dirty
 
+    PerPage = 10
+
     belongs_to :task
     belongs_to :request_message
 
@@ -15,27 +17,6 @@ class RequestTask < ActiveRecord::Base
     validates :assigner_description, length: { maximum: 512 }
     validates :executor_description, length: { maximum: 512 }
     validates :auditor_description, length: { maximum: 512 }
-
-    def getFullInfo
-        request_message = self.request_message
-        assigner = self.assigner
-        executor = self.executor
-        auditor = self.auditor
-
-        fullInfo = self.attributes
-        fullInfo["request_id"] = request_message.request_id
-        fullInfo["machine_name"] = request_message.request.machine.name
-        fullInfo["task_name"] = self.task.name
-        fullInfo["assigner_name"] = assigner ? assigner.name : nil
-        fullInfo["executor_name"] = executor ? executor.name : nil
-        fullInfo["auditor_name"] = auditor ? auditor.name : nil
-        fullInfo["checked"] = false;
-
-        fullInfo["request"] = request_message.request.getFullInfo
-        fullInfo["attributes"] = request_message.request_attributes.collect { |ra| { :name => ra.attribute.name, :value => ra.value } }
-
-        return fullInfo
-    end
 
     def attrs
         request_message = self.request_message
@@ -55,6 +36,82 @@ class RequestTask < ActiveRecord::Base
         return fullInfo
     end
 
+    def getFullInfo
+        fullInfo = self.attrs
+        fullInfo["request"] = request_message.request.getFullInfo
+        fullInfo["attributes"] = request_message.request_attributes.collect { |ra| { :name => ra.attribute.name, :value => ra.value } }
+        return fullInfo
+    end
+
+    def self.filter(params)
+        filter = { }           # Хэш с фильтрами по сотрудникам
+        date_filter = []       # Массив со строковыми фильрами по просрочке
+        indicators_filter = [] # Массив со строковыми фильтрами по индикаторам
+        to_read_filter = []    # Массив со строковыми фильтрами по прочитанности
+
+        # Достаем информацию о фильтрах из параметров
+        request_id  = params[:request_id]
+        who_am_i = params[:who_am_i] || []
+        overdued = params[:overdued] || []
+        indicators = params[:indicators] || []
+        to_read = params[:to_read] || []
+
+        # Создаем фильтр по заявке
+        if request_id != "" && request_id
+            filter[:request_messages] = { :request_id => request_id }
+        end
+
+        if params[:signed_in]
+            # Создаем фильтр по сотрудникам
+            if params[:current_employee]
+                who_am_i.each do |i|
+                    filter[(i + "_id").to_sym] = params[:current_employee].id
+                end
+            end
+
+            # Создаем фильтр по просроченности
+            overdued.each do |type|
+                case type
+                when "done"
+                    date_filter << "execution_date IS NOT NULL AND deadline_date < :date_now"
+                when "not_done"
+                    date_filter << "execution_date IS NULL AND deadline_date < :date_now"
+                end
+            end
+
+            # Создаем фильтр по индикаторам
+            indicators.each do |type|
+                case type
+                when "assign"
+                    indicators_filter << RequestTask.assign_filter
+                when "execute"
+                    indicators_filter << RequestTask.execute_filter
+                when "audit"
+                    indicators_filter << RequestTask.audit_filter
+                end
+            end
+
+            # Создаем фильтр по записям, которые нужно прочитать
+            to_read.each do |tr|
+                case tr
+                when "assigner"
+                    to_read_filter << RequestTask.to_read_assigner_filter
+                when "executor"
+                    to_read_filter << RequestTask.to_read_executor_filter
+                end
+            end
+        end
+
+        date_now_p = RequestTask.date_now_params
+        confirm_time_p = RequestTask.confirm_time_params
+        RequestTask.joins(:request_message).order("id DESC").where(filter).where(date_filter.join(' OR '), date_now_p).where(indicators_filter.join(' OR '), date_now_p).where(to_read_filter.join(' OR '), confirm_time_p)
+    end
+
+    def self.page(pg, prm)
+        pg = pg.to_i
+        self.filter(prm).offset((pg-1)*PerPage).limit(PerPage)
+    end
+
     def self.assign_filter
         "executor_id IS NULL OR deadline_date IS NULL"
     end
@@ -64,7 +121,11 @@ class RequestTask < ActiveRecord::Base
     end
 
     def self.audit_filter
-        "execution_date IS NULL AND deadline_date < '#{DateTime.now.utc}' OR execution_date IS NOT NULL AND audition_date IS NULL"
+        "execution_date IS NULL AND deadline_date < :date_now OR execution_date IS NOT NULL AND audition_date IS NULL"
+    end
+
+    def self.date_now_params
+        { date_now: DateTime.now.utc }
     end
 
     def self.to_read_assigner_filter
@@ -72,7 +133,7 @@ class RequestTask < ActiveRecord::Base
         # И не просрочили ли они прочтение
         read_confirm_time = NewVendSettings.getSettings.read_confirm_time
         if read_confirm_time
-            date_filter += "AND email_to_executor_date < '#{(DateTime.now - read_confirm_time.minutes).utc}'"
+            date_filter += "AND email_to_executor_date < :confirm_time"
         end
 
         return date_filter
@@ -83,10 +144,15 @@ class RequestTask < ActiveRecord::Base
         # И не просрочили ли они прочтение
         read_confirm_time = NewVendSettings.getSettings.read_confirm_time
         if read_confirm_time
-            date_filter += "AND email_to_auditor_date < '#{(DateTime.now - read_confirm_time.minutes).utc}'"
+            date_filter += "AND email_to_auditor_date < :confirm_time"
         end
 
         return date_filter
+    end
+
+    def self.confirm_time_params
+        read_confirm_time = NewVendSettings.getSettings.read_confirm_time
+        { confirm_time: (DateTime.now - read_confirm_time.minutes).utc }
     end
 
     def self.to_read_by_assigner_filter
@@ -116,7 +182,7 @@ class RequestTask < ActiveRecord::Base
     def self.to_audit_count(auditor)
         filter = {}
         filter[("auditor_id").to_sym] = auditor.id
-        return RequestTask.where(filter).where(RequestTask.audit_filter).size
+        return RequestTask.where(filter).where(RequestTask.audit_filter, { date_now: DateTime.now.utc }).size
     end
 
     # Возвращает количество непрочитанных поручений,
@@ -133,7 +199,7 @@ class RequestTask < ActiveRecord::Base
         # Дополнительно проверяем, нужно ли вообще им их читать
         date_filter = to_read_assigner_filter
 
-        return RequestTask.where(filter).where(date_filter).size
+        return RequestTask.where(filter).where(date_filter, RequestTask.confirm_time_params).size
     end
 
     # Возвращает количество непрочитанных поручений,
@@ -150,7 +216,7 @@ class RequestTask < ActiveRecord::Base
         # Дополнительно проверяем, нужно ли вообще им их читать
         date_filter = to_read_executor_filter
 
-        return RequestTask.where(filter).where(date_filter).size
+        return RequestTask.where(filter).where(date_filter, RequestTask.confirm_time_params).size
     end
 
     def self.to_read_by_executor_count(executor)

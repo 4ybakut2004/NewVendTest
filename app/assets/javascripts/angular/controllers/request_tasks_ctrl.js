@@ -10,7 +10,16 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 	 * Конструктор
 	 */
 	function init() {
-		$scope.requestTasks = RequestTask.all({ request_id: getURLParameter('request_id') });
+		$scope.requestTasks = RequestTask.all({
+			request_id: getURLParameter('request_id'),
+			page: $scope.currentPage
+		});
+
+		RequestTask.count().then(function(d) {
+			$scope.pager = new Pager(10);
+			$scope.pager.calcPageCount(d);
+		});
+
 		$scope.employees = Employee.all();
 		Employee.current_employee().then(function(d) {
 			$scope.currentEmployee = d;
@@ -352,12 +361,23 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 
 	// Обновляет массив поручений в зависимости от настроенных фильтров
 	function requestTasksFilter() {
+		
+		$scope.requestTasks = $scope.getFilteredTasks();
+		// После фильтра подгоняем ширину шапки таблицы
+		$scope.changeWidth();
+
+		$scope.setReadIndicatorsCounts();
+		$scope.setReadByIndicatorsCounts();
+	}
+
+	$scope.getFilteredTasks = function() {
 		// Массив атрибутов фильтра
 		var attr = {
 			'who_am_i[]': [],
 			'overdued[]': [],
 			'indicators[]': [],
-			'to_read[]' : []
+			'to_read[]' : [],
+			'page': $scope.pager.currentPage
 		};
 
 		// Запоминаем отмеченные пункты просроченности
@@ -388,14 +408,12 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 			}
 		}
 
-		$scope.requestTasks = RequestTask.all(attr);
+		RequestTask.count(attr).then(function(d) {
+			$scope.pager.calcPageCount(d);
+		});
 
-		// После фильтра подгоняем ширину шапки таблицы
-		$scope.changeWidth();
-
-		$scope.setReadIndicatorsCounts();
-		$scope.setReadByIndicatorsCounts();
-	}
+		return RequestTask.all(attr);
+	};
 
 	/*
 	 * $scope.whoAmIFilter(str)
@@ -502,6 +520,26 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		}
 		else {
 			return false;
+		}
+	};
+
+	$scope.setPage = function(page) {
+		$scope.pager.currentPage = page;
+		var newPageTasks = $scope.getFilteredTasks();
+		newPageTasks.$promise.then(function() {
+			$scope.requestTasks = newPageTasks;
+		});
+	};
+
+	$scope.nextPage = function() {
+		if($scope.pager.currentPage < $scope.pager.pageCount) {
+			$scope.setPage($scope.pager.currentPage + 1);
+		}
+	};
+
+	$scope.prevPage = function() {
+		if($scope.pager.currentPage > 1) {
+			$scope.setPage($scope.pager.currentPage - 1);
 		}
 	};
 }

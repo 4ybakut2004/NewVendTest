@@ -7,69 +7,24 @@ class RequestTasksController < ApplicationController
 	def index
 		@ng_controller = "RequestTasks"
 
-		filter = { }           # Хэш с фильтрами по сотрудникам
-		date_filter = []       # Массив со строковыми фильрами по просрочке
-		indicators_filter = [] # Массив со строковыми фильтрами по индикаторам
-		to_read_filter = []    # Массив со строковыми фильтрами по прочитанности
+		parm = params.dup
+		parm[:signed_in] = signed_in?
+		parm[:current_employee] = current_user.employee
+		page_num = params[:page] || 1
 
-		# Достаем информацию о фильтрах из параметров
-		@request_id  = params[:request_id]
-		@who_am_i = params[:who_am_i] || []
-		@overdued = params[:overdued] || []
-		@indicators = params[:indicators] || []
-		@to_read = params[:to_read] || []
-		
-		# Создаем фильтр по заявке
-		if @request_id != "" && @request_id
-			filter[:request_messages] = { :request_id => @request_id }
-		end
-
-		if signed_in?
-			# Создаем фильтр по сотрудникам
-			if current_user.employee
-				@who_am_i.each do |i|
-					filter[(i + "_id").to_sym] = current_user.employee.id
-				end
-			end
-
-			# Создаем фильтр по просроченности
-			@overdued.each do |type|
-				case type
-				when "done"
-					date_filter << "execution_date IS NOT NULL AND deadline_date < '#{DateTime.now}'"
-				when "not_done"
-					date_filter << "execution_date IS NULL AND deadline_date < '#{DateTime.now}'"
-				end
-			end
-
-			# Создаем фильтр по индикаторам
-			@indicators.each do |type|
-				case type
-				when "assign"
-					indicators_filter << RequestTask.assign_filter
-				when "execute"
-					indicators_filter << RequestTask.execute_filter
-				when "audit"
-					indicators_filter << RequestTask.audit_filter
-				end
-			end
-
-			# Создаем фильтр по записям, которые нужно прочитать
-			@to_read.each do |tr|
-				case tr
-				when "assigner"
-					to_read_filter << RequestTask.to_read_assigner_filter
-				when "executor"
-					to_read_filter << RequestTask.to_read_executor_filter
-				end
-			end
-		end
-	
 		# Формируем ответ
 		respond_to do |format|
-	      format.html { }
-	      format.json { render json: RequestTask.joins(:request_message).order("created_at DESC").where(filter).where(date_filter.join(' OR ')).where(indicators_filter.join(' OR ')).where(to_read_filter.join(' OR ')).collect { |rt| rt.attrs } }
-	    end
+			format.html { }
+			format.json { render json: RequestTask.page(page_num, parm).collect { |rt| rt.attrs } }
+		end
+	end
+
+	def count
+		parm = params.dup
+		parm[:signed_in] = signed_in?
+		parm[:current_employee] = current_user.employee
+
+		respond_with RequestTask.filter(parm).size
 	end
 
 	def show
@@ -205,8 +160,7 @@ class RequestTasksController < ApplicationController
 		end
 
 		if params[:type] == "assign"
-		# Этот случай означает, что переход осуществился через письмо,
-		# и обработать нужно целую заявку, причем только для назначателей
+		# Обработка случая для назначателей
 			@request = Request.find_by_id(params[:id])
 			if @request
 				@request.request_tasks.each do |rt|
@@ -245,8 +199,8 @@ class RequestTasksController < ApplicationController
 	end
 
 	def signed_in_user
-      redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
-    end
+		redirect_to signin_url, notice: "Пожалуйста, войдите в систему" unless signed_in?
+	end
 
 	private
 

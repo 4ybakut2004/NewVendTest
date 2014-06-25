@@ -87,5 +87,9 @@ newVending.factory('RequestTask', ['$resource', '$http', function($resource, $ht
       return getSimpleResponse('/read_request_task.json', {id: id, employee_id: employee_id});
   };
 
+  RequestTask.prototype.count = function(attr) {
+      return getSimpleResponse('/request_tasks/count.json', attr);
+  };
+
   return new RequestTask();
 }]);

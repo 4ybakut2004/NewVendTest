@@ -145,4 +145,14 @@
       </tr>
     </tbody>
   </table>
+  <ul class="pagination" style="margin-top: 0px;" ng-show="pager.pageCount">
+    <li ng-class='{"disabled": pager.currentPage == 1}' ng-click="prevPage()"><a href="">&laquo;</a></li>
+    <li ng-repeat="page in pager.pages"
+        ng-class='{"active": pager.currentPage == page.number}'>
+      <a href="" ng-click="setPage(page.number)">
+        {{page.label}}
+      </a>
+    </li>
+    <li ng-class='{"disabled": pager.currentPage == pager.pageCount}' ng-click="nextPage()"><a href="">&raquo;</a></li>
+  </ul>
 </div>

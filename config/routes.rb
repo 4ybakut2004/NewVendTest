@@ -1,5 +1,7 @@
 NewVend::Application.routes.draw do
   get "machines/new"
+  get 'request_tasks/count' => 'request_tasks#count'
+
   resources :machines, only: [:index, :show, :create, :new]
   resources :users, only: [:show, :edit, :update, :new, :create, :index]
   resources :sessions, only: [:new, :create, :destroy]
@@ -14,7 +16,7 @@ NewVend::Application.routes.draw do
   resources :new_vend_settings, only: [:index, :show, :update]
 
   root  'static_pages#home'
-  match '/help',  to: 'static_pages#help',       via: 'get'
+  match '/help',    to: 'static_pages#help',    via: 'get'
 
   match '/signin',  to: 'sessions#new',         via: 'get'
   match '/signout', to: 'sessions#destroy',     via: 'delete'
