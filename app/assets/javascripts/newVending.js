@@ -436,7 +436,7 @@ function Pagination($compile) {
 
 			// Настраиваем стили, классы и атрибуты
 			ul.addClass(paginationClass);
-			ul.css({ 'margin-top': '0px' });
+			ul.css({ 'margin-top': '5px' });
 			ul.attr({ 'ng-show': ulNgShow });
 
 			prevLi.attr({

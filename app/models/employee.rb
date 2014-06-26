@@ -66,9 +66,11 @@ class Employee < ActiveRecord::Base
             url_path += "id=#{params[:request_task].id}"
         end
 
+        msg = Employee.create_sms_message(params)
+
         url_path += "&employee_id=#{employee.id}"
         url_path += "&phone=#{employee.phone}"
-        url_path += "&msg=Сообщение"
+        url_path += "&msg=#{msg}"
         url_path += "&type=#{type}"
 
         url = URI.parse(URI.encode(url_path.strip))
@@ -81,6 +83,46 @@ class Employee < ActiveRecord::Base
 
     def has_phone
         self.phone != nil && self.phone != ''
+    end
+
+    def self.create_sms_message(params)
+        msg = ""
+        if params[:request]
+            request = params[:request]
+            machine_name = request.machine.name
+
+            msg += "Автомат: #{machine_name}\n"
+
+            if request.description && request.description != ""
+                msg += "Описание: #{request.description}\n"
+            end
+        else
+            request_task = params[:request_task]
+            machine_name = request_task.request_message.request.machine.name
+            msg += "Автомат: #{machine_name}\n"
+
+            if request_task.description
+                msg += "Описание: #{request_task.description}\n"
+            end
+
+            if request_task.registrar_description
+                msg += "Регистратор: #{request_task.registrar_description}\n"
+            end
+
+            if request_task.assigner_description
+                msg += "Назначатель: #{request_task.assigner_description}\n"
+            end
+
+            if request_task.executor_description
+                msg += "Исполнитель: #{request_task.executor_description}\n"
+            end
+
+            if request_task.auditor_description
+                msg += "Контролер: #{request_task.auditor_description}\n"
+            end
+        end
+
+        return msg
     end
 end
 

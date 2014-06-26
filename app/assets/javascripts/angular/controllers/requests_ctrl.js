@@ -196,7 +196,7 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 		var oldRequests = $scope.requests;
 		$scope.requests = [];
 		angular.forEach(oldRequests, function(request) {
-			if (!request.checked) { 
+			if (!request.checked) {
 				$scope.requests.push(request);
 			}
 			else {
