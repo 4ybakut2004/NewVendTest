@@ -25,7 +25,7 @@ newVending.factory('Request', ['$resource', '$http', function($resource, $http) 
   };
 
   Request.prototype.delete = function(id) {
-    this.service.remove({requestId: id});
+    return this.service.remove({requestId: id});
   };
 
   Request.prototype.create = function(attr) {

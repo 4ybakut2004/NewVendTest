@@ -11,6 +11,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 	 */
 	function init() {
 		$scope.requestId = getURLParameter('request_id');
+		$scope.perPage = 10;
 		$scope.requestTasks = RequestTask.all({
 			request_id: $scope.requestId,
 			page: $scope.currentPage
@@ -19,7 +20,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		RequestTask.count({
 			request_id: $scope.requestId
 		}).then(function(d) {
-			$scope.pager = new Pager(10);
+			$scope.pager = new Pager($scope.perPage);
 			$scope.pager.calcPageCount(d);
 		});
 

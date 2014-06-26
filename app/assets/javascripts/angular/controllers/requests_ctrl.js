@@ -7,6 +7,7 @@
 function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) {
 //- Инициализация моделей ----------------------------------
 	$scope.requestTaskId = getURLParameter("request_task_id");
+	$scope.perPage = 10;
 
 	// Присутствие id поручения в параметрах означает,
 	// что пользователь нажал кнопку создания заявки из поручения.
@@ -22,14 +23,15 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 	$scope.messages = Message.all();
 	$scope.machines = Machine.all();
 
-	Request.count().then(function(d) {
-		$scope.pager = new Pager(10);
-		$scope.pager.calcPageCount(d);
-	});
-
 	// Настраиваем начальное значение селект бокса с автоматами
 	$scope.machines.$promise.then(function() {
 		$scope.newMachineId = $scope.machines[0].id;
+	});
+
+	// Настраиваем листалку страниц таблицы
+	Request.count().then(function(d) {
+		$scope.pager = new Pager($scope.perPage);
+		$scope.pager.calcPageCount(d);
 	});
 
 	$scope.requestTypes = RequestType.all();
@@ -166,7 +168,21 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 
 		var newRequest = Request.create(attr);
 		newRequest.$promise.then(function() {
-			$scope.requests.unshift(newRequest);
+			if($scope.pager.currentPage == 1) {
+				$scope.requests.unshift(newRequest);
+				if($scope.requests.length > $scope.perPage) {
+					$scope.requests.splice($scope.requests.length - 1, 1);
+				}
+			}
+			else {
+				$scope.setPage($scope.pager.currentPage);
+			}
+
+			var attr = $scope.getFilterAttrs();
+			Request.count(attr).then(function(d) {
+				$scope.pager.calcPageCount(d);
+			});
+
 			$scope.closeNew();
 		}, function(d) {
 			showErrors(d.data, $scope.inputsErrors);
@@ -187,20 +203,24 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 		});
 	};
 
-	$scope.deleteRequest = function(id, idx) {
-		$scope.requests.splice(idx, 1);
-		return Request.delete(id);
-	};
-
 	$scope.deleteRequests = function() {
-		var oldRequests = $scope.requests;
-		$scope.requests = [];
-		angular.forEach(oldRequests, function(request) {
-			if (!request.checked) {
-				$scope.requests.push(request);
+		var deleted = 0;
+		var toDelete = 0;
+
+		angular.forEach($scope.requests, function(request) {
+			if(request.checked) {
+				toDelete++;
 			}
-			else {
-				Request.delete(request.id);
+		});
+
+		angular.forEach($scope.requests, function(request) {
+			if(request.checked) {
+				Request.delete(request.id).$promise.then(function() {
+					deleted++;
+					if(deleted == toDelete) {
+						$scope.setPage($scope.pager.currentPage);
+					}
+				});
 			}
 		});
 		return true;
@@ -262,6 +282,16 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 	}
 
 	$scope.getFilteredRequests = function() {
+		var attr = $scope.getFilterAttrs();
+
+		Request.count(attr).then(function(d) {
+			$scope.pager.calcPageCount(d);
+		});
+
+		return Request.all(attr);
+	};
+
+	$scope.getFilterAttrs = function() {
 		var attr = {
 			'who_am_i[]': [],
 			'page': $scope.pager.currentPage
@@ -273,11 +303,7 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 			}
 		}
 
-		Request.count(attr).then(function(d) {
-			$scope.pager.calcPageCount(d);
-		});
-
-		return Request.all(attr);
+		return attr;
 	};
 
 	$scope.whoAmIFilter = function(str) {
