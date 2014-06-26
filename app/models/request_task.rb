@@ -1,6 +1,5 @@
 class RequestTask < ActiveRecord::Base
     include ActiveModel::Dirty
-
     PerPage = 10
 
     belongs_to :task

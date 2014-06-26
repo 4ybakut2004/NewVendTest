@@ -10,12 +10,15 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 	 * Конструктор
 	 */
 	function init() {
+		$scope.requestId = getURLParameter('request_id');
 		$scope.requestTasks = RequestTask.all({
-			request_id: getURLParameter('request_id'),
+			request_id: $scope.requestId,
 			page: $scope.currentPage
 		});
 
-		RequestTask.count().then(function(d) {
+		RequestTask.count({
+			request_id: $scope.requestId
+		}).then(function(d) {
 			$scope.pager = new Pager(10);
 			$scope.pager.calcPageCount(d);
 		});
@@ -377,7 +380,8 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 			'overdued[]': [],
 			'indicators[]': [],
 			'to_read[]' : [],
-			'page': $scope.pager.currentPage
+			'page': $scope.pager.currentPage,
+			'request_id': $scope.requestId
 		};
 
 		// Запоминаем отмеченные пункты просроченности

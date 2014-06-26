@@ -5,29 +5,29 @@ $(document).on('ready page:load', function() {
 });
 
 function Application($compile, User) 
-{       
-    return {
-	    link: function($scope, element, attrs) {
-	    	var menuPosition = attrs["menuPosition"];
-	    	var userId = parseInt(attrs["userId"]) || 0;
-	    	var hidden;
+{
+	return {
+		link: function($scope, element, attrs) {
+			var menuPosition = attrs.menuPosition;
+			var userId = parseInt(attrs.userId) || 0;
+			var hidden;
 
-	    	if(menuPosition == "shown") {
-	    		hidden = false;
-	    	}
-	    	else {
-	    		hidden = true;
-	    	}
+			if(menuPosition == "shown") {
+				hidden = false;
+			}
+			else {
+				hidden = true;
+			}
 
-	    	var signed = attrs.signed;
+			var signed = attrs.signed;
 
-	    	var closeButton;
-	    	var closeButtonWidth; // Уменьшим меню на эту ширину, чтобы засунуть кнопку закрытия
-	    	var menuWidth;        // На данный отступ сейчас смещена рабочая область. Запомнить для открытия меню
-	    	var showButton;
-	    	var hideButton;
+			var closeButton;
+			var closeButtonWidth; // Уменьшим меню на эту ширину, чтобы засунуть кнопку закрытия
+			var menuWidth;        // На данный отступ сейчас смещена рабочая область. Запомнить для открытия меню
+			var showButton;
+			var hideButton;
 
-	    	// DOM элементы
+			// DOM элементы
 			var workspace = element.find('.workspace').first();
 			var menuContainer = element.find('.menu').first();
 			var menu = menuContainer.find('.menu-nav').first();
@@ -171,15 +171,15 @@ function Application($compile, User)
 						'margin-left': menuWidth + 'px'
 				});
 			}
-        }
-    };
+		}
+	};
 }
 
 function FixedHeader($compile) 
-{       
-    return {
-	    link: function($scope, element, attrs) {
-	    	var fixedHeader;
+{
+	return {
+		link: function($scope, element, attrs) {
+			var fixedHeader;
 			var table = element.find('table').first();
 			var h;
 
@@ -276,76 +276,76 @@ function FixedHeader($compile)
 			scrollX.bind('scroll', function() {
 				element.scrollLeft(scrollX.scrollLeft());
 			});
-        }
-    };
+		}
+	};
 }
 
 function DateTimePicker($compile) 
-{       
-    return {
-	    link: function($scope, element, attrs) {
+{
+	return {
+		link: function($scope, element, attrs) {
 			element.datetimepicker({
-		      lang: 'ru',
-		      mask: true,
-		      format: 'd.m.Y H:i:s',
-		      dayOfWeekStart: 1,
-		      allowBlank: true
-		    });
+				lang: 'ru',
+				mask: true,
+				format: 'd.m.Y H:i:s',
+				dayOfWeekStart: 1,
+				allowBlank: true
+			});
 
-		    var inputContainer = $('<div style="position: relative;"></div>');
-		    var parent = element.parent();
+			var inputContainer = $('<div style="position: relative;"></div>');
+			var parent = element.parent();
 
-		    var clearButton = $('<button type="button" class="close input-clear">&times;</button>');
+			var clearButton = $('<button type="button" class="close input-clear">&times;</button>');
 
-		    clearButton.click(function() {
-		    	element.val(DATE_MASK);
-		    	$scope[attrs.ngModel] = DATE_MASK;
-		    });
+			clearButton.click(function() {
+				element.val(DATE_MASK);
+				$scope[attrs.ngModel] = DATE_MASK;
+			});
 
-		   	inputContainer.append(element);
-		   	inputContainer.append(clearButton);
+			inputContainer.append(element);
+			inputContainer.append(clearButton);
 
-		   	parent.append(inputContainer);
-        }
-    };
+			parent.append(inputContainer);
+		}
+	};
 }
 
 function DateTimePickerFromNow($compile) 
-{       
-    return {
-	    link: function($scope, element, attrs) {
+{
+	return {
+		link: function($scope, element, attrs) {
 			element.datetimepicker({
-		      lang: 'ru',
-		      mask: true,
-		      format: 'd.m.Y H:i:s',
-		      dayOfWeekStart: 1,
-		      allowBlank: true,
-		      minDate: 0,
-		      onChangeDateTime:function(dp,$input) {
-		        var now = new Date();
-		        var val = new Date($input.val().replace(/(\d+).(\d+).(\d+)/, '$2/$1/$3'));
-		        if(val < now) {
-		          $input.val(formattedDate(now));
-		        }
-		      }
-		    });
+				lang: 'ru',
+				mask: true,
+				format: 'd.m.Y H:i:s',
+				dayOfWeekStart: 1,
+				allowBlank: true,
+				minDate: 0,
+				onChangeDateTime:function(dp,$input) {
+					var now = new Date();
+					var val = new Date($input.val().replace(/(\d+).(\d+).(\d+)/, '$2/$1/$3'));
+					if(val < now) {
+						$input.val(formattedDate(now));
+					}
+				}
+			});
 
-		    var inputContainer = $('<div style="position: relative;"></div>');
-		    var parent = element.parent();
+			var inputContainer = $('<div style="position: relative;"></div>');
+			var parent = element.parent();
 
-		    var clearButton = $('<button type="button" class="close input-clear">&times;</button>');
+			var clearButton = $('<button type="button" class="close input-clear">&times;</button>');
 
-		    clearButton.click(function() {
-		    	element.val(DATE_MASK);
-		    	$scope[attrs.ngModel] = DATE_MASK;
-		    });
+			clearButton.click(function() {
+				element.val(DATE_MASK);
+				$scope[attrs.ngModel] = DATE_MASK;
+			});
 
-		   	inputContainer.append(element);
-		   	inputContainer.append(clearButton);
+			inputContainer.append(element);
+			inputContainer.append(clearButton);
 
-		   	parent.append(inputContainer);
-        }
-    };
+			parent.append(inputContainer);
+		}
+	};
 }
 
 function FormGroup($compile) {
@@ -356,21 +356,21 @@ function FormGroup($compile) {
 			//console.log(a);
 			//$compile(fh)($scope);
 			/*<div class="form-group"
-	          ng-class='{"has-success": editingInputs.description && !editingErrors.description,
-	                     "has-error":   editingErrors.description}'>
-	          <label class="col-sm-3 control-label" for="description">Описание</label>
-	          <div class="col-sm-9">
-	            <textarea id="description"
-	              type="text"
-	              ng-model='editingDescription'
-	              placeholder="Введите описание"
-	              class="form-control">
-	            </textarea>
-	            <div class="alert alert-danger alert-field" ng-show="editingErrors.description">
-	              {{editingErrors.description}}
-	            </div>
-	          </div>
-	        </div>*/
+			ng-class='{"has-success": editingInputs.description && !editingErrors.description,
+							"has-error":   editingErrors.description}'>
+			<label class="col-sm-3 control-label" for="description">Описание</label>
+				<div class="col-sm-9">
+					<textarea id="description"
+						type="text"
+						ng-model='editingDescription'
+						placeholder="Введите описание"
+						class="form-control">
+					</textarea>
+					<div class="alert alert-danger alert-field" ng-show="editingErrors.description">
+						{{editingErrors.description}}
+					</div>
+				</div>
+			</div>*/
 		}
 	};
 }
@@ -386,8 +386,94 @@ function FormGroup($compile) {
   input-width="9">
 </div>*/
 
+function Pagination($compile) {
+	return {
+		link: function($scope, element, attrs) {
+			var pager           = attrs.pager || 'pager';
+			var prevPage        = attrs.prevPageMethod || 'prevPage';
+			var nextPage        = attrs.nextPageMethod || 'nextPage';
+			var setPage         = attrs.setPageMethod || 'setPage';
+			var disabledClass   = 'disabled';
+			var activeClass     = 'active';
+			var paginationClass = 'pagination';
+
+			// Создаем элементы
+			var ul       = $('<ul></ul>');
+			var prevLi   = $('<li></li>');
+			var nextLi   = $('<li></li>');
+			var pageLi   = $('<li></li>');
+			var prevLink = $('<a href="">&laquo;</a>');
+			var nextLink = $('<a href="">&raquo;</a>');
+			var pageLink = $('<a href="">{{page.label}}</a>');
+
+			// Создаем атрибутами
+			var ulNgShow = '[pager].pageCount > 1';
+			ulNgShow = ulNgShow.replace('[pager]', pager);
+
+			var prevLiNgClass = '{"[disabled-class]": [pager].currentPage == 1}';
+			prevLiNgClass = prevLiNgClass.replace('[disabled-class]', disabledClass)
+										.replace('[pager]', pager);
+
+			var prevLiNgClick = '[prev-page]()';
+			prevLiNgClick = prevLiNgClick.replace('[prev-page]', prevPage);
+
+			var pageLiNgRepeat = 'page in [pager].pages';
+			pageLiNgRepeat = pageLiNgRepeat.replace('[pager]', pager);
+
+			var pageLiNgClass = '{"[active-class]": [pager].currentPage == page.number}';
+			pageLiNgClass = pageLiNgClass.replace('[active-class]', activeClass)
+										.replace('[pager]', pager);
+
+			var pageLiNgClick = '[set-page](page.number)';
+			pageLiNgClick = pageLiNgClick.replace('[set-page]', setPage);
+
+			var nextLiNgClass = '{"[disabled-class]": [pager].currentPage == [pager].pageCount}';
+			nextLiNgClass = nextLiNgClass.replace('[disabled-class]', disabledClass)
+										.replace(/\[pager\]/g, pager);
+
+			var nextLiNgClick = '[next-page]()';
+			nextLiNgClick = nextLiNgClick.replace('[next-page]', nextPage);
+
+			// Настраиваем стили, классы и атрибуты
+			ul.addClass(paginationClass);
+			ul.css({ 'margin-top': '0px' });
+			ul.attr({ 'ng-show': ulNgShow });
+
+			prevLi.attr({
+				'ng-class': prevLiNgClass,
+				'ng-click': prevLiNgClick
+			});
+
+			pageLi.attr({
+				'ng-repeat': pageLiNgRepeat,
+				'ng-class': pageLiNgClass,
+				'ng-click': pageLiNgClick
+			});
+
+			nextLi.attr({
+				'ng-class': nextLiNgClass,
+				'ng-click': nextLiNgClick
+			});
+
+			// Генерируем DOM элемент из всего созданного
+			prevLi.append(prevLink);
+			prevLi.appendTo(ul);
+
+			pageLi.append(pageLink);
+			pageLi.appendTo(ul);
+
+			nextLi.append(nextLink);
+			nextLi.appendTo(ul);
+
+			var compiledUl = $compile(ul)($scope);
+			element.append(compiledUl);
+		}
+	};
+}
+
 newVending.directive('application', ['$compile', 'User', Application]);
 newVending.directive('fixedheader', ['$compile', FixedHeader]);
 newVending.directive('datetimepicker', ['$compile', DateTimePicker]);
 newVending.directive('datetimepickerfromnow', ['$compile', DateTimePickerFromNow]);
 newVending.directive('formgroup', ['$compile', FormGroup]);
+newVending.directive('pagination', ['$compile', Pagination]);
