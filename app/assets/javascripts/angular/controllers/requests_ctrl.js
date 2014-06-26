@@ -6,63 +6,62 @@
 
 function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) {
 //- Инициализация моделей ----------------------------------
-	$scope.requestTaskId = getURLParameter("request_task_id");
-	$scope.perPage = 10;
-
-	// Присутствие id поручения в параметрах означает,
-	// что пользователь нажал кнопку создания заявки из поручения.
-	// При этом неободимо открыть окно создания заявки.
-	if(!$scope.requestTaskId) {
-		$scope.requests = Request.all();
-	}
-	else {
-		$scope.requests = [];
-		$('#newRequest').modal('show');
-	}
-
-	$scope.messages = Message.all();
-	$scope.machines = Machine.all();
-
-	// Настраиваем начальное значение селект бокса с автоматами
-	$scope.machines.$promise.then(function() {
-		$scope.newMachineId = $scope.machines[0].id;
-	});
-
-	// Настраиваем листалку страниц таблицы
-	Request.count().then(function(d) {
+	function init() {
+		$scope.requestTaskId = getURLParameter("request_task_id");
+		$scope.perPage = 10;
 		$scope.pager = new Pager($scope.perPage);
-		$scope.pager.calcPageCount(d);
-	});
 
-	$scope.requestTypes = RequestType.all();
-	$scope.editing = false;
-	$scope.newMessages = [];
+		// Присутствие id поручения в параметрах означает,
+		// что пользователь нажал кнопку создания заявки из поручения.
+		// При этом неободимо открыть окно создания заявки.
+		if(!$scope.requestTaskId) {
+			$scope.requests = Request.all();
+		}
+		else {
+			$scope.requests = [];
+			$('#newRequest').modal('show');
+		}
 
-	$scope.inputs = {
-		machineId: false,
-		requestTypeId: false,
-		phone: false,
-		description: false
-	};
+		$scope.messages = Message.all();
+		$scope.machines = Machine.all();
 
-	$scope.inputsErrors = {
-		machine_id: "",
-		description: ""
-	};
+		// Настраиваем начальное значение селект бокса с автоматами
+		$scope.machines.$promise.then(function() {
+			$scope.newMachineId = $scope.machines[0].id;
+		});
 
-	$scope.editingInputs = {
-		description: false,
-		machineId: false
-	};
+		$scope.calcPageCount($scope.getFilterAttrs());
 
-	$scope.editingErrors = {
-		machine_id: "",
-		description: ""
-	};
+		$scope.requestTypes = RequestType.all();
+		$scope.editing = false;
+		$scope.newMessages = [];
 
-	$scope.whoAmI = {
-		registrar: false
-	};
+		$scope.inputs = {
+			machineId: false,
+			requestTypeId: false,
+			phone: false,
+			description: false
+		};
+
+		$scope.inputsErrors = {
+			machine_id: "",
+			description: ""
+		};
+
+		$scope.editingInputs = {
+			description: false,
+			machineId: false
+		};
+
+		$scope.editingErrors = {
+			machine_id: "",
+			description: ""
+		};
+
+		$scope.whoAmI = {
+			registrar: false
+		};
+	}
 
 //- Мониторинг изменения моделей ---------------------------
 	$scope.changeWidth = function() {
@@ -172,16 +171,12 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 				$scope.requests.unshift(newRequest);
 				if($scope.requests.length > $scope.perPage) {
 					$scope.requests.splice($scope.requests.length - 1, 1);
+					$scope.calcPageCount(attr);
 				}
 			}
 			else {
 				$scope.setPage($scope.pager.currentPage);
 			}
-
-			var attr = $scope.getFilterAttrs();
-			Request.count(attr).then(function(d) {
-				$scope.pager.calcPageCount(d);
-			});
 
 			$scope.closeNew();
 		}, function(d) {
@@ -277,19 +272,11 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 	};
 
 	function requestsFilter() {
-		$scope.requests = $scope.getFilteredRequests();
+		var attr = $scope.getFilterAttrs();
+		$scope.calcPageCount(attr);
+		$scope.requests = Request.all(attr);
 		$scope.changeWidth();
 	}
-
-	$scope.getFilteredRequests = function() {
-		var attr = $scope.getFilterAttrs();
-
-		Request.count(attr).then(function(d) {
-			$scope.pager.calcPageCount(d);
-		});
-
-		return Request.all(attr);
-	};
 
 	$scope.getFilterAttrs = function() {
 		var attr = {
@@ -312,8 +299,10 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 	};
 
 	$scope.setPage = function(page) {
+		var attr = $scope.getFilterAttrs();
 		$scope.pager.currentPage = page;
-		var newPageRequests = $scope.getFilteredRequests();
+		$scope.calcPageCount(attr);
+		var newPageRequests = Request.all(attr);
 		newPageRequests.$promise.then(function() {
 			$scope.requests = newPageRequests;
 		});
@@ -331,8 +320,16 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 		}
 	};
 
+	$scope.calcPageCount = function(attr) {
+		Request.count(attr).then(function(d) {
+			$scope.pager.calcPageCount(d);
+		});
+	};
+
 	$scope.formattedDate = formattedDate;
 	$scope.dateForInput = dateForInput;
+
+	init();
 }
 
 newVending.controller("RequestsCtrl",['$scope', '$timeout', 'Request', 'Message', 'Machine', 'RequestType', RequestsCtrl]);
