@@ -8,8 +8,15 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 //- Инициализация моделей ----------------------------------
 	function init() {
 		$scope.requestTaskId = getURLParameter("request_task_id");
+
 		$scope.perPage = 10;
-		$scope.pager = new Pager($scope.perPage);
+		$scope.pager = new Pager({
+			perPage: $scope.perPage,
+			controllerScope: $scope,
+			filterMethod: $scope.getFilterAttrs,
+			service: Request,
+			containerName: "requests"
+		});
 
 		// Присутствие id поручения в параметрах означает,
 		// что пользователь нажал кнопку создания заявки из поручения.
@@ -30,7 +37,7 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 			$scope.newMachineId = $scope.machines[0].id;
 		});
 
-		$scope.calcPageCount($scope.getFilterAttrs());
+		$scope.pager.calcPageCount($scope.getFilterAttrs());
 
 		$scope.requestTypes = RequestType.all();
 		$scope.editing = false;
@@ -171,11 +178,11 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 				$scope.requests.unshift(newRequest);
 				if($scope.requests.length > $scope.perPage) {
 					$scope.requests.splice($scope.requests.length - 1, 1);
-					$scope.calcPageCount(attr);
+					$scope.pager.calcPageCount(attr);
 				}
 			}
 			else {
-				$scope.setPage($scope.pager.currentPage);
+				$scope.pager.setPage($scope.pager.currentPage);
 			}
 
 			$scope.closeNew();
@@ -213,7 +220,7 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 				Request.delete(request.id).$promise.then(function() {
 					deleted++;
 					if(deleted == toDelete) {
-						$scope.setPage($scope.pager.currentPage);
+						$scope.pager.setPage($scope.pager.currentPage);
 					}
 				});
 			}
@@ -239,6 +246,8 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 			$scope.requestMessages = r.request_messages;
 			$scope.editing = true;
 		});
+
+		console.log($scope.pager.pages);
 	};
 
 	$scope.setNewRequestTypeId = function(request_type_id) {
@@ -273,8 +282,11 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 
 	function requestsFilter() {
 		var attr = $scope.getFilterAttrs();
-		$scope.calcPageCount(attr);
-		$scope.requests = Request.all(attr);
+		$scope.pager.calcPageCount(attr);
+		var newRequests = Request.all(attr);
+		newRequests.$promise.then(function() {
+			$scope.requests = newRequests;
+		});
 		$scope.changeWidth();
 	}
 
@@ -296,34 +308,6 @@ function RequestsCtrl($scope, $timeout, Request, Message, Machine, RequestType) 
 	$scope.whoAmIFilter = function(str) {
 		$scope.whoAmI[str] = !$scope.whoAmI[str];
 		requestsFilter();
-	};
-
-	$scope.setPage = function(page) {
-		var attr = $scope.getFilterAttrs();
-		$scope.pager.currentPage = page;
-		$scope.calcPageCount(attr);
-		var newPageRequests = Request.all(attr);
-		newPageRequests.$promise.then(function() {
-			$scope.requests = newPageRequests;
-		});
-	};
-
-	$scope.nextPage = function() {
-		if($scope.pager.currentPage < $scope.pager.pageCount) {
-			$scope.setPage($scope.pager.currentPage + 1);
-		}
-	};
-
-	$scope.prevPage = function() {
-		if($scope.pager.currentPage > 1) {
-			$scope.setPage($scope.pager.currentPage - 1);
-		}
-	};
-
-	$scope.calcPageCount = function(attr) {
-		Request.count(attr).then(function(d) {
-			$scope.pager.calcPageCount(d);
-		});
 	};
 
 	$scope.formattedDate = formattedDate;

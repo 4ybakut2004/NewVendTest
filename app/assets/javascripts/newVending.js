@@ -390,9 +390,6 @@ function Pagination($compile) {
 	return {
 		link: function($scope, element, attrs) {
 			var pager           = attrs.pager || 'pager';
-			var prevPage        = attrs.prevPageMethod || 'prevPage';
-			var nextPage        = attrs.nextPageMethod || 'nextPage';
-			var setPage         = attrs.setPageMethod || 'setPage';
 			var disabledClass   = 'disabled';
 			var activeClass     = 'active';
 			var paginationClass = 'pagination';
@@ -414,8 +411,8 @@ function Pagination($compile) {
 			prevLiNgClass = prevLiNgClass.replace('[disabled-class]', disabledClass)
 										.replace('[pager]', pager);
 
-			var prevLiNgClick = '[prev-page]()';
-			prevLiNgClick = prevLiNgClick.replace('[prev-page]', prevPage);
+			var prevLiNgClick = '[pager].prevPage()';
+			prevLiNgClick = prevLiNgClick.replace('[pager]', pager);
 
 			var pageLiNgRepeat = 'page in [pager].pages';
 			pageLiNgRepeat = pageLiNgRepeat.replace('[pager]', pager);
@@ -424,15 +421,15 @@ function Pagination($compile) {
 			pageLiNgClass = pageLiNgClass.replace('[active-class]', activeClass)
 										.replace('[pager]', pager);
 
-			var pageLiNgClick = '[set-page](page.number)';
-			pageLiNgClick = pageLiNgClick.replace('[set-page]', setPage);
+			var pageLiNgClick = '[pager].setPage(page.number)';
+			pageLiNgClick = pageLiNgClick.replace('[pager]', pager);
 
 			var nextLiNgClass = '{"[disabled-class]": [pager].currentPage == [pager].pageCount}';
 			nextLiNgClass = nextLiNgClass.replace('[disabled-class]', disabledClass)
 										.replace(/\[pager\]/g, pager);
 
-			var nextLiNgClick = '[next-page]()';
-			nextLiNgClick = nextLiNgClick.replace('[next-page]', nextPage);
+			var nextLiNgClick = '[pager].nextPage()';
+			nextLiNgClick = nextLiNgClick.replace('[pager]', pager);
 
 			// Настраиваем стили, классы и атрибуты
 			ul.addClass(paginationClass);

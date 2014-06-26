@@ -12,17 +12,20 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 	function init() {
 		$scope.requestId = getURLParameter('request_id');
 		$scope.perPage = 10;
+		$scope.pager = new Pager({
+			perPage: $scope.perPage,
+			controllerScope: $scope,
+			filterMethod: $scope.getFilterAttrs,
+			service: RequestTask,
+			containerName: "requestTasks"
+		});
+
 		$scope.requestTasks = RequestTask.all({
 			request_id: $scope.requestId,
 			page: $scope.currentPage
 		});
 
-		RequestTask.count({
-			request_id: $scope.requestId
-		}).then(function(d) {
-			$scope.pager = new Pager($scope.perPage);
-			$scope.pager.calcPageCount(d);
-		});
+		$scope.pager.calcPageCount($scope.getFilterAttrs());
 
 		$scope.employees = Employee.all();
 		Employee.current_employee().then(function(d) {
@@ -145,8 +148,6 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 			$scope.toReadByCount = d;
 		});
 	};
-
-	init();
 
 //- Мониторинг изменения моделей ---------------------------
 	$scope.changeWidth = function() {
@@ -365,16 +366,25 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 
 	// Обновляет массив поручений в зависимости от настроенных фильтров
 	function requestTasksFilter() {
-		
-		$scope.requestTasks = $scope.getFilteredTasks();
-		// После фильтра подгоняем ширину шапки таблицы
+
+		var attr = $scope.getFilterAttrs();
+		$scope.pager.calcPageCount(attr);
+		var newRequestTasks = RequestTask.all(attr);
+		newRequestTasks.$promise.then(function() {
+			$scope.requestTasks = newRequestTasks;
+		});
+
+		$scope.changeWidth();
+		$scope.setReadIndicatorsCounts();
+		$scope.setReadByIndicatorsCounts();
+
 		$scope.changeWidth();
 
 		$scope.setReadIndicatorsCounts();
 		$scope.setReadByIndicatorsCounts();
 	}
 
-	$scope.getFilteredTasks = function() {
+	$scope.getFilterAttrs = function() {
 		// Массив атрибутов фильтра
 		var attr = {
 			'who_am_i[]': [],
@@ -413,11 +423,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 			}
 		}
 
-		RequestTask.count(attr).then(function(d) {
-			$scope.pager.calcPageCount(d);
-		});
-
-		return RequestTask.all(attr);
+		return attr;
 	};
 
 	/*
@@ -528,25 +534,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 		}
 	};
 
-	$scope.setPage = function(page) {
-		$scope.pager.currentPage = page;
-		var newPageTasks = $scope.getFilteredTasks();
-		newPageTasks.$promise.then(function() {
-			$scope.requestTasks = newPageTasks;
-		});
-	};
-
-	$scope.nextPage = function() {
-		if($scope.pager.currentPage < $scope.pager.pageCount) {
-			$scope.setPage($scope.pager.currentPage + 1);
-		}
-	};
-
-	$scope.prevPage = function() {
-		if($scope.pager.currentPage > 1) {
-			$scope.setPage($scope.pager.currentPage - 1);
-		}
-	};
+	init();
 }
 
 newVending.controller("RequestTasksCtrl",['$scope', '$timeout', 'RequestTask', 'Employee', RequestTasksCtrl]);
