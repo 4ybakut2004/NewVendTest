@@ -7,26 +7,25 @@ class RequestsController < ApplicationController
   # GET /requests
   # GET /requests.json 
   def index
-    filter = {}
-    @who_am_i = params[:who_am_i]
-    if !@who_am_i
-      @who_am_i = []
-    end
-
     @ng_controller = "Requests"
 
-    if signed_in?
-      if current_user.employee
-        @who_am_i.each do |i|
-          filter[(i + "_id").to_sym] = current_user.employee.id
-        end
-      end
-    end
+    parm = params.dup
+    parm[:signed_in] = signed_in?
+    parm[:current_employee] = current_user.employee
+    page_num = params[:page] || 1
 
     respond_to do |format|
       format.html { }
-      format.json { render json: Request.order('created_at DESC').where(filter).collect { |r| r.attrs } }
+      format.json { render json: Request.page(page_num, parm).collect { |r| r.attrs } }
     end
+  end
+
+  def count
+    parm = params.dup
+    parm[:signed_in] = signed_in?
+    parm[:current_employee] = current_user.employee
+
+    respond_with Request.filter(parm).size
   end
 
   # GET /requests/1/edit

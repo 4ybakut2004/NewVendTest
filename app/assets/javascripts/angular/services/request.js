@@ -9,7 +9,7 @@
  * Подробное описание находтся в файле attribute.js
  **********************************************************/
 
-newVending.factory('Request', ['$resource', function($resource) {
+newVending.factory('Request', ['$resource', '$http', function($resource, $http) {
   function Request() {
     this.service = $resource('/requests/:requestId.json', 
                              {requestId: '@id'}, 
@@ -34,6 +34,18 @@ newVending.factory('Request', ['$resource', function($resource) {
 
   Request.prototype.update = function(id, attr) {
     return this.service.update({requestId: id}, attr);
+  };
+
+  function getSimpleResponse(url, params) {
+    var promise = $http.get(url, {params: params}).then(function (response) {
+      return response.data;
+    });
+
+    return promise;
+  }
+
+  Request.prototype.count = function(attr) {
+      return getSimpleResponse('/requests/count.json', attr);
   };
 
   return new Request();

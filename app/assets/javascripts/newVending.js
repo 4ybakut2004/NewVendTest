@@ -407,7 +407,7 @@ function Pagination($compile) {
 			var pageLink = $('<a href="">{{page.label}}</a>');
 
 			// Создаем атрибутами
-			var ulNgShow = '[pager].pageCount > 1';
+			var ulNgShow = '[pager].pageCount';
 			ulNgShow = ulNgShow.replace('[pager]', pager);
 
 			var prevLiNgClass = '{"[disabled-class]": [pager].currentPage == 1}';

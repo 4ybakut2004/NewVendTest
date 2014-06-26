@@ -1,6 +1,5 @@
 class RequestTask < ActiveRecord::Base
     include ActiveModel::Dirty
-    PerPage = 10
 
     belongs_to :task
     belongs_to :request_message
@@ -104,11 +103,6 @@ class RequestTask < ActiveRecord::Base
         date_now_p = RequestTask.date_now_params
         confirm_time_p = RequestTask.confirm_time_params
         RequestTask.joins(:request_message).order("id DESC").where(filter).where(date_filter.join(' OR '), date_now_p).where(indicators_filter.join(' OR '), date_now_p).where(to_read_filter.join(' OR '), confirm_time_p)
-    end
-
-    def self.page(pg, prm)
-        pg = pg.to_i
-        self.filter(prm).offset((pg-1)*PerPage).limit(PerPage)
     end
 
     def self.assign_filter

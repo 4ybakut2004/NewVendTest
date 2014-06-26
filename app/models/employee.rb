@@ -72,8 +72,6 @@ class Employee < ActiveRecord::Base
         url_path += "&type=#{type}"
 
         url = URI.parse(URI.encode(url_path.strip))
-        puts '!!!!!!!!!!!!!!!!!'
-        puts url
         response = Net::HTTP.get_response(url)
     end
 
