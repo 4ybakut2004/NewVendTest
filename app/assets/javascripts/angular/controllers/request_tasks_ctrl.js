@@ -208,7 +208,7 @@ function RequestTasksCtrl($scope, $timeout, RequestTask, Employee) {
 			else {
 				angular.forEach($scope.requestTasks, function(requestTask) {
 					requestTask.checked = false;
-				});	
+				});
 			}
 		}
 	});
