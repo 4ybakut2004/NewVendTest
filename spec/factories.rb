@@ -75,4 +75,19 @@ FactoryGirl.define do
       request_message.message_id = FactoryGirl.create(:message).id
     end
   end
+
+  factory :spiral do
+    name "Спираль"
+    direction "left"
+    mount_priority 1
+  end
+
+  factory :motor do
+    name "Мотор"
+    left_spiral_position 1.0
+    right_spiral_position 1.0
+    left_bound_offset 1.5
+    right_bound_offset 1.5
+    mount_priority 1
+  end
 end

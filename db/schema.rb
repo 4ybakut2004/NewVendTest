@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140623082808) do
+ActiveRecord::Schema.define(version: 20140627034307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,17 @@ ActiveRecord::Schema.define(version: 20140623082808) do
   end
 
   add_index "messages", ["name"], name: "index_messages_on_name", unique: true, using: :btree
+
+  create_table "motors", force: true do |t|
+    t.string   "name"
+    t.float    "left_spiral_position"
+    t.float    "right_spiral_position"
+    t.float    "left_bound_offset"
+    t.float    "right_bound_offset"
+    t.integer  "mount_priority"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "new_vend_settings", force: true do |t|
     t.integer  "read_confirm_time"
@@ -168,6 +179,14 @@ ActiveRecord::Schema.define(version: 20140623082808) do
     t.string   "phone"
     t.integer  "registrar_id"
     t.integer  "request_type_id", default: 4
+  end
+
+  create_table "spirals", force: true do |t|
+    t.string   "name"
+    t.string   "direction"
+    t.integer  "mount_priority"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "tasks", force: true do |t|
