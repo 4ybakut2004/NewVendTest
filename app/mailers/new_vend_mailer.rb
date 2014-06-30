@@ -26,7 +26,6 @@ class NewVendMailer < ActionMailer::Base
 
   def assign_email(employee, params)
     @to_assign_count = RequestTask.to_assign_count(employee)
-    @tasks_count = params[:tasks_count]
     @employee = employee
     @host = getHostName
     @request = params[:request]

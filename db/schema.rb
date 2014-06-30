@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140627034307) do
+ActiveRecord::Schema.define(version: 20140630025646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,8 @@ ActiveRecord::Schema.define(version: 20140627034307) do
     t.datetime "updated_at"
     t.string   "email"
     t.string   "phone"
+    t.integer  "next_sms_code",      default: 0
+    t.boolean  "first_code_is_free", default: true
   end
 
   add_index "employees", ["name"], name: "index_employees_on_name", unique: true, using: :btree
@@ -152,6 +154,9 @@ ActiveRecord::Schema.define(version: 20140627034307) do
     t.datetime "email_to_assigner_date"
     t.datetime "email_to_executor_date"
     t.datetime "email_to_auditor_date"
+    t.integer  "assigner_sms_code"
+    t.integer  "executor_sms_code"
+    t.integer  "auditor_sms_code"
   end
 
   create_table "request_type_messages", force: true do |t|

@@ -7,6 +7,13 @@ describe Employee do
 
   	it { should respond_to(:name) }
   	it { should respond_to(:email) }
+  	it { should respond_to(:phone) }
+  	it { should respond_to(:next_sms_code) }
+  	it { should respond_to(:first_code_is_free) }
+
+  	it { should respond_to(:lock_first_code) }
+  	it { should respond_to(:free_first_code) }
+  	it { should respond_to(:get_next_sms_code) }
 
   	it { should be_valid }
 

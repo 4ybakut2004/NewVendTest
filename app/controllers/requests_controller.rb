@@ -43,18 +43,26 @@ class RequestsController < ApplicationController
     @requests = Request.all
     @request  = Request.new(request_params)
     @request.registrar_id = current_user.employee ? current_user.employee.id : nil
-    messages = params[:messages]
+    message_ids = params[:messages]
 
     if @request.save
-      if messages
-        request_tasks_count = {}
+      # Если были переданы идентификаторы сигналов, которые нужно породить
+      if message_ids
+        employees = {} # Сохраним сюда сотрудников, фигурирующих в поручениях
+        sms_codes = {} # Сохраним сюда коды подтверждения сотрудников, которые нужно отослать
 
-        messages.each { |m|
+        # Породим каждый сигнал
+        message_ids.each { |m|
           request_message = RequestMessage.create(:request_id => @request.id,
                                                   :message_id => m[:id])
           message = Message.find(m[:id])
+          # Для каждого сигнала созданим поручения заявок
           message.tasks.each { |task|
             assigner_id = task.solver ? task.solver_id : @request.registrar_id
+            assigner = Employee.find(assigner_id)
+            employees[assigner_id] = assigner
+            next_sms_code = assigner.get_next_sms_code
+
             request_task = RequestTask.create(:assigner_id => assigner_id,
                                               :auditor_id  => assigner_id,
                                               :task_id => task.id,
@@ -62,17 +70,20 @@ class RequestsController < ApplicationController
                                               :creation_date => DateTime.now,
                                               :deadline_date => DateTime.now + task.deadline.days,
                                               :registrar_description => message.description,
-                                              :email_to_assigner_date => DateTime.now)
+                                              :email_to_assigner_date => DateTime.now,
+                                              :assigner_sms_code => next_sms_code)
 
-            assigner = Employee.find(assigner_id)
-
-            if request_tasks_count[assigner.id]
-              request_tasks_count[assigner.id] += 1
+            # Сохраним использованный код подтверждения для отправки его через смс
+            if sms_codes[assigner_id]
+              if next_sms_code < sms_codes[assigner_id]
+                sms_codes[assigner_id] = next_sms_code
+              end
             else
-              request_tasks_count[assigner.id] = 1
+              sms_codes[assigner_id] = next_sms_code
             end
           }
 
+          # Создадим атрибуты, если есть информация о них
           if m[:attributes]
             m[:attributes].each { |a|
               request_attribute = RequestAttribute.create(:request_message_id => request_message.id,
@@ -82,15 +93,15 @@ class RequestsController < ApplicationController
           end
         }
 
-        request_tasks_count.each { |key, value|
+        # Каждому сотруднику их поручений отошлем письма, что они назначатели
+        employees.each { |key, employee|
           params = {
-            :tasks_count => value,
             :host => request.host_with_port,
-            :request => @request
+            :request => @request,
+            :sms_code => sms_codes[key]
           }
-          employee_to_send = Employee.find(key)
-          employee_to_send.send_assign_email(params)
-          employee_to_send.send_assign_sms(params)
+          employee.send_assign_email(params)
+          employee.send_assign_sms(params)
         }
       end
       respond_to do |format|

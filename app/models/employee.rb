@@ -1,22 +1,25 @@
 class Employee < ActiveRecord::Base
     require 'net/http'
 
-	before_save { self.email = email ? email.downcase : "" }
-	
-	has_many :users
+    FIRST_CODE = 0
+    MAX_CODE = 999
 
-	validates :name, presence: true, uniqueness: true
-	VALID_EMAIL_REGEX = /\A([\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+)?\z/i
-  	validates :email, format: { with: VALID_EMAIL_REGEX }
+    before_save { self.email = email ? email.downcase : "" }
+    
+    has_many :users
 
-	def attrs
-		self.attributes.merge!({ "checked" => false })
-	end
+    validates :name, presence: true, uniqueness: true
+    VALID_EMAIL_REGEX = /\A([\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+)?\z/i
+    validates :email, format: { with: VALID_EMAIL_REGEX }
 
-	def send_execute_email(params)
-		if self.has_email
-        	NewVendMailer.execute_email(self, params).deliver
-    	end
+    def attrs
+        self.attributes.merge!({ "checked" => false })
+    end
+
+    def send_execute_email(params)
+        if self.has_email
+            NewVendMailer.execute_email(self, params).deliver
+        end
     end
     handle_asynchronously :send_execute_email
 
@@ -28,9 +31,9 @@ class Employee < ActiveRecord::Base
     handle_asynchronously :send_assign_email
 
     def send_audit_email(params)
-    	if self.has_email
-        	NewVendMailer.audit_email(self, params).deliver
-    	end
+        if self.has_email
+            NewVendMailer.audit_email(self, params).deliver
+        end
     end
     handle_asynchronously :send_audit_email
 
@@ -122,7 +125,55 @@ class Employee < ActiveRecord::Base
             end
         end
 
+        sms_code = params[:sms_code] == 0 ? "любой текст" : "число #{params[:sms_code]}"
+        msg += "Для подтв. отправьте " + sms_code
+
         return msg
+    end
+
+    def self.first_code
+        FIRST_CODE
+    end
+
+    def free_first_code
+        self.update({first_code_is_free: true})
+    end
+
+    def lock_first_code
+        self.update({first_code_is_free: false})
+    end
+
+    def get_next_sms_code
+        if self.first_code_is_free && self.next_sms_code != FIRST_CODE
+            next_code = FIRST_CODE
+        else
+            next_code = self.next_sms_code
+            new_code = next_code + 1
+            if new_code > MAX_CODE
+                new_code = FIRST_CODE
+            end
+            self.update({next_sms_code: new_code})
+
+            if !self.first_code_is_free && new_code == FIRST_CODE
+                self.free_first_code
+            end
+        end
+
+        if self.first_code_is_free && next_code == FIRST_CODE
+            self.lock_first_code
+        end
+
+        return next_code
+    end
+
+    def see_next_sms_code
+        if self.first_code_is_free
+            next_code = FIRST_CODE
+        else
+            next_code = self.next_sms_code
+        end
+
+        return next_code
     end
 end
 

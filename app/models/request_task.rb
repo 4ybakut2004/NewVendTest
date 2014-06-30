@@ -284,6 +284,30 @@ class RequestTask < ActiveRecord::Base
         self.execution_date && self.auditor_id
     end
 
+    def set_assigner_sms_code
+        assigner = self.assigner
+        if assigner
+            next_code = assigner.get_next_sms_code
+            self.update({assigner_sms_code: next_code})
+        end
+    end
+
+    def set_executor_sms_code
+        executor = self.executor
+        if executor
+            next_code = executor.get_next_sms_code
+            self.update({executor_sms_code: next_code})
+        end
+    end
+
+    def set_auditor_sms_code
+        auditor = self.auditor
+        if auditor
+            next_code = auditor.get_next_sms_code
+            self.update({auditor_sms_code: next_code})
+        end
+    end
+
     private
         def set_audition_entering_date
             if self.audition_date != nil

@@ -2,6 +2,7 @@ NewVend::Application.routes.draw do
   get "machines/new"
   get 'request_tasks/count' => 'request_tasks#count'
   get 'requests/count' => 'requests#count'
+  get 'mobile' => 'application#mobile', :as => :mobile
 
   resources :machines, only: [:index, :show, :create, :new]
   resources :users, only: [:show, :edit, :update, :new, :create, :index]

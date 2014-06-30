@@ -33,48 +33,53 @@ class RequestTasksController < ApplicationController
 
 	def update
 		respond_to do |format|
-		  # Перезаписываем атрибуты.
-		  # Не испольузем update, так как он автоматически сохраняет запись,
-		  # А нам нужно посмотреть, какие поля были изменены
-		  @request_task.assign_attributes(request_task_params)
+			# Перезаписываем атрибуты.
+			# Не испольузем update, так как он автоматически сохраняет запись,
+			# А нам нужно посмотреть, какие поля были изменены
+			@request_task.assign_attributes(request_task_params)
 
-		  # Смотрим, нужно ли отсылась письма после редактирования поручения
-		  execute_email = @request_task.needs_send_execute_email
-		  audit_email = @request_task.needs_send_audit_email
+			# Смотрим, нужно ли отсылась письма после редактирования поручения
+			execute_email = @request_task.needs_send_execute_email
+			audit_email = @request_task.needs_send_audit_email
 
-		  # Если нужно отправить письма, сохраняем даты отправки
-		  if execute_email
-		  	@request_task.email_to_executor_date = DateTime.now
-		  end
+			# Если нужно отправить письма, сохраняем даты отправки
+			if execute_email
+				@request_task.email_to_executor_date = DateTime.now
+			end
 
-		  if audit_email
-		  	@request_task.email_to_auditor_date = DateTime.now
-		  end
+			if audit_email
+				@request_task.email_to_auditor_date = DateTime.now
+			end
 
-		  # Остальное делаем, если при сохранении записи не было ошибок
-	      if @request_task.save
-	      	# Эти данные нужны отправщику сообщений для формирования письма
-	      	params = {
-                :request_task => @request_task,
-                :host => request.host_with_port
-            }
+			# Остальное делаем, если при сохранении записи не было ошибок
+			if @request_task.save
+				# Эти данные нужны отправщику сообщений для формирования письма
+				params = {
+					:request_task => @request_task,
+					:host => request.host_with_port
+				}
 
-            # Отсылаем письма, если необходимо
-	      	if execute_email
-	      		@request_task.executor.send_execute_email(params)
-	      		@request_task.executor.send_execute_sms(params)
-	      	end
+				# Отсылаем письма, если необходимо
+				if execute_email
+					@request_task.set_executor_sms_code
+					params[:sms_code] = @request_task.executor_sms_code
+					@request_task.executor.send_execute_email(params)
+					@request_task.executor.send_execute_sms(params)
+					
+				end
 
-	      	if audit_email
-	      		@request_task.auditor.send_audit_email(params)
-	      		@request_task.auditor.send_audit_sms(params)
-	      	end
+				if audit_email
+					@request_task.set_auditor_sms_code
+					params[:sms_code] = @request_task.auditor_sms_code
+					@request_task.auditor.send_audit_email(params)
+					@request_task.auditor.send_audit_sms(params)
+				end
 
-	        format.json { render json: @request_task.attrs, status: :created }
-	      else
-	        format.json { render json: @request_task.errors, status: :unprocessable_entity }
-	      end
-	    end
+				format.json { render json: @request_task.attrs, status: :created }
+			else
+				format.json { render json: @request_task.errors, status: :unprocessable_entity }
+			end
+		end
 	end
 
 	def to_assign_count
@@ -160,12 +165,15 @@ class RequestTasksController < ApplicationController
 		end
 
 		if params[:type] == "assign"
-		# Обработка случая для назначателей
+		# Чтение целой заявки
 			@request = Request.find_by_id(params[:id])
 			if @request
 				@request.request_tasks.each do |rt|
 					if rt.validate_read_by_assigner(employee)
 						rt.update({:is_read_by_assigner => true})
+						if rt.assigner_sms_code == Employee.first_code
+							employee.free_first_code
+						end
 					end
 				end
 			else
@@ -173,16 +181,26 @@ class RequestTasksController < ApplicationController
 				response = "can't find request"
 			end
 		else
+		# Чтение отдельного поручения
 			@request_task = RequestTask.find_by_id(params[:id])
 			if @request_task
 				# Выставляем поручению статус прочитано только тогда,
 				# когда его читает ответственный за нее человек
 				if @request_task.validate_read_by_assigner(employee)
 					@request_task.update({:is_read_by_assigner => true})
+					if @request_task.assigner_sms_code == Employee.first_code
+						employee.free_first_code
+					end
 				elsif @request_task.validate_read_by_executor(employee)
 					@request_task.update({:is_read_by_executor => true})
+					if @request_task.executor_sms_code == Employee.first_code
+						employee.free_first_code
+					end
 				elsif @request_task.validate_read_by_auditor(employee)
 					@request_task.update({:is_read_by_auditor => true})
+					if @request_task.auditor_sms_code == Employee.first_code
+						employee.free_first_code
+					end
 				end
 
 				# Формируем ответ для обновления данных на клиенте
