@@ -1,3 +1,3 @@
-class Motor < ActiveRecord::Base
+class Model < ActiveRecord::Base
 	validates :name, presence: true, uniqueness: true
 end

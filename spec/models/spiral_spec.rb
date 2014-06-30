@@ -1,13 +1,15 @@
 require 'spec_helper'
 
 describe Spiral do
-	let(:spiral) { FactoryGirl.create(:spiral) }
+	let(:spiral) { FactoryGirl.build(:spiral) }
 
 	subject { spiral }
 
 	it { should respond_to(:name) }
 	it { should respond_to(:direction) }
 	it { should respond_to(:mount_priority) }
+
+	it { should be_valid }
 
 	describe "when name is not present" do
 		before { spiral.name = " " }
@@ -19,5 +21,12 @@ describe Spiral do
 		it { should_not be_valid }
 	end
 
-	it { should be_valid }
+	describe "when name is already taken" do
+		before do
+			spiral_with_same_name = spiral.dup
+			spiral_with_same_name.save
+		end
+
+		it { should_not be_valid }
+	end
 end

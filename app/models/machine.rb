@@ -1,4 +1,7 @@
 class Machine < ActiveRecord::Base
+	belongs_to :sales_location
+	belongs_to :model
+
 	has_many :requests, dependent: :destroy
 
 	require 'open-uri'
@@ -7,16 +10,14 @@ class Machine < ActiveRecord::Base
 		machines_json = JSON.parse(open("http://lifehack.ru/machines.json").read.force_encoding("Windows-1251").encode("UTF-8"))
 		machines_info = machines_json["Machines"]
 		machines_info.each { |machine|
-			current = Machine.where(:uid => machine["UID"]).take
+			current = Machine.where(:guid => machine["UID"]).first
 			if current
 				current.update(:name => machine["Name"],
-					           :location => machine["Location"],
-					           :machine_type => machine["MachineType"])
+					           :location => machine["Location"])
 			else
-				Machine.create(:uid => machine["UID"], 
+				Machine.create(:guid => machine["UID"], 
 					           :name => machine["Name"],
-					           :location => machine["Location"],
-					           :machine_type => machine["MachineType"])
+					           :location => machine["Location"])
 			end
 		}
 

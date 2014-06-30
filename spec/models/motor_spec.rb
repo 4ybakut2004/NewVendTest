@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Motor do
-	let(:motor) { FactoryGirl.create(:motor) }
+	let(:motor) { FactoryGirl.build(:motor) }
 
 	subject { motor }
 
@@ -12,10 +12,19 @@ describe Motor do
 	it { should respond_to(:right_bound_offset) }
 	it { should respond_to(:mount_priority) }
 
+	it { should be_valid }
+
 	describe "when name is not present" do
 		before { motor.name = " " }
 		it { should_not be_valid }
 	end
 
-	it { should be_valid }
+	describe "when name is already taken" do
+		before do
+			motor_with_same_name = motor.dup
+			motor_with_same_name.save
+		end
+
+		it { should_not be_valid }
+	end
 end

@@ -3,14 +3,12 @@
   <thead>
     <tr>
       <th>Номер</th>
-      <th>uid</th>
+      <th>guid</th>
       <th>Имя</th>
       <th>Расположение</th>
-      <th>Тип</th>
     </tr>
     <tr>
       <th>Фильтр:</th>
-      <th><input class="form-control input-sm" type="text"></th>
       <th><input class="form-control input-sm" type="text"></th>
       <th><input class="form-control input-sm" type="text"></th>
       <th><input class="form-control input-sm" type="text"></th>
@@ -21,10 +19,9 @@
     <% @machines.each do |machine| %>
       <tr id="<%= machine.id %>">
         <td><%= link_to machine.id, machine_path(machine) %></td>
-        <td><%= link_to machine.uid, machine_path(machine) %></td>
+        <td><%= link_to machine.guid, machine_path(machine) %></td>
         <td><%= link_to machine.name, machine_path(machine) %></td>
         <td><%= link_to machine.location, machine_path(machine) %></td>
-        <td><%= link_to machine.machine_type, machine_path(machine) %></td>
       </tr>
     <% end %>
   </tbody>

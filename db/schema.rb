@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140630025646) do
+ActiveRecord::Schema.define(version: 20140630101227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,17 +53,28 @@ ActiveRecord::Schema.define(version: 20140630025646) do
 
   add_index "employees", ["name"], name: "index_employees_on_name", unique: true, using: :btree
 
-  create_table "machines", force: true do |t|
-    t.string   "uid"
-    t.string   "name"
-    t.string   "location"
-    t.string   "machine_type"
+  create_table "holes", force: true do |t|
+    t.string   "code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "holes", ["code"], name: "index_holes_on_code", using: :btree
+
+  create_table "machines", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "sales_location_id"
+    t.integer  "model_id"
+    t.string   "machine_key"
+    t.string   "guid"
+    t.string   "location"
+    t.string   "code"
+    t.string   "external_code"
+  end
+
   add_index "machines", ["name"], name: "index_machines_on_name", using: :btree
-  add_index "machines", ["uid"], name: "index_machines_on_uid", using: :btree
 
   create_table "message_attributes", force: true do |t|
     t.integer  "message_id"
@@ -92,6 +103,14 @@ ActiveRecord::Schema.define(version: 20140630025646) do
 
   add_index "messages", ["name"], name: "index_messages_on_name", unique: true, using: :btree
 
+  create_table "models", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "models", ["name"], name: "index_models_on_name", unique: true, using: :btree
+
   create_table "motors", force: true do |t|
     t.string   "name"
     t.float    "left_spiral_position"
@@ -102,6 +121,8 @@ ActiveRecord::Schema.define(version: 20140630025646) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "motors", ["name"], name: "index_motors_on_name", unique: true, using: :btree
 
   create_table "new_vend_settings", force: true do |t|
     t.integer  "read_confirm_time"
@@ -186,6 +207,22 @@ ActiveRecord::Schema.define(version: 20140630025646) do
     t.integer  "request_type_id", default: 4
   end
 
+  create_table "sales_locations", force: true do |t|
+    t.string   "name"
+    t.integer  "vendor_id"
+    t.text     "address"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sales_locations", ["name"], name: "index_sales_locations_on_name", unique: true, using: :btree
+
+  create_table "shelves", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "spirals", force: true do |t|
     t.string   "name"
     t.string   "direction"
@@ -193,6 +230,8 @@ ActiveRecord::Schema.define(version: 20140630025646) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "spirals", ["name"], name: "index_spirals_on_name", unique: true, using: :btree
 
   create_table "tasks", force: true do |t|
     t.string   "name"
@@ -216,5 +255,13 @@ ActiveRecord::Schema.define(version: 20140630025646) do
 
   add_index "users", ["name"], name: "index_users_on_name", unique: true, using: :btree
   add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
+
+  create_table "vendors", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "vendors", ["name"], name: "index_vendors_on_name", unique: true, using: :btree
 
 end

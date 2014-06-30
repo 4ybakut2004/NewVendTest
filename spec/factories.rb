@@ -7,9 +7,7 @@ FactoryGirl.define do
 
   factory :machine do
     name "Machine Name"
-    uid "UID"
-    location "City"
-    machine_type "Any Type"
+    guid "UID"
   end
 
   factory :request do
@@ -91,5 +89,26 @@ FactoryGirl.define do
     left_bound_offset 1.5
     right_bound_offset 1.5
     mount_priority 1
+  end
+
+  factory :model do
+    name "Модель"
+  end
+
+  factory :shelf do
+    name "Полка"
+  end
+
+  factory :hole do
+    code "Код"
+  end
+
+  factory :vendor do
+    name "Вендор"
+  end
+
+  factory :sales_location do
+    name "Имя"
+    address "Улица"
   end
 end

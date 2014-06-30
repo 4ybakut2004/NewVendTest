@@ -1,5 +1,5 @@
 class Spiral < ActiveRecord::Base
-	validates :name, presence: true
+	validates :name, presence: true, uniqueness: true
 
 	validates_inclusion_of :direction, :in => [:left, :right]
 
